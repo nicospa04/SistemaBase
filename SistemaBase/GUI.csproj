@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,17 +49,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="FormBitacoraEventos_625NS.cs">
+    <Compile Include="Administracion\FormABMUsuario_625NS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormBitacoraEventos_625NS.Designer.cs">
+    <Compile Include="Administracion\FormABMUsuario_625NS.Designer.cs">
+      <DependentUpon>FormABMUsuario_625NS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Administracion\FormBitacoraEventos_625NS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Administracion\FormBitacoraEventos_625NS.Designer.cs">
       <DependentUpon>FormBitacoraEventos_625NS.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormIniciarSesion.cs">
+    <Compile Include="Usuario\FormIniciarSesion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormIniciarSesion.Designer.cs">
+    <Compile Include="Usuario\FormIniciarSesion.Designer.cs">
       <DependentUpon>FormIniciarSesion.cs</DependentUpon>
     </Compile>
     <Compile Include="MenuPrincipal.cs">
@@ -65,10 +77,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormBitacoraEventos_625NS.resx">
+    <EmbeddedResource Include="Administracion\FormABMUsuario_625NS.resx">
+      <DependentUpon>FormABMUsuario_625NS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Administracion\FormBitacoraEventos_625NS.resx">
       <DependentUpon>FormBitacoraEventos_625NS.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormIniciarSesion.resx">
+    <EmbeddedResource Include="Usuario\FormIniciarSesion.resx">
       <DependentUpon>FormIniciarSesion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuPrincipal.resx">

@@ -91,5 +91,10 @@ namespace BLL
         {
             dal.cambiarIdioma(user, v);
         }
+
+        public void CambiarEstadoActivo(string dni, bool nuevoEstado)
+        {
+            dal.CambiarEstadoActivo(dni, nuevoEstado);
+        }
     }
 }

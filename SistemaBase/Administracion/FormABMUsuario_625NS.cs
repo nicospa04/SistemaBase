@@ -343,5 +343,29 @@ namespace SistemaBase.Administracion
         {
 
         }
+
+        private void btnActivarDesactivar_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 0) return;
+
+            var fila = dataGridView1.SelectedRows[0];
+
+            string dni = fila.Cells["DNI_625NS"].Value.ToString();
+            bool bloqueadoActual = Convert.ToBoolean(fila.Cells["Bloqueado_625NS"].Value);
+
+            try
+            {
+                var bll = new BLL_Usuario_625NS();
+                // Invertimos: si está bloqueado, lo desbloqueamos (false) y viceversa
+                bll.CambiarEstadoActivo(dni, !bloqueadoActual);
+
+                MessageBox.Show("Estado actualizado con éxito.");
+                actualizar(); // Esto refresca la lista
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
     }
 }

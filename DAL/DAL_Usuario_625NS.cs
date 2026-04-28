@@ -216,6 +216,19 @@ namespace DAL_625NS
             }
         }
 
+        public void CambiarEstadoActivo(string dni, bool nuevoEstado)
+        {
+            string query = "UPDATE Usuario_625NS SET Bloqueado_625NS = @estado WHERE DNI_625NS = @dni";
+
+            SqlParameter[] parametros = new SqlParameter[]
+            {
+                new SqlParameter("@estado", nuevoEstado),
+                new SqlParameter("@dni", dni)
+            };
+
+            DAL_625NS.ExecuteNonQuery(query, parametros);
+        }
+
         public void cambiarIdioma(BE_Usuario_625NS user, string v)
         {
             string query = @"UPDATE Usuario_625NS 

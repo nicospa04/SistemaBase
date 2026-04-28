@@ -11,26 +11,26 @@ using System.Linq;
 using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using BLL_625NS;
+using BLL;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Xml.Linq;
 namespace GUI_625NS.Administracion
 {
-    public partial class FormBitacoraEventos_625NS : Form, IdiomaObserver_625NS
+    public partial class FormBitacoraEventos_625NS : Form //, IdiomaObserver_625NS
     {
         private List<BE_Evento_625NS> eventos;
         private List<BE_Evento_625NS> filtrados;
 
 
-        public void ActualizarIdioma_625NS()
-        {
-            Traducir_625NS();
-        }
-        public void Traducir_625NS()
-        {
-            var traductor = new BLL_Idioma_625NS();
-            traductor.Traducir_625NS(this);
-        }
+        //public void ActualizarIdioma_625NS()
+        //{
+        //    Traducir_625NS();
+        //}
+        //public void Traducir_625NS()
+        //{
+        //    var traductor = new BLL_Idioma_625NS();
+        //    traductor.Traducir_625NS(this);
+        //}
 
         public FormBitacoraEventos_625NS()
         {
@@ -51,9 +51,9 @@ namespace GUI_625NS.Administracion
                 BE_Evento_625NS.Criticidad.Bajo
             );
 
-            SessionManager_625NS.getInstancia().Suscribir_625NS(this);
+            //SessionManager_625NS.getInstancia().Suscribir_625NS(this);
 
-            ActualizarIdioma_625NS();
+            //ActualizarIdioma_625NS();
 
         }
 

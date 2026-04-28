@@ -17,22 +17,31 @@ namespace SistemaBase.Administracion
 {
     public partial class FormABMUsuario_625NS : Form
     {
+        string modo = "";
+
         public FormABMUsuario_625NS()
         {
             InitializeComponent();
 
-            //CargarRoles();
+            CargarRoles();
 
 
-            SessionManager_625NS.getInstancia().Suscribir_625NS(this);
 
 
-            comboBox2.DataSource = new BLL_Especialidad_625NS().obtenerEspecialidades().Select(e => e.nombre).ToList();
 
 
-            ActualizarIdioma_625NS();
+            //ActualizarIdioma_625NS();
 
             actualizar();
+        }
+
+        void CargarRoles()
+        {
+
+            //hardcodeamos los roles ya que aun no existen en la bd
+            comboBox1.Items.Add("Administrador");
+            comboBox1.Items.Add("Base");
+            comboBox1.SelectedIndex = 1; //x defecto se selecciona el rol base
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -100,47 +109,13 @@ namespace SistemaBase.Administracion
                     idioma: "ES" //Español es el idioma por defecto
                 );
 
-                usuario.Rol_625NS = new BE_Perfil_625NS
-                {
-                    Nombre_625NS = comboBox1.SelectedValue.ToString()
-                };
+                usuario.Rol_625NS = comboBox1.SelectedValue.ToString();
 
                 // Guardar usuario
                 var usuarioBLL = new BLL_Usuario_625NS();
                 usuarioBLL.crearUsuario(usuario);
 
-                if (comboBox1.SelectedValue.ToString() == "Profesional")
-                {
-                    string codigoEspecialidad = comboBox2.SelectedItem.ToString();
-
-                    var esp = new BLL_Especialidad_625NS().obtenerEspecialidades()
-                                .FirstOrDefault(ea => ea.nombre == codigoEspecialidad);
-
-                    if (esp == null)
-                    {
-                        MessageBox.Show("Error: especialidad no válida.");
-                        return;
-                    }
-
-
-
-                    BE_Profesional_625NS profesional = new BE_Profesional_625NS
-                    {
-                        codigoProfesional = "",
-                        nombre = textBox3.Text,
-                        apellido = textBox2.Text,
-                        codigoEspecialidad = esp.codigoEspecialidad,
-                        dniUsuario = usuario.Dni,  // ← IMPORTANTE,
-                        estado = checkBox2.Checked ? "Inactivo" : "Activo"
-                    };
-
-                    new BLL_Profesional_625NS().crearProfesional(profesional);
-
-                    string a = SessionManager_625NS.getInstancia().getUsuarioActivo().Dni;
-
-                    BE_Evento_625NS ee = new BE_Evento_625NS(a, DateTime.Now, "Profesionales", "Creacion de profesional", BE_Evento_625NS.Criticidad.Bajo);
-                    new BLL_BitacoraEvento_625NS().RegistrarEvento(ee);
-                }
+               
 
                 MessageBox.Show("Usuario creado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -256,15 +231,11 @@ namespace SistemaBase.Administracion
                     MessageBox.Show("No se puede modificar un usuario y asignarle el rol de profesional"); return;
                 }
 
-                user.Rol_625NS = new BE_Perfil_625NS
-                {
-
-                    Nombre_625NS = comboBox1.SelectedValue.ToString()
-                };
+                user.Rol_625NS = comboBox1.SelectedValue.ToString();
 
 
 
-                BLL_625NS.BLL_Usuario_625NS a = new BLL_625NS.BLL_Usuario_625NS();
+                BLL.BLL_Usuario_625NS a = new BLL.BLL_Usuario_625NS();
                 a.modificarUsuario(user);
 
                 actualizar();
@@ -306,10 +277,7 @@ namespace SistemaBase.Administracion
             BLL_Usuario_625NS bl = new BLL_Usuario_625NS
              ();
 
-            dataGridView1.DataSource = bl.obtenerUsuarios()
-                    .Where(e => e.Rol_625NS != null && e.Rol_625NS.Nombre_625NS != "Profesional")
-                    .ToList();
-
+          
             label2.Text += bl.obtenerUsuarios().Count();
         }
 
@@ -336,7 +304,7 @@ namespace SistemaBase.Administracion
 
             button5.Enabled = habilitar;
         }
-
+        bool activado = false;
         private void button2_Click(object sender, EventArgs e)
         {
             activado = !activado;
@@ -367,6 +335,11 @@ namespace SistemaBase.Administracion
         }
 
         private void FormABMUsuario_625NS_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

@@ -14,7 +14,7 @@ namespace DAL_625NS
                 throw new Exception("Usuario ya existe");
 
             string queryRol = "SELECT CodRol_625NS FROM Rol_625NS WHERE Nombre_625NS = @NombreRol";
-            object result = DAL_625NS.ExecuteScalar(queryRol, new SqlParameter[] { new SqlParameter("@NombreRol", usuario.Rol_625NS.Nombre_625NS) });
+            object result = DAL_625NS.ExecuteScalar(queryRol, new SqlParameter[] { new SqlParameter("@NombreRol", usuario.Rol_625NS) });
 
             if (result == null || result == DBNull.Value)
                 throw new Exception("El rol especificado no existe.");
@@ -120,11 +120,7 @@ namespace DAL_625NS
 
                 if (row["NombreRol"] != DBNull.Value)
                 {
-                    usuario.Rol_625NS = new BE_Perfil_625NS
-                    {
-                        Nombre_625NS = row["NombreRol"].ToString(),
-                        Permisos_625NS = new List<IPerfil_625NS>()
-                    };
+                    usuario.Rol_625NS = row["NombreRol"].ToString();
                 }
 
 
@@ -139,7 +135,7 @@ namespace DAL_625NS
         public void modificarUsuario(BE_Usuario_625NS usuario)
         {
             string queryRol = "SELECT CodRol_625NS FROM Rol_625NS WHERE Nombre_625NS = @NombreRol";
-            object result = DAL_625NS.ExecuteScalar(queryRol, new SqlParameter[] { new SqlParameter("@NombreRol", usuario.Rol_625NS.Nombre_625NS) });
+            object result = DAL_625NS.ExecuteScalar(queryRol, new SqlParameter[] { new SqlParameter("@NombreRol", usuario.Rol_625NS) });
 
             if (result == null || result == DBNull.Value)
                 throw new Exception("El rol especificado no existe.");

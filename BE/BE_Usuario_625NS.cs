@@ -20,7 +20,7 @@ namespace BE_625NS
 
         public string Email { get; set; }
         [XmlIgnore]
-        public BE_Perfil_625NS Rol_625NS { get; set; } //Perfil 
+        public string Rol_625NS { get; set; } //Perfil 
 
 
         public string Nombre { get; set; }

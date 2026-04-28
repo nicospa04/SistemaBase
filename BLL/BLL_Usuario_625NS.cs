@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using DAL_625NS;
 namespace BLL
 {
     public class BLL_Usuario_625NS
@@ -14,13 +14,17 @@ namespace BLL
         private DAL_Usuario_625NS dal = new DAL_Usuario_625NS();
 
 
-        public bool TienePermiso(string nombrePermiso, BE_Usuario_625NS a)
-        {
-            if (a.Rol_625NS == null) return false;
+        //public bool TienePermiso(string nombrePermiso, BE_Usuario_625NS a)
+        //{
 
-            var permisos = a.Rol_625NS.obtenerPermisos625NS();
-            return permisos.Any(p => p.Nombre_625NS.Equals(nombrePermiso, StringComparison.OrdinalIgnoreCase));
-        }
+
+        //    //if (a.Rol_625NS == null) return false; codigo usado para cuando exista composite
+
+        //    //var permisos = a.Rol_625NS.obtenerPermisos625NS();
+        //    //return permisos.Any(p => p.Nombre_625NS.Equals(nombrePermiso, StringComparison.OrdinalIgnoreCase));
+
+        //  
+        //}
 
 
 

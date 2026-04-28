@@ -102,7 +102,7 @@ namespace SistemaBase
 
                 SessionManager_625NS.getInstancia().iniciarSesion(usuarioLogueado);
 
-                SessionManager_625NS.getInstancia().CambiarIdioma_625NS(usuarioLogueado.idioma);
+               // SessionManager_625NS.getInstancia().CambiarIdioma_625NS(usuarioLogueado.idioma);
 
 
                 var sessao = SessionManager_625NS.getInstancia();
@@ -130,10 +130,16 @@ namespace SistemaBase
                 BLL_Usuario_625NS bll = new BLL_Usuario_625NS();
 
 
-                //FormPrincipal menu = Application.OpenForms["FormPrincipal"] as FormPrincipal;
+                MenuPrincipal menu = Application.OpenForms["FormPrincipal"] as MenuPrincipal;
 
 
-                //menu.MenuAdministracion.Enabled = bll.TienePermiso("Administracion", userr);
+
+                menu.MenuAdministracion.Enabled = userr.Rol_625NS == "Administrador";
+                
+
+
+                //codigo que se usara cuando exista composite
+                //menu.MenuAdministracion.Enabled = bll.TienePermiso("Administrador", userr);
                 //menu.MenuTurnos.Enabled = bll.TienePermiso("Turnos", userr);
                 //menu.Reportes.Enabled = bll.TienePermiso("Reportes", userr);
                 //menu.MenuConsulta.Enabled = bll.TienePermiso("ConsultaMedica", userr);

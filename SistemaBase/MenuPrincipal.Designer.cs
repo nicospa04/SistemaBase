@@ -38,6 +38,7 @@
             this.IsMdiContainer = true;
             this.Name = "MenuPrincipal";
             this.Text = "MenuPrincipal";
+            this.Load += new System.EventHandler(this.MenuPrincipal_Load);
             this.ResumeLayout(false);
 
         }

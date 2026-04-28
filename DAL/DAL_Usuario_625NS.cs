@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace DAL_625NS
 {
-    public class DAL_Usuario_625NS
+    public class DAL_Usuario_625NS //hola
     {
         public void crearUsuario(BE_Usuario_625NS usuario)
         {

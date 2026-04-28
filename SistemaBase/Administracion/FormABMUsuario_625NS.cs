@@ -21,7 +21,7 @@ namespace SistemaBase.Administracion
         {
             InitializeComponent();
 
-            CargarRoles();
+            //CargarRoles();
 
 
             SessionManager_625NS.getInstancia().Suscribir_625NS(this);
@@ -313,14 +313,14 @@ namespace SistemaBase.Administracion
             label2.Text += bl.obtenerUsuarios().Count();
         }
 
-        private void CargarRoles()
-        {
-            var rolBLL = new BLLPerfil_625NS();
-            var roles = rolBLL.ObtenerPerfilesSimples625NS();
-            comboBox1.DataSource = roles;
-            comboBox1.DisplayMember = "Nombre_625NS";
-            comboBox1.ValueMember = "Nombre_625NS";
-        }
+        //private void CargarRoles()
+        ////{
+        ////    var rolBLL = new BLLPerfil_625NS();
+        //    var roles = rolBLL.ObtenerPerfilesSimples625NS();
+        //    comboBox1.DataSource = roles;
+        //    comboBox1.DisplayMember = "Nombre_625NS";
+        //    comboBox1.ValueMember = "Nombre_625NS";
+        //}
 
 
 

@@ -62,39 +62,39 @@ namespace SistemaBase
                 }
 
 
-                var perfilBLL = new BLLPerfil_625NS();
-                usuarioLogueado.Rol_625NS = perfilBLL.ObtenerPerfilCompleto625NS(usuarioLogueado.Rol_625NS.Nombre_625NS);
+                ////var perfilBLL = new BLLPerfil_625NS();
+                //usuarioLogueado.Rol_625NS = perfilBLL.ObtenerPerfilCompleto625NS(usuarioLogueado.Rol_625NS.Nombre_625NS);
 
 
 
 
-                var revision = new BLL_DigitoVerificador_625NS().Revision();
+                //var revision = new BLL_DigitoVerificador_625NS().Revision();
 
-                bool tablavacia = revision.tablaDVVacia;
-                List<string> errores = revision.tablasConError;
+                //bool tablavacia = revision.tablaDVVacia;
+                //List<string> errores = revision.tablasConError;
 
-                if (tablavacia)
-                {
-                    MessageBox.Show("No existen registros en la tabla DigitoVerificador.");
-                }
-                else if (errores.Count > 0)
-                {
-                    MessageBox.Show("Se detectaron inconsistencias en la base de datos");
+                //if (tablavacia)
+                //{
+                //    MessageBox.Show("No existen registros en la tabla DigitoVerificador.");
+                //}
+                //else if (errores.Count > 0)
+                //{
+                //    MessageBox.Show("Se detectaron inconsistencias en la base de datos");
 
-                    if (usuarioLogueado.Rol_625NS.Nombre_625NS == "Administrador")
-                    {
+                //    if (usuarioLogueado.Rol_625NS.Nombre_625NS == "Administrador")
+                //    {
 
-                        FormReparacion_625NS form = new FormReparacion_625NS(errores);
-                        form.Show();
-                        this.Hide();
-                        return;
-                    }
-                    else
-                    {
-                        MessageBox.Show("El sistema no se encuentra disponible en estos momentos, contacte al administrador.");
-                        return;
-                    }
-                }
+                //        FormReparacion_625NS form = new FormReparacion_625NS(errores);
+                //        form.Show();
+                //        this.Hide();
+                //        return;
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show("El sistema no se encuentra disponible en estos momentos, contacte al administrador.");
+                //        return;
+                //    }
+                //}
 
 
 
@@ -121,7 +121,7 @@ namespace SistemaBase
 
 
 
-                var perfil = new BLLPerfil_625NS().ObtenerPerfilCompleto625NS(usuarioLogueado.Rol_625NS.Nombre_625NS);
+                //var perfil = new BLLPerfil_625NS().ObtenerPerfilCompleto625NS(usuarioLogueado.Rol_625NS.Nombre_625NS);
 
 
 
@@ -130,22 +130,22 @@ namespace SistemaBase
                 BLL_Usuario_625NS bll = new BLL_Usuario_625NS();
 
 
-                FormPrincipal menu = Application.OpenForms["FormPrincipal"] as FormPrincipal;
+                //FormPrincipal menu = Application.OpenForms["FormPrincipal"] as FormPrincipal;
 
 
-                menu.MenuAdministracion.Enabled = bll.TienePermiso("Administracion", userr);
-                menu.MenuTurnos.Enabled = bll.TienePermiso("Turnos", userr);
-                menu.Reportes.Enabled = bll.TienePermiso("Reportes", userr);
-                menu.MenuConsulta.Enabled = bll.TienePermiso("ConsultaMedica", userr);
-                menu.MenuMaestro.Enabled = bll.TienePermiso("Maestro", userr);
+                //menu.MenuAdministracion.Enabled = bll.TienePermiso("Administracion", userr);
+                //menu.MenuTurnos.Enabled = bll.TienePermiso("Turnos", userr);
+                //menu.Reportes.Enabled = bll.TienePermiso("Reportes", userr);
+                //menu.MenuConsulta.Enabled = bll.TienePermiso("ConsultaMedica", userr);
+                //menu.MenuMaestro.Enabled = bll.TienePermiso("Maestro", userr);
 
-                menu.MenuCambiarIdioma.Enabled = true;
+                //menu.MenuCambiarIdioma.Enabled = true;
 
-                menu.MenuCambiarContraseña.Enabled = true;
+                //menu.MenuCambiarContraseña.Enabled = true;
 
-                menu.MenuCerrarSesion.Enabled = true;
+                //menu.MenuCerrarSesion.Enabled = true;
 
-                menu.Ayuda.Enabled = true;
+                //menu.Ayuda.Enabled = true;
 
                 this.Close();
 

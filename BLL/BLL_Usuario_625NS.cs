@@ -1,4 +1,4 @@
-﻿using BE_625NS;
+﻿using BE_56_PS;
 using ClassLibrary2;
 using Services_625NS;
 using System;
@@ -43,7 +43,7 @@ namespace BLL
             return CryptoManager_625NS.Encriptar(nombre + dni);
         }
 
-        public void crearUsuario(BE_Usuario_625NS usuario) //si
+        public void crearUsuario(BE_Usuario_56_PS usuario) //si
         {
             dal.crearUsuario(usuario);
         }
@@ -59,12 +59,12 @@ namespace BLL
             return dal.validarUsuario(nombreUsuario, contraseñaEncriptada);
         }
 
-        public void modificarUsuario(BE_Usuario_625NS usuario) //si
+        public void modificarUsuario(BE_Usuario_56_PS usuario) //si
         {
             dal.modificarUsuario(usuario);
         }
 
-        public List<BE_Usuario_625NS> obtenerUsuarios() //si
+        public List<BE_Usuario_56_PS> obtenerUsuarios() //si
         {
             return dal.obtenerUsuarios();
         }
@@ -87,7 +87,7 @@ namespace BLL
             dal.validarCantIntentos(nombreUsuario);
         }
 
-        public void cambiarIdioma(BE_Usuario_625NS user, string v)  //si
+        public void cambiarIdioma(BE_Usuario_56_PS user, string v)  //si
         {
             dal.cambiarIdioma(user, v);
         }

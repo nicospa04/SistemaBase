@@ -96,5 +96,15 @@ namespace BLL
         {
             dal.CambiarEstadoActivo(dni, nuevoEstado);
         }
+
+        public object obtenerUsuarioPorDni(string dni)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CambiarEstadoBloqueado(string dni, bool v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

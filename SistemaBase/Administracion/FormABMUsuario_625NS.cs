@@ -19,20 +19,39 @@ namespace SistemaBase.Administracion
     {
         string modo = "";
 
+        List<BE_Usuario_625NS> listaGeneral;
+
         public FormABMUsuario_625NS()
         {
             InitializeComponent();
 
             CargarRoles();
 
+            listaGeneral = new BLL_Usuario_625NS().obtenerUsuarios();
+
+            dataGridView1.DataSource = listaGeneral;
 
 
-
+            deshabilitarBotonCancelar();
+            deshabilitarBotonAplicar();
 
 
             //ActualizarIdioma_625NS();
 
             actualizar();
+
+            textBox5.Text = textBox5.Text = "Mensaje: \nModo consulta";
+        }
+
+        void deshabilitarBotonAplicar()
+        {
+            button5.Enabled = false;
+        }
+
+
+        void habilitarBotonAplicar()
+        {
+            button5.Enabled = true;
         }
 
         void CargarRoles()
@@ -47,93 +66,17 @@ namespace SistemaBase.Administracion
         private void button1_Click(object sender, EventArgs e)
         {
 
-            try
-            {
-                // Validaciones básicas
-                if (string.IsNullOrWhiteSpace(textBox1.Text) ||
-                    string.IsNullOrWhiteSpace(textBox2.Text) ||
-                    string.IsNullOrWhiteSpace(textBox3.Text) ||
-                    string.IsNullOrWhiteSpace(textBox4.Text))
-                {
-                    MessageBox.Show("Todos los campos son obligatorios", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+            modo = "crear";
 
-                if (comboBox1.SelectedItem == null)
-                {
-                    MessageBox.Show("Debe seleccionar un rol", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+            textBox5.Text = "Mensaje: \nModo crear";
 
-                if (string.IsNullOrWhiteSpace(textBox4.Text))
-                {
-                    MessageBox.Show("Debe ingresar un email");
-                    return;
-                }
+            habilitarBotonAplicar();
+            habilitarBotonCancelar();
 
+            deshabilitarBotonActivarDesactivar();
+            deshabilitarBotonDesbloquear();
+            deshabilitarBotonModificar();
 
-                string dni = textBox1.Text;
-
-                if (new BLL_Usuario_625NS().obtenerUsuarios().Any(ee => ee.Dni == dni))
-                {
-                    MessageBox.Show("No se puede crear un usuario con ese DNI.");
-                    return;
-                }
-
-
-                // Crear nombre de usuario, es la combinacion de los primeros dos digitos de nombre + apellido + dni ultimos 2 digitos
-                string nombreUsuario = textBox3.Text.Substring(0, 2) +
-                                       textBox2.Text.Substring(0, 2) +
-                                       textBox1.Text.Substring(textBox1.Text.Length - 2);
-
-                string emailEncriptado = CryptoManager_625NS.EncriptarReversible(textBox4.Text);
-
-                //la contraseña se crea apartir de juntar el DNI + apellido
-                if (emailEncriptado == null)
-                {
-                    MessageBox.Show("Error al encriptar el email. Revise el valor ingresado.");
-                    return;
-                }
-
-
-                // Crear objeto Usuario
-                var usuario = new BE_Usuario_625NS(
-                    apellido: textBox2.Text,
-                    bloqueado: checkBox2.Checked,
-                    contraseña: CryptoManager_625NS.Encriptar(textBox1.Text + textBox2.Text),
-                    dni: textBox1.Text,
-                    email: emailEncriptado,
-                    nombre: textBox3.Text,
-                    nombreUsuario: nombreUsuario,
-                    cantIntentosFallidos: 0,
-                    idioma: "ES" //Español es el idioma por defecto
-                );
-
-                usuario.Rol_625NS = comboBox1.SelectedValue.ToString();
-
-                // Guardar usuario
-                var usuarioBLL = new BLL_Usuario_625NS();
-                usuarioBLL.crearUsuario(usuario);
-
-               
-
-                MessageBox.Show("Usuario creado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-                string aa = SessionManager_625NS.getInstancia().getUsuarioActivo().Dni;
-
-                BE_Evento_625NS eee = new BE_Evento_625NS(aa, DateTime.Now, "Usuarios", "Creacion de usuario", BE_Evento_625NS.Criticidad.Bajo);
-                new BLL_BitacoraEvento_625NS().RegistrarEvento(eee);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al crear el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            actualizar();
-            LimpiarCampos();
-            modo = "";
 
         }
 
@@ -170,10 +113,98 @@ namespace SistemaBase.Administracion
             HabilitarCampos(true);
 
             modo = "modificar";
+
+            textBox5.Text = "Mensaje: \nModo modificar";
+
+            habilitarBotonAplicar();
+            habilitarBotonCancelar();
+
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
+
+            if(modo == "desbloquear")
+            {
+                if (dataGridView1.SelectedRows.Count == 0)
+                {
+
+
+                    MessageBox.Show("Debe seleccionar un usuario de la tabla");
+                    return;
+                }
+
+                var fila = dataGridView1.SelectedRows[0];
+
+                string dni = fila.Cells["DNI_625NS"].Value.ToString();
+                bool bloqueadoActual = Convert.ToBoolean(fila.Cells["Bloqueado_625NS"].Value);
+
+                var bll = new BLL_Usuario_625NS();
+                // Invertimos: si está bloqueado, lo desbloqueamos (false) y viceversa
+                bll.CambiarEstadoBloqueado(dni, !bloqueadoActual);
+
+                MessageBox.Show("Estado actualizado con éxito.");
+                actualizar(); // Esto refresca la lista
+            }
+
+
+            if (modo == "activar/desactivar")
+            {
+                if (dataGridView1.SelectedRows.Count == 0) {
+
+
+                    MessageBox.Show("Debe seleccionar un usuario de la tabla");
+                    return;
+                }
+
+                var fila = dataGridView1.SelectedRows[0];
+
+                string dni = fila.Cells["DNI_625NS"].Value.ToString();
+                bool ActivoActual = Convert.ToBoolean(fila.Cells["Activo"].Value);
+
+                  var bll = new BLL_Usuario_625NS();
+                    // Invertimos: si está bloqueado, lo desbloqueamos (false) y viceversa
+                    bll.CambiarEstadoActivo(dni, !ActivoActual);
+
+                    MessageBox.Show("Estado actualizado con éxito.");
+                    actualizar(); // Esto refresca la lista
+             
+            }
+
+
+
+            if (modo == "desbloquear")
+            {
+                try
+                {
+
+                    DataGridViewRow fila = dataGridView1.SelectedRows[0];
+
+
+                    string dni = fila.Cells["DNI"].Value.ToString();
+
+                    BE_Usuario_625NS usuarioADesbloquear = (BE_Usuario_625NS)new BLL_Usuario_625NS().obtenerUsuarioPorDni(dni); // to do
+
+                    if (!usuarioADesbloquear.Bloqueado)
+                    {
+                        MessageBox.Show("No puede desbloquear un usuario que no se encuentra bloqueado");
+                        return;
+                    }
+
+                    new BLL_Usuario_625NS().desbloquearUsuario(dni);
+
+                    MessageBox.Show($"Usuario {usuarioADesbloquear.NombreUsuario} desbloqueado con exito");
+
+
+                }
+                catch
+                {
+                    MessageBox.Show("Debe seleccionar un usuario para poder desbloquearlo");
+                }
+
+
+            }
+
             if (modo == "modificar")
             {
 
@@ -226,10 +257,7 @@ namespace SistemaBase.Administracion
                 BE_625NS.BE_Usuario_625NS user = new BE_625NS.BE_Usuario_625NS(apellido, bloqueado, fila.Cells["Contraseña"].Value.ToString(), dni, emailEncriptado, nombre, nombreUsuario, 0, "EN");
 
 
-                if (comboBox1.SelectedValue.ToString() == "Profesional")
-                {
-                    MessageBox.Show("No se puede modificar un usuario y asignarle el rol de profesional"); return;
-                }
+              
 
                 user.Rol_625NS = comboBox1.SelectedValue.ToString();
 
@@ -252,11 +280,117 @@ namespace SistemaBase.Administracion
 
 
             }
+            if(modo == "crear")
+            {
+
+                try
+                {
+                    // Validaciones básicas
+                    if (string.IsNullOrWhiteSpace(textBox1.Text) ||
+                        string.IsNullOrWhiteSpace(textBox2.Text) ||
+                        string.IsNullOrWhiteSpace(textBox3.Text) ||
+                        string.IsNullOrWhiteSpace(textBox4.Text))
+                    {
+                        MessageBox.Show("Todos los campos son obligatorios", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (comboBox1.SelectedItem == null)
+                    {
+                        MessageBox.Show("Debe seleccionar un rol", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(textBox4.Text))
+                    {
+                        MessageBox.Show("Debe ingresar un email");
+                        return;
+                    }
+
+
+                    string dni = textBox1.Text;
+
+                    if (new BLL_Usuario_625NS().obtenerUsuarios().Any(ee => ee.Dni == dni))
+                    {
+                        MessageBox.Show("No se puede crear un usuario con ese DNI.");
+                        return;
+                    }
+
+
+                    // Crear nombre de usuario, es la combinacion de los primeros dos digitos de nombre + apellido + dni ultimos 2 digitos
+                    string nombreUsuario = textBox3.Text.Substring(0, 2) +
+                                           textBox2.Text.Substring(0, 2) +
+                                           textBox1.Text.Substring(textBox1.Text.Length - 2);
+
+                    string emailEncriptado = CryptoManager_625NS.EncriptarReversible(textBox4.Text);
+
+                    //la contraseña se crea apartir de juntar el DNI + apellido
+                    if (emailEncriptado == null)
+                    {
+                        MessageBox.Show("Error al encriptar el email. Revise el valor ingresado.");
+                        return;
+                    }
+
+
+                    // Crear objeto Usuario
+                    var usuario = new BE_Usuario_625NS(
+                        apellido: textBox2.Text,
+                        bloqueado: checkBox2.Checked,
+                        contraseña: CryptoManager_625NS.Encriptar(textBox1.Text + textBox2.Text),
+                        dni: textBox1.Text,
+                        email: emailEncriptado,
+                        nombre: textBox3.Text,
+                        nombreUsuario: nombreUsuario,
+                        cantIntentosFallidos: 0,
+                        idioma: "ES" //Español es el idioma por defecto
+                    );
+
+                    usuario.Rol_625NS = comboBox1.SelectedValue.ToString();
+
+                    // Guardar usuario
+                    var usuarioBLL = new BLL_Usuario_625NS();
+                    usuarioBLL.crearUsuario(usuario);
+
+
+
+                    MessageBox.Show("Usuario creado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+                    string aa = SessionManager_625NS.getInstancia().getUsuarioActivo().Dni;
+
+                    BE_Evento_625NS eee = new BE_Evento_625NS(aa, DateTime.Now, "Usuarios", "Creacion de usuario", BE_Evento_625NS.Criticidad.Bajo);
+                    new BLL_BitacoraEvento_625NS().RegistrarEvento(eee);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al crear el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                actualizar();
+                LimpiarCampos();
+                modo = "";
+            }
+        }
+
+        void habilitarBotonCancelar()
+        {
+            button6.Enabled = true;
+        }
+
+        void deshabilitarBotonCancelar()
+        {
+            button6.Enabled = false;
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
+            //se cancela la operacion actual
+            modo = "";
 
+            LimpiarCampos();
+
+            MessageBox.Show("Operacion cancelada");
         }
 
 
@@ -305,34 +439,51 @@ namespace SistemaBase.Administracion
             button5.Enabled = habilitar;
         }
         bool activado = false;
-        private void button2_Click(object sender, EventArgs e)
+
+
+        void habilitarBotonCrear()
         {
-            activado = !activado;
-
-            var bll = new BLL_Usuario_625NS();
-            var usuarios = bll.obtenerUsuarios();
-
-            if (activado)
-            {
-                // 🔓 Mostrar mails desencriptados
-                foreach (var u in usuarios)
-                {
-                    if (!string.IsNullOrEmpty(u.Email))
-                        u.Email = CryptoManager_625NS.DesencriptarReversible(u.Email);
-                }
-
-                dataGridView1.DataSource = null;
-                dataGridView1.DataSource = usuarios;
-                button2.Text = "Ocultar mails";
-            }
-            else
-            {
-                dataGridView1.DataSource = null;
-                dataGridView1.DataSource = usuarios;
-                button2.Text = "Ver mails";
-            }
-
+            button1.Enabled = true;
         }
+
+        void deshabilitarBotonCrear()
+        {
+            button1.Enabled = false;
+        }
+
+        void habilitarBotonModificar()
+        {
+            button3.Enabled = true;
+        }
+
+        void deshabilitarBotonModificar()
+        {
+            button3 .Enabled = false;
+        }
+
+        void habilitarBotonActivarDesactivar()
+        {
+            btnActivarDesactivar.Enabled = true;
+        }
+
+        void deshabilitarBotonActivarDesactivar()
+        {
+            btnActivarDesactivar.Enabled= false;
+        }
+
+        void habilitarBotonDesbloquear()
+        {
+            button2.Enabled = true;
+            
+        }
+
+        void deshabilitarBotonDesbloquear()
+        {
+            button2.Enabled = false;
+        }
+
+
+
 
         private void FormABMUsuario_625NS_Load(object sender, EventArgs e)
         {
@@ -346,26 +497,77 @@ namespace SistemaBase.Administracion
 
         private void btnActivarDesactivar_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count == 0) return;
 
-            var fila = dataGridView1.SelectedRows[0];
+            modo = "activar/desactivar";
 
-            string dni = fila.Cells["DNI_625NS"].Value.ToString();
-            bool bloqueadoActual = Convert.ToBoolean(fila.Cells["Bloqueado_625NS"].Value);
+            textBox5.Text = textBox5.Text = "Mensaje: \nModo activar/desactivar";
 
-            try
+            habilitarBotonAplicar();
+            habilitarBotonCancelar();
+
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!radioButton1.Checked)
             {
-                var bll = new BLL_Usuario_625NS();
-                // Invertimos: si está bloqueado, lo desbloqueamos (false) y viceversa
-                bll.CambiarEstadoActivo(dni, !bloqueadoActual);
-
-                MessageBox.Show("Estado actualizado con éxito.");
-                actualizar(); // Esto refresca la lista
+                radioButton2.Checked = true;
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Error: " + ex.Message);
+                radioButton2.Checked = false;
+                dataGridView1.DataSource = listaGeneral.Where(x => x.Activo == true).ToList(); //mostramos solo los usuarios activos, no bloqueados
+
             }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!radioButton2.Checked)
+            {
+            }
+            else
+            {
+                radioButton1.Checked = false;
+                radioButton3.Checked = false;
+                dataGridView1.DataSource = listaGeneral;
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton3.Checked)
+            {
+
+                radioButton1.Checked= false;
+                radioButton2.Checked= false;
+
+                dataGridView1.DataSource = listaGeneral.Where(x => x.Bloqueado);
+
+
+            }
+            else
+            {
+                dataGridView1.DataSource= listaGeneral;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            modo = "desbloquear";
+
+            textBox5.Text = "Mensaje: \nModo desbloquear";
+
+            habilitarBotonAplicar();
+            habilitarBotonCancelar();
+
+
         }
     }
 }

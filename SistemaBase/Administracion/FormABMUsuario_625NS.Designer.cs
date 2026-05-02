@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button2 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -52,19 +51,13 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.btnActivarDesactivar = new System.Windows.Forms.Button();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(697, 249);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 32;
-            this.button2.Text = "Ver email";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label7
             // 
@@ -215,22 +208,23 @@
             this.radioButton2.Tag = "TodosCheckBox";
             this.radioButton2.Text = "Todos";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(397, 25);
+            this.radioButton1.Location = new System.Drawing.Point(332, 25);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(60, 17);
             this.radioButton1.TabIndex = 26;
-            this.radioButton1.TabStop = true;
             this.radioButton1.Tag = "ActivosCheckBox";
             this.radioButton1.Text = "Activos";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(697, 220);
+            this.button6.Location = new System.Drawing.Point(697, 239);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 25;
@@ -241,7 +235,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(697, 146);
+            this.button5.Location = new System.Drawing.Point(697, 120);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 24;
@@ -252,7 +246,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(697, 103);
+            this.button3.Location = new System.Drawing.Point(697, 87);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 23;
@@ -294,7 +288,7 @@
             // 
             // btnActivarDesactivar
             // 
-            this.btnActivarDesactivar.Location = new System.Drawing.Point(697, 175);
+            this.btnActivarDesactivar.Location = new System.Drawing.Point(697, 149);
             this.btnActivarDesactivar.Name = "btnActivarDesactivar";
             this.btnActivarDesactivar.Size = new System.Drawing.Size(75, 38);
             this.btnActivarDesactivar.TabIndex = 33;
@@ -303,13 +297,60 @@
             this.btnActivarDesactivar.UseVisualStyleBackColor = true;
             this.btnActivarDesactivar.Click += new System.EventHandler(this.btnActivarDesactivar_Click);
             // 
+            // textBox5
+            // 
+            this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 18.25F);
+            this.textBox5.Location = new System.Drawing.Point(467, 305);
+            this.textBox5.Multiline = true;
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(256, 109);
+            this.textBox5.TabIndex = 34;
+            this.textBox5.Text = "Mensaje:";
+            this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(697, 268);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 35;
+            this.button4.Text = "Salir";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(398, 25);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(81, 17);
+            this.radioButton3.TabIndex = 36;
+            this.radioButton3.Tag = "ActivosCheckBox";
+            this.radioButton3.Text = "Bloqueados";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(697, 195);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 38);
+            this.button2.TabIndex = 37;
+            this.button2.Tag = "CancelarButton";
+            this.button2.Text = "Desbloquear";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // FormABMUsuario_625NS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnActivarDesactivar);
             this.Controls.Add(this.button2);
+            this.Controls.Add(this.radioButton3);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.textBox5);
+            this.Controls.Add(this.btnActivarDesactivar);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.panel1);
@@ -334,7 +375,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Panel panel1;
@@ -358,5 +398,9 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnActivarDesactivar;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.Button button2;
     }
 }

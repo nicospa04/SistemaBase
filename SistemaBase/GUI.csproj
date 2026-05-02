@@ -61,7 +61,6 @@
     <Compile Include="Administracion\FormABMUsuario_625NS.Designer.cs">
       <DependentUpon>FormABMUsuario_625NS.cs</DependentUpon>
     </Compile>
-    <Compile Include="Class1.cs" />
     <Compile Include="Administracion\FormBitacoraEventos_625NS.cs">
       <SubType>Form</SubType>
     </Compile>

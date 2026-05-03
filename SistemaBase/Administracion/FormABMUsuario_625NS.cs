@@ -1,8 +1,8 @@
-﻿using BE_625NS;
+﻿using BE_56_PS;
 using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
-using Services_625NS;
+using Services_56_PS;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +19,7 @@ namespace SistemaBase.Administracion
     {
         string modo = "";
 
-        List<BE_Usuario_625NS> listaGeneral;
+        List<BE_Usuario_56_PS> listaGeneral;
 
         public FormABMUsuario_625NS()
         {
@@ -27,7 +27,7 @@ namespace SistemaBase.Administracion
 
             CargarRoles();
 
-            listaGeneral = new BLL_Usuario_625NS().obtenerUsuarios();
+            listaGeneral = new BLL_Usuario_56_PS().obtenerUsuarios();
 
             dataGridView1.DataSource = listaGeneral;
 
@@ -139,7 +139,7 @@ namespace SistemaBase.Administracion
                 string dni = fila.Cells["DNI_625NS"].Value.ToString();
                 bool bloqueadoActual = Convert.ToBoolean(fila.Cells["Bloqueado_625NS"].Value);
 
-                var bll = new BLL_Usuario_625NS();
+                var bll = new BLL_Usuario_56_PS();
                 // Invertimos: si está bloqueado, lo desbloqueamos (false) y viceversa
                 bll.CambiarEstadoBloqueado(dni, !bloqueadoActual);
 
@@ -162,7 +162,7 @@ namespace SistemaBase.Administracion
                 string dni = fila.Cells["DNI_625NS"].Value.ToString();
                 bool ActivoActual = Convert.ToBoolean(fila.Cells["Activo"].Value);
 
-                  var bll = new BLL_Usuario_625NS();
+                  var bll = new BLL_Usuario_56_PS();
                     // Invertimos: si está bloqueado, lo desbloqueamos (false) y viceversa
                     bll.CambiarEstadoActivo(dni, !ActivoActual);
 
@@ -183,7 +183,7 @@ namespace SistemaBase.Administracion
 
                     string dni = fila.Cells["DNI"].Value.ToString();
 
-                    BE_Usuario_625NS usuarioADesbloquear = (BE_Usuario_625NS)new BLL_Usuario_625NS().obtenerUsuarioPorDni(dni); // to do
+                    BE_Usuario_56_PS usuarioADesbloquear = (BE_Usuario_56_PS)new BLL_Usuario_56_PS().obtenerUsuarioPorDni(dni); // to do
 
                     if (!usuarioADesbloquear.Bloqueado)
                     {
@@ -191,7 +191,7 @@ namespace SistemaBase.Administracion
                         return;
                     }
 
-                    new BLL_Usuario_625NS().desbloquearUsuario(dni);
+                    new BLL_Usuario_56_PS().desbloquearUsuario(dni);
 
                     MessageBox.Show($"Usuario {usuarioADesbloquear.NombreUsuario} desbloqueado con exito");
 
@@ -226,7 +226,7 @@ namespace SistemaBase.Administracion
 
 
 
-                string emailEncriptado = CryptoManager_625NS.EncriptarReversible(email);
+                string emailEncriptado = CryptoManager_56_PS.EncriptarReversible(email);
 
 
 
@@ -254,16 +254,16 @@ namespace SistemaBase.Administracion
 
 
 
-                BE_625NS.BE_Usuario_625NS user = new BE_625NS.BE_Usuario_625NS(apellido, bloqueado, fila.Cells["Contraseña"].Value.ToString(), dni, emailEncriptado, nombre, nombreUsuario, 0, "EN");
+                BE_56_PS.BE_Usuario_56_PS user = new BE_56_PS.BE_Usuario_56_PS(apellido, fila.Cells["Contraseña"].Value.ToString(), dni, emailEncriptado, nombre, nombreUsuario, 0, "EN", bloqueado, activo);
 
 
               
 
-                user.Rol_625NS = comboBox1.SelectedValue.ToString();
+                user.Rol_56_PS = comboBox1.SelectedValue.ToString();
 
 
 
-                BLL.BLL_Usuario_625NS a = new BLL.BLL_Usuario_625NS();
+                BLL.BLL_Usuario_56_PS a = new BLL.BLL_Usuario_56_PS();
                 a.modificarUsuario(user);
 
                 actualizar();
@@ -274,9 +274,9 @@ namespace SistemaBase.Administracion
                 MessageBox.Show("Usuario modificado");
 
 
-                var currentUser = SessionManager_625NS.getInstancia().getUsuarioActivo();
+                var currentUser = SessionManager_56_PS.getInstancia().getUsuarioActivo();
 
-                BE_Evento_56_PS evento = new BE_Evento_625NS(currentUser.Dni, DateTime.Now, "Usuarios", "Modificación de usuario", BE_Evento_56_PS.Criticidad.Medio);
+                BE_Evento_56_PS evento = new BE_Evento_56_PS(currentUser.Dni, DateTime.Now, "Usuarios", "Modificación de usuario", BE_Evento_56_PS.Criticidad.Medio);
 
 
             }
@@ -310,7 +310,7 @@ namespace SistemaBase.Administracion
 
                     string dni = textBox1.Text;
 
-                    if (new BLL_Usuario_625NS().obtenerUsuarios().Any(ee => ee.Dni == dni))
+                    if (new BLL_Usuario_56_PS().obtenerUsuarios().Any(ee => ee.Dni == dni))
                     {
                         MessageBox.Show("No se puede crear un usuario con ese DNI.");
                         return;
@@ -322,7 +322,7 @@ namespace SistemaBase.Administracion
                                            textBox2.Text.Substring(0, 2) +
                                            textBox1.Text.Substring(textBox1.Text.Length - 2);
 
-                    string emailEncriptado = CryptoManager_625NS.EncriptarReversible(textBox4.Text);
+                    string emailEncriptado = CryptoManager_56_PS.EncriptarReversible(textBox4.Text);
 
                     //la contraseña se crea apartir de juntar el DNI + apellido
                     if (emailEncriptado == null)
@@ -333,22 +333,23 @@ namespace SistemaBase.Administracion
 
 
                     // Crear objeto Usuario
-                    var usuario = new BE_Usuario_625NS(
+                    var usuario = new BE_Usuario_56_PS(
                         apellido: textBox2.Text,
                         bloqueado: checkBox2.Checked,
-                        contraseña: CryptoManager_625NS.Encriptar(textBox1.Text + textBox2.Text),
+                        contraseña: CryptoManager_56_PS.Encriptar(textBox1.Text + textBox2.Text),
                         dni: textBox1.Text,
                         email: emailEncriptado,
                         nombre: textBox3.Text,
                         nombreUsuario: nombreUsuario,
                         cantIntentosFallidos: 0,
-                        idioma: "ES" //Español es el idioma por defecto
+                        idioma: "ES", //Español es el idioma por defecto
+                        activo: checkBox1.Checked
                     );
 
-                    usuario.Rol_625NS = comboBox1.SelectedValue.ToString();
+                    usuario.Rol_56_PS = comboBox1.SelectedValue.ToString();
 
                     // Guardar usuario
-                    var usuarioBLL = new BLL_Usuario_625NS();
+                    var usuarioBLL = new BLL_Usuario_56_PS();
                     usuarioBLL.crearUsuario(usuario);
 
 
@@ -356,7 +357,7 @@ namespace SistemaBase.Administracion
                     MessageBox.Show("Usuario creado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
-                    string aa = SessionManager_625NS.getInstancia().getUsuarioActivo().Dni;
+                    string aa = SessionManager_56_PS.getInstancia().getUsuarioActivo().Dni;
 
                     BE_Evento_56_PS eee = new BE_Evento_56_PS(aa, DateTime.Now, "Usuarios", "Creacion de usuario", BE_Evento_56_PS.Criticidad.Bajo);
                     new BLL_BitacoraEvento_56_PS().RegistrarEvento(eee);
@@ -408,7 +409,7 @@ namespace SistemaBase.Administracion
 
         void actualizar()
         {
-            BLL_Usuario_625NS bl = new BLL_Usuario_625NS
+            BLL_Usuario_56_PS bl = new BLL_Usuario_56_PS
              ();
 
           

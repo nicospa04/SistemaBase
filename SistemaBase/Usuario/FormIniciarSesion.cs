@@ -1,4 +1,4 @@
-﻿using BE_625NS;
+﻿using BE_56_PS;
 using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
@@ -23,7 +23,7 @@ namespace SistemaBase
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var instance = SessionManager_625NS.getInstancia();
+            var instance = SessionManager_56_PS.getInstancia();
 
             if (instance.haySesionActiva())
             {
@@ -48,13 +48,13 @@ namespace SistemaBase
             }
 
 
-            BLL_Usuario_625NS usuarioBLL = new BLL_Usuario_625NS();
+            BLL_Usuario_56_PS usuarioBLL = new BLL_Usuario_56_PS();
             bool valido = usuarioBLL.validarUsuario(userName, password);
 
             if (valido)
             {
-                List<BE_Usuario_625NS> listaUsuarios = usuarioBLL.obtenerUsuarios();
-                BE_Usuario_625NS usuarioLogueado = listaUsuarios.Find(u => u.NombreUsuario == userName);
+                List<BE_Usuario_56_PS> listaUsuarios = usuarioBLL.obtenerUsuarios();
+                BE_Usuario_56_PS usuarioLogueado = listaUsuarios.Find(u => u.NombreUsuario == userName);
 
                 if (usuarioLogueado.Bloqueado)
                 {
@@ -100,22 +100,22 @@ namespace SistemaBase
 
 
 
-                SessionManager_625NS.getInstancia().iniciarSesion(usuarioLogueado);
+                SessionManager_56_PS.getInstancia().iniciarSesion(usuarioLogueado);
 
                // SessionManager_625NS.getInstancia().CambiarIdioma_625NS(usuarioLogueado.idioma);
 
 
-                var sessao = SessionManager_625NS.getInstancia();
+                var sessao = SessionManager_56_PS.getInstancia();
                 string userNamee = sessao.getUsuarioActivo().NombreUsuario;
 
 
                 MessageBox.Show("Sesión iniciada, bienvenido " + userNamee);
 
 
-                var user = SessionManager_625NS.getInstancia().getUsuarioActivo();
+                var user = SessionManager_56_PS.getInstancia().getUsuarioActivo();
 
 
-                BE_Evento_56_PS evento = new BE_Evento_625NS(user.Dni, DateTime.Now, "Usuarios", "Inicio de sesión", BE_Evento_56_PS.Criticidad.Bajo);
+                BE_Evento_56_PS evento = new BE_Evento_56_PS(user.Dni, DateTime.Now, "Usuarios", "Inicio de sesión", BE_Evento_56_PS.Criticidad.Bajo);
 
                 new BLL_BitacoraEvento_56_PS().RegistrarEvento(evento);
 
@@ -126,15 +126,15 @@ namespace SistemaBase
 
 
 
-                var userr = SessionManager_625NS.getInstancia().getUsuarioActivo();
-                BLL_Usuario_625NS bll = new BLL_Usuario_625NS();
+                var userr = SessionManager_56_PS.getInstancia().getUsuarioActivo();
+                BLL_Usuario_56_PS bll = new BLL_Usuario_56_PS();
 
 
                 MenuPrincipal menu = Application.OpenForms["FormPrincipal"] as MenuPrincipal;
 
 
 
-                menu.MenuAdministracion.Enabled = userr.Rol_625NS == "Administrador";
+                menu.MenuAdministracion.Enabled = userr.Rol_56_PS == "Administrador";
                 
 
 

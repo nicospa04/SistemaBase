@@ -1,4 +1,4 @@
-﻿using BE_625NS;
+﻿using BE_56_PS;
 using ClassLibrary2;
 using ClassLibrary3;
 using System;
@@ -41,9 +41,9 @@ namespace GUI_625NS.Administracion
 
             dataGridView1.DataSource = filtrados;
 
-            var user = SessionManager_625NS.getInstancia().getUsuarioActivo();
+            var user = SessionManager_56_PS.getInstancia().getUsuarioActivo();
 
-            BE_Evento_56_PS evento = new BE_Evento_625NS(
+            BE_Evento_56_PS evento = new BE_Evento_56_PS(
                 user.Dni,
                 DateTime.Now,
                 "Eventos",
@@ -182,7 +182,7 @@ namespace GUI_625NS.Administracion
 
                     MessageBox.Show("PDF exportado correctamente.");
 
-                    string a = SessionManager_625NS.getInstancia().getUsuarioActivo().Dni;
+                    string a = SessionManager_56_PS.getInstancia().getUsuarioActivo().Dni;
 
                     BE_Evento_56_PS ee = new BE_Evento_56_PS(a, DateTime.Now, "Eventos", "Exportacion a pdf de evento", BE_Evento_56_PS.Criticidad.Bajo);
                     new BLL_BitacoraEvento_56_PS().RegistrarEvento(ee);

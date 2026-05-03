@@ -18,8 +18,8 @@ namespace GUI_625NS.Administracion
 {
     public partial class FormBitacoraEventos_625NS : Form //, IdiomaObserver_625NS
     {
-        private List<BE_Evento_625NS> eventos;
-        private List<BE_Evento_625NS> filtrados;
+        private List<BE_Evento_56PS> eventos;
+        private List<BE_Evento_56PS> filtrados;
 
 
         //public void ActualizarIdioma_625NS()
@@ -36,19 +36,19 @@ namespace GUI_625NS.Administracion
         {
             InitializeComponent();
 
-            eventos = new BLL_BitacoraEvento_625NS().obtenerEventos();
-            filtrados = new List<BE_Evento_625NS>(eventos);
+            eventos = new BLL_BitacoraEvento_56PS().obtenerEventos();
+            filtrados = new List<BE_Evento_56PS>(eventos);
 
             dataGridView1.DataSource = filtrados;
 
             var user = SessionManager_625NS.getInstancia().getUsuarioActivo();
 
-            BE_Evento_625NS evento = new BE_Evento_625NS(
+            BE_Evento_56PS evento = new BE_Evento_625NS(
                 user.Dni,
                 DateTime.Now,
                 "Eventos",
                 "Consultó el listado de eventos",
-                BE_Evento_625NS.Criticidad.Bajo
+                BE_Evento_56PS.Criticidad.Bajo
             );
 
             //SessionManager_625NS.getInstancia().Suscribir_625NS(this);
@@ -63,7 +63,7 @@ namespace GUI_625NS.Administracion
             comboBox1.Items.AddRange(eventos.Select(ev => ev.modulo_625NS).Distinct().ToArray());
 
             comboBox2.Items.Clear();
-            comboBox2.Items.AddRange(Enum.GetNames(typeof(BE_Evento_625NS.Criticidad)));
+            comboBox2.Items.AddRange(Enum.GetNames(typeof(BE_Evento_56PS.Criticidad)));
 
             dateTimePicker1.Value = eventos.Min(ev => ev.fecha_625NS);
             dateTimePicker2.Value = eventos.Max(ev => ev.fecha_625NS);
@@ -83,7 +83,7 @@ namespace GUI_625NS.Administracion
 
             if (comboBox2.SelectedItem != null)
             {
-                var crit = (BE_Evento_625NS.Criticidad)Enum.Parse(typeof(BE_Evento_625NS.Criticidad), comboBox2.SelectedItem.ToString());
+                var crit = (BE_Evento_56PS.Criticidad)Enum.Parse(typeof(BE_Evento_56PS.Criticidad), comboBox2.SelectedItem.ToString());
                 query = query.Where(ev => ev.criticidad_625NS == crit);
             }
 
@@ -108,7 +108,7 @@ namespace GUI_625NS.Administracion
             dateTimePicker1.Value = eventos.Min(ev => ev.fecha_625NS);
             dateTimePicker2.Value = eventos.Max(ev => ev.fecha_625NS);
 
-            filtrados = new List<BE_Evento_625NS>(eventos);
+            filtrados = new List<BE_Evento_56PS>(eventos);
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = filtrados;
         }
@@ -184,8 +184,8 @@ namespace GUI_625NS.Administracion
 
                     string a = SessionManager_625NS.getInstancia().getUsuarioActivo().Dni;
 
-                    BE_Evento_625NS ee = new BE_Evento_625NS(a, DateTime.Now, "Eventos", "Exportacion a pdf de evento", BE_Evento_625NS.Criticidad.Bajo);
-                    new BLL_BitacoraEvento_625NS().RegistrarEvento(ee);
+                    BE_Evento_56PS ee = new BE_Evento_56PS(a, DateTime.Now, "Eventos", "Exportacion a pdf de evento", BE_Evento_56PS.Criticidad.Bajo);
+                    new BLL_BitacoraEvento_56PS().RegistrarEvento(ee);
                 }
             }
             catch (Exception ex)

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace DAL_625NS
 {
-    public static class DAL_625NS
+    public static class DAL_56PS
     {
         private static string dbname = "SistemaMedicoDB";
         private static string conexion = $@"Data Source=COMPURELOCA;Initial Catalog={dbname};Integrated Security=True";

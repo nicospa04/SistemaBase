@@ -41,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CryptoManager_625NS.cs" />
+    <Compile Include="Usuario_625NS.cs" />
+    <Compile Include="CryptoManager_56PS.cs" />
+    <Compile Include="IntentosLogin_56PS.cs" />
+    <Compile Include="LoginAttemptManager_56PS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionManager.cs" />
+    <Compile Include="SessionManager_56PS.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BE\BE.csproj">

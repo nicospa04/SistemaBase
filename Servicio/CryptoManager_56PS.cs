@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Services_625NS
 {
-    public static class CryptoManager_625NS
+    public static class CryptoManager_56PS
     {
         public static string Encriptar(string texto)
         {
@@ -26,7 +26,7 @@ namespace Services_625NS
             }
         }
 
-        private static readonly string _clave = "ClaveDeSeguridadParaEncriptacionNoModificar_625NS"; // Cambiar por una clave fuerte
+        private static readonly string _clave = "ClaveDeSeguridadParaEncriptacionNoModificar_56PS"; // Cambiar por una clave fuerte
 
         public static string EncriptarReversible(string texto)
         {

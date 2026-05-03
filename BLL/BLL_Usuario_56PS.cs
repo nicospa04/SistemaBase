@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using DAL_625NS;
 namespace BLL
 {
-    public class BLL_Usuario_625NS
+    public class BLL_Usuario_56PS
     {
-        private DAL_Usuario_625NS dal = new DAL_Usuario_625NS();
+        private DAL_Usuario_56PS dal = new DAL_Usuario_56PS();
 
 
         //public bool TienePermiso(string nombrePermiso, BE_Usuario_625NS a)
@@ -40,7 +40,7 @@ namespace BLL
 
         public string crearContraseña(string nombre, string dni) //si
         {
-            return CryptoManager_625NS.Encriptar(nombre + dni);
+            return CryptoManager_56PS.Encriptar(nombre + dni);
         }
 
         public void crearUsuario(BE_Usuario_56_PS usuario) //si
@@ -55,7 +55,7 @@ namespace BLL
 
         public bool iniciarSesion(string nombreUsuario, string contraseña) //si
         {
-            string contraseñaEncriptada = CryptoManager_625NS.Encriptar(contraseña);
+            string contraseñaEncriptada = CryptoManager_56PS.Encriptar(contraseña);
             return dal.validarUsuario(nombreUsuario, contraseñaEncriptada);
         }
 
@@ -71,7 +71,7 @@ namespace BLL
 
         public bool validarUsuario(string nombreUsuario, string contraseña) //si
         {
-            string contraseñaEncriptada = CryptoManager_625NS.Encriptar(contraseña);
+            string contraseñaEncriptada = CryptoManager_56PS.Encriptar(contraseña);
             return dal.validarUsuario(nombreUsuario, contraseñaEncriptada);
         }
 
@@ -80,12 +80,12 @@ namespace BLL
             return dal.verificarEstado(nombreUsuario);
         }
 
-        public void sumarIntentoFallido(string nombreUsuario) //si
-        {
-            dal.sumarIntentoFallido(nombreUsuario);
+        //public void sumarIntentoFallido(string nombreUsuario) //si
+        //{
+        //    dal.sumarIntentoFallido(nombreUsuario);
 
-            dal.validarCantIntentos(nombreUsuario);
-        }
+        //    dal.validarCantIntentos(nombreUsuario);
+        //}
 
         public void cambiarIdioma(BE_Usuario_56_PS user, string v)  //si
         {
@@ -103,6 +103,16 @@ namespace BLL
         }
 
         public void CambiarEstadoBloqueado(string dni, bool v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool existeUsuarioConEseUsername(string userName)
+        {
+            return dal.existeUsuarioConEseUsername(userName);
+        }
+
+        public void bloquearUsuario(string userName)
         {
             throw new NotImplementedException();
         }

@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace BE_56_PS
 {
     [Serializable]
-    public class BE_Usuario_56_PS
+    public class Usuario_56PS
     {
         public string Apellido { get; set; }
         public string Contraseña { get; set; }
@@ -16,7 +16,7 @@ namespace BE_56_PS
         public string Email { get; set; }
 
         [XmlIgnore]
-        public string Rol_56_PS { get; set; } //Perfil 
+        public string Rol { get; set; } //Perfil 
 
 
         public string Nombre { get; set; }
@@ -26,9 +26,9 @@ namespace BE_56_PS
         public bool Bloqueado { get; set; }
         public bool Activo { get; set; }
 
-        public BE_Usuario_56_PS() { }
+        public Usuario_56PS() { }
 
-        public BE_Usuario_56_PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, int cantIntentosFallidos, string idioma, bool bloqueado ,bool activo)
+        public Usuario_56PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, int cantIntentosFallidos, string idioma, bool bloqueado ,bool activo, string rol)
         {
             this.Apellido = apellido;
             this.Contraseña = contraseña;
@@ -40,6 +40,7 @@ namespace BE_56_PS
             this.idioma = idioma;
             this.Bloqueado = bloqueado;
             this.Activo = activo;
+            this.Rol = rol;
         }
     }
 }

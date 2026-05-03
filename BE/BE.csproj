@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BE_Evento_625NS.cs" />
-    <Compile Include="BE_Usuario_625NS.cs" />
+    <Compile Include="BE_Evento_56_PS.cs" />
+    <Compile Include="BE_Usuario_56_PS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

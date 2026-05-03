@@ -1,17 +1,17 @@
 ﻿using BE_56_PS;
 using ClassLibrary2;
-using Services_625NS;
+using Services_56_PS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DAL_625NS;
+using DAL_56_PS;
 namespace BLL
 {
-    public class BLL_Usuario_625NS
+    public class BLL_Usuario_56_PS
     {
-        private DAL_Usuario_625NS dal = new DAL_Usuario_625NS();
+        private DAL_Usuario_56_PS dal = new DAL_Usuario_56_PS();
 
 
         //public bool TienePermiso(string nombrePermiso, BE_Usuario_625NS a)
@@ -35,12 +35,12 @@ namespace BLL
 
         public void cerrarSesion() //si
         {
-            SessionManager_625NS.getInstancia().cerrarSesion();
+            SessionManager_56_PS.getInstancia().cerrarSesion();
         }
 
         public string crearContraseña(string nombre, string dni) //si
         {
-            return CryptoManager_625NS.Encriptar(nombre + dni);
+            return CryptoManager_56_PS.Encriptar(nombre + dni);
         }
 
         public void crearUsuario(BE_Usuario_56_PS usuario) //si
@@ -55,7 +55,7 @@ namespace BLL
 
         public bool iniciarSesion(string nombreUsuario, string contraseña) //si
         {
-            string contraseñaEncriptada = CryptoManager_625NS.Encriptar(contraseña);
+            string contraseñaEncriptada = CryptoManager_56_PS.Encriptar(contraseña);
             return dal.validarUsuario(nombreUsuario, contraseñaEncriptada);
         }
 
@@ -71,7 +71,7 @@ namespace BLL
 
         public bool validarUsuario(string nombreUsuario, string contraseña) //si
         {
-            string contraseñaEncriptada = CryptoManager_625NS.Encriptar(contraseña);
+            string contraseñaEncriptada = CryptoManager_56_PS.Encriptar(contraseña);
             return dal.validarUsuario(nombreUsuario, contraseñaEncriptada);
         }
 

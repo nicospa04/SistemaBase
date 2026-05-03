@@ -41,9 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAL_625NS.cs" />
-    <Compile Include="DAL_BitacoraEventos_625NS.cs" />
-    <Compile Include="DAL_Usuario_625NS.cs" />
+    <Compile Include="DAL_56_PS.cs" />
+    <Compile Include="DAL_BitacoraEventos_56_PS.cs" />
+    <Compile Include="DAL_Usuario_56_PS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

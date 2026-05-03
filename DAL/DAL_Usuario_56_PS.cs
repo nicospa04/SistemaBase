@@ -5,9 +5,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Net.NetworkInformation;
 
-namespace DAL_625NS
+namespace DAL_56_PS
 {
-    public class DAL_Usuario_625NS 
+    public class DAL_Usuario_56_PS 
     {
         public void crearUsuario(BE_Usuario_56_PS usuario)
         {
@@ -15,7 +15,7 @@ namespace DAL_625NS
                 throw new Exception("Usuario ya existe");
 
             string queryRol = "SELECT CodRol_625NS FROM Rol_625NS WHERE Nombre_625NS = @NombreRol";
-            object result = DAL_625NS.ExecuteScalar(queryRol, new SqlParameter[] { new SqlParameter("@NombreRol", usuario.Rol_56_PS) });
+            object result = DAL_56_PS.ExecuteScalar(queryRol, new SqlParameter[] { new SqlParameter("@NombreRol", usuario.Rol_56_PS) });
 
             if (result == null || result == DBNull.Value)
                 throw new Exception("El rol especificado no existe.");
@@ -45,7 +45,7 @@ namespace DAL_625NS
                 new SqlParameter("@Activo", usuario.Activo)
             };
 
-            DAL_625NS.ExecuteNonQuery(query, parameters);
+            DAL_56_PS.ExecuteNonQuery(query, parameters);
         }
 
         public bool validarUsuarioDNI(string dni)
@@ -53,7 +53,7 @@ namespace DAL_625NS
             string query = "SELECT COUNT(*) FROM dbo.Usuario WHERE DNI = @Dni";
             SqlParameter[] parameters = { new SqlParameter("@Dni", dni) };
 
-            int count = Convert.ToInt32(DAL_625NS.ExecuteScalar(query, parameters));
+            int count = Convert.ToInt32(DAL_56_PS.ExecuteScalar(query, parameters));
             return count > 0;
         }
 
@@ -67,7 +67,7 @@ namespace DAL_625NS
                 new SqlParameter("@Contraseña", contraseña)
             };
 
-            int count = Convert.ToInt32(DAL_625NS.ExecuteScalar(query, parameters));
+            int count = Convert.ToInt32(DAL_56_PS.ExecuteScalar(query, parameters));
             return count > 0;
         }
 
@@ -80,20 +80,20 @@ namespace DAL_625NS
                 new SqlParameter("@DNI", dni)
             };
 
-            DAL_625NS.ExecuteNonQuery(query, parameters);
+            DAL_56_PS.ExecuteNonQuery(query, parameters);
         }
 
         public void desbloquearUsuario(string dni)
         {
             string query = "UPDATE dbo.Usuario SET Bloqueado = 0, IntentosFallidos = 0, Activo = 1 WHERE DNI = @DNI";
-            DAL_625NS.ExecuteNonQuery(query, new SqlParameter[] { new SqlParameter("@DNI", dni) });
+            DAL_56_PS.ExecuteNonQuery(query, new SqlParameter[] { new SqlParameter("@DNI", dni) });
         }
 
         public List<BE_Usuario_56_PS> obtenerUsuarios()
         {
             string query = "SELECT * FROM dbo.Usuario";
 
-            DataSet ds = DAL_625NS.ExecuteDataSet(query, null);
+            DataSet ds = DAL_56_PS.ExecuteDataSet(query, null);
 
             List<BE_Usuario_56_PS> lista = new List<BE_Usuario_56_PS>();
 
@@ -129,7 +129,7 @@ namespace DAL_625NS
         public void modificarUsuario(BE_Usuario_56_PS usuario)
         {
             string queryRol = "SELECT CodRol FROM Rol WHERE NombreRol = @NombreRol";
-            object result = DAL_625NS.ExecuteScalar(queryRol, new SqlParameter[] { new SqlParameter("@NombreRol", usuario.Rol_56_PS) });
+            object result = DAL_56_PS.ExecuteScalar(queryRol, new SqlParameter[] { new SqlParameter("@NombreRol", usuario.Rol_56_PS) });
 
             if (result == null || result == DBNull.Value)
                 throw new Exception("El rol especificado no existe.");
@@ -164,14 +164,14 @@ namespace DAL_625NS
                 new SqlParameter("@DNI", usuario.Dni)
             }; 
 
-            DAL_625NS.ExecuteNonQuery(query, parameters);
+            DAL_56_PS.ExecuteNonQuery(query, parameters);
         }
 
         public string verificarEstado(string nombreUsuario)
         {
             string query = "SELECT Bloqueado FROM dbo.Usuario WHERE NombreUsuario = @NombreUsuario";
 
-            object result = DAL_625NS.ExecuteScalar(query, new SqlParameter[] { new SqlParameter("@NombreUsuario", nombreUsuario) });
+            object result = DAL_56_PS.ExecuteScalar(query, new SqlParameter[] { new SqlParameter("@NombreUsuario", nombreUsuario) });
 
             if (result == null) return "Inexistente";
             return Convert.ToBoolean(result) ? "Bloqueado" : "Activo";
@@ -180,19 +180,19 @@ namespace DAL_625NS
         public void sumarIntentoFallido(string nombreUsuario)
         {
             string query = "UPDATE dbo.Usuario SET IntentosFallidos = ISNULL(IntentosFallidos, 0) + 1 WHERE NombreUsuario = @NombreUsuario";
-            DAL_625NS.ExecuteNonQuery(query, new SqlParameter[] { new SqlParameter("@NombreUsuario", nombreUsuario) });
+            DAL_56_PS.ExecuteNonQuery(query, new SqlParameter[] { new SqlParameter("@NombreUsuario", nombreUsuario) });
         }
 
         public void validarCantIntentos(string nombreUsuario)
         {
             string query = "SELECT IntentosFallidos FROM dbo.Usuario WHERE NombreUsuario = @NombreUsuario";
 
-            object result = DAL_625NS.ExecuteScalar(query, new SqlParameter[] { new SqlParameter("@NombreUsuario", nombreUsuario) });
+            object result = DAL_56_PS.ExecuteScalar(query, new SqlParameter[] { new SqlParameter("@NombreUsuario", nombreUsuario) });
 
             if (result != null && Convert.ToInt32(result) >= 3)
             {
                 string bloquearQuery = "UPDATE dbo.Usuario SET Bloqueado = 1, Activo = 0, IntentosFallidos = 0 WHERE NombreUsuario = @NombreUsuario";
-                DAL_625NS.ExecuteNonQuery(bloquearQuery, new SqlParameter[] { new SqlParameter("@NombreUsuario", nombreUsuario) });
+                DAL_56_PS.ExecuteNonQuery(bloquearQuery, new SqlParameter[] { new SqlParameter("@NombreUsuario", nombreUsuario) });
             }
         }
 
@@ -206,7 +206,7 @@ namespace DAL_625NS
                 new SqlParameter("@dni", dni)
             };
 
-            DAL_625NS.ExecuteNonQuery(query, parametros);
+            DAL_56_PS.ExecuteNonQuery(query, parametros);
         }
 
         public void cambiarIdioma(BE_Usuario_56_PS user, string nuevoIdioma)
@@ -217,8 +217,8 @@ namespace DAL_625NS
                 new SqlParameter("@dni", user.Dni),
                 new SqlParameter("@Idioma", nuevoIdioma)
             };
-
-            DAL_625NS.ExecuteNonQuery(query, parameters);
+                
+            DAL_56_PS.ExecuteNonQuery(query, parameters);
         }
     }
 }

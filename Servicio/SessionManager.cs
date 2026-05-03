@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BE_625NS;
+using BE_56_PS;
 namespace ClassLibrary2
 {
-    public class SessionManager_625NS //: IObservable_625NS
+    public class SessionManager_56_PS //: IObservable_625NS
     {
-        private static SessionManager_625NS instancia;
-        private BE_Usuario_625NS usuarioActivo;
+        private static SessionManager_56_PS instancia;
+        private BE_Usuario_56_PS usuarioActivo;
 
 
         public string idiomaActual_625NS { get; private set; }
@@ -17,10 +17,10 @@ namespace ClassLibrary2
 
         //private SessionManager_625NS() { Observadores_625NS = new List<IdiomaObserver_625NS>(); }
 
-        public static SessionManager_625NS getInstancia()
+        public static SessionManager_56_PS getInstancia()
         {
             if (instancia == null)
-                instancia = new SessionManager_625NS();
+                instancia = new SessionManager_56_PS();
 
             return instancia;
         }
@@ -32,7 +32,7 @@ namespace ClassLibrary2
         //}
 
 
-        public void iniciarSesion(BE_Usuario_625NS usuario)
+        public void iniciarSesion(BE_Usuario_56_PS usuario)
         {
             usuarioActivo = usuario;
         }
@@ -42,7 +42,7 @@ namespace ClassLibrary2
             usuarioActivo = null;
         }
 
-        public BE_Usuario_625NS getUsuarioActivo()
+        public BE_Usuario_56_PS getUsuarioActivo()
         {
             return usuarioActivo;
         }

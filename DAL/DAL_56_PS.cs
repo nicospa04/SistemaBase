@@ -3,9 +3,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 
-namespace DAL_625NS
+namespace DAL_56_PS
 {
-    public static class DAL_625NS
+    public static class DAL_56_PS
     {
         private static string dbname = "SistemaMedicoDB";
         private static string conexion = $@"Data Source=COMPURELOCA;Initial Catalog={dbname};Integrated Security=True";

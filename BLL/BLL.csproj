@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLL_BitacoraEvento_625NS.cs" />
-    <Compile Include="BLL_Usuario_625NS.cs" />
+    <Compile Include="BLL_BitacoraEvento_56_PS.cs" />
+    <Compile Include="BLL_Usuario_56_PS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

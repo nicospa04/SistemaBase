@@ -115,9 +115,9 @@ namespace SistemaBase
                 var user = SessionManager_625NS.getInstancia().getUsuarioActivo();
 
 
-                BE_Evento_625NS evento = new BE_Evento_625NS(user.Dni, DateTime.Now, "Usuarios", "Inicio de sesión", BE_Evento_625NS.Criticidad.Bajo);
+                BE_Evento_56_PS evento = new BE_Evento_625NS(user.Dni, DateTime.Now, "Usuarios", "Inicio de sesión", BE_Evento_56_PS.Criticidad.Bajo);
 
-                new BLL_BitacoraEvento_625NS().RegistrarEvento(evento);
+                new BLL_BitacoraEvento_56_PS().RegistrarEvento(evento);
 
 
 

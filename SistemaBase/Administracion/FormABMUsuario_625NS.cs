@@ -276,7 +276,7 @@ namespace SistemaBase.Administracion
 
                 var currentUser = SessionManager_625NS.getInstancia().getUsuarioActivo();
 
-                BE_Evento_625NS evento = new BE_Evento_625NS(currentUser.Dni, DateTime.Now, "Usuarios", "Modificación de usuario", BE_Evento_625NS.Criticidad.Medio);
+                BE_Evento_56_PS evento = new BE_Evento_625NS(currentUser.Dni, DateTime.Now, "Usuarios", "Modificación de usuario", BE_Evento_56_PS.Criticidad.Medio);
 
 
             }
@@ -358,8 +358,8 @@ namespace SistemaBase.Administracion
 
                     string aa = SessionManager_625NS.getInstancia().getUsuarioActivo().Dni;
 
-                    BE_Evento_625NS eee = new BE_Evento_625NS(aa, DateTime.Now, "Usuarios", "Creacion de usuario", BE_Evento_625NS.Criticidad.Bajo);
-                    new BLL_BitacoraEvento_625NS().RegistrarEvento(eee);
+                    BE_Evento_56_PS eee = new BE_Evento_56_PS(aa, DateTime.Now, "Usuarios", "Creacion de usuario", BE_Evento_56_PS.Criticidad.Bajo);
+                    new BLL_BitacoraEvento_56_PS().RegistrarEvento(eee);
 
                 }
                 catch (Exception ex)

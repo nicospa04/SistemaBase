@@ -6,9 +6,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services_625NS
+namespace Services_56_PS
 {
-    public static class CryptoManager_625NS
+    public static class CryptoManager_56_PS
     {
         public static string Encriptar(string texto)
         {

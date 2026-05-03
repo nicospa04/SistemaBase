@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BE_625NS
+namespace BE_56_PS
 {
-    public class BE_Evento_625NS
+    public class BE_Evento_56_PS
     {
 
         public enum Criticidad
@@ -31,7 +31,7 @@ namespace BE_625NS
 
         public Criticidad criticidad_625NS { get; set; }
 
-        public BE_Evento_625NS(int numero_625NS, string dni_625NS, DateTime fecha_625NS, string modulo_625NS, string descripcion_625NS, Criticidad criticidad_625NS)
+        public BE_Evento_56_PS(int numero_625NS, string dni_625NS, DateTime fecha_625NS, string modulo_625NS, string descripcion_625NS, Criticidad criticidad_625NS)
         {
             this.numero_625NS = numero_625NS;
             this.dni_625NS = dni_625NS;
@@ -41,7 +41,7 @@ namespace BE_625NS
             this.criticidad_625NS = criticidad_625NS;
         }
 
-        public BE_Evento_625NS(string dni_625NS, DateTime fecha_625NS, string modulo_625NS, string descripcion_625NS, Criticidad criticidad_625NS)
+        public BE_Evento_56_PS(string dni_625NS, DateTime fecha_625NS, string modulo_625NS, string descripcion_625NS, Criticidad criticidad_625NS)
         {
 
             this.dni_625NS = dni_625NS;

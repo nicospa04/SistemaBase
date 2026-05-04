@@ -21,14 +21,13 @@ namespace BE_56_PS
 
         public string Nombre { get; set; }
         public string NombreUsuario { get; set; }
-        public int cantIntentosFallidos { get; set; }
         public string idioma { get; set; }
         public bool Bloqueado { get; set; }
         public bool Activo { get; set; }
 
         public Usuario_56PS() { }
 
-        public Usuario_56PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, int cantIntentosFallidos, string idioma, bool bloqueado ,bool activo, string rol)
+        public Usuario_56PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, string idioma, bool bloqueado ,bool activo, string rol)
         {
             this.Apellido = apellido;
             this.Contraseña = contraseña;
@@ -36,7 +35,6 @@ namespace BE_56_PS
             this.Email = email;
             this.Nombre = nombre;
             this.NombreUsuario = nombreUsuario;
-            this.cantIntentosFallidos = cantIntentosFallidos;
             this.idioma = idioma;
             this.Bloqueado = bloqueado;
             this.Activo = activo;

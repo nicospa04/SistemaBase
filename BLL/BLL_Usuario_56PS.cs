@@ -14,18 +14,6 @@ namespace BLL
         private DAL_Usuario_56PS dal = new DAL_Usuario_56PS();
 
 
-        //public bool TienePermiso(string nombrePermiso, BE_Usuario_625NS a)
-        //{
-
-
-        //    //if (a.Rol_625NS == null) return false; codigo usado para cuando exista composite
-
-        //    //var permisos = a.Rol_625NS.obtenerPermisos625NS();
-        //    //return permisos.Any(p => p.Nombre_625NS.Equals(nombrePermiso, StringComparison.OrdinalIgnoreCase));
-
-        //  
-        //}
-
 
 
         public void cambiarContraseña(string dni, string nuevaContraseña) //si
@@ -33,17 +21,14 @@ namespace BLL
             dal.cambiarContraseña(dni, nuevaContraseña);
         }
 
-        public void cerrarSesion() //si
-        {
-            SessionManager_625NS.getInstancia().cerrarSesion();
-        }
+      
 
         public string crearContraseña(string nombre, string dni) //si
         {
             return CryptoManager_56PS.Encriptar(nombre + dni);
         }
 
-        public void crearUsuario(BE_Usuario_56_PS usuario) //si
+        public void crearUsuario(Usuario_56PS usuario) //si
         {
             dal.crearUsuario(usuario);
         }
@@ -59,12 +44,12 @@ namespace BLL
             return dal.validarUsuario(nombreUsuario, contraseñaEncriptada);
         }
 
-        public void modificarUsuario(BE_Usuario_56_PS usuario) //si
+        public void modificarUsuario(Usuario_56PS usuario) //si
         {
             dal.modificarUsuario(usuario);
         }
 
-        public List<BE_Usuario_56_PS> obtenerUsuarios() //si
+        public List<Usuario_56PS> obtenerUsuarios() //si
         {
             return dal.obtenerUsuarios();
         }
@@ -80,41 +65,22 @@ namespace BLL
             return dal.verificarEstado(nombreUsuario);
         }
 
-        //public void sumarIntentoFallido(string nombreUsuario) //si
-        //{
-        //    dal.sumarIntentoFallido(nombreUsuario);
 
-        //    dal.validarCantIntentos(nombreUsuario);
-        //}
-
-        public void cambiarIdioma(BE_Usuario_56_PS user, string v)  //si
+        public Usuario_56PS obtenerUsuarioPorDni(string dni)
         {
-            dal.cambiarIdioma(user, v);
+            return dal.obtenerUsuarioPorDni(dni);
         }
 
-        public void CambiarEstadoActivo(string dni, bool nuevoEstado)
-        {
-            dal.CambiarEstadoActivo(dni, nuevoEstado);
-        }
-
-        public object obtenerUsuarioPorDni(string dni)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CambiarEstadoBloqueado(string dni, bool v)
-        {
-            throw new NotImplementedException();
-        }
+  
 
         public bool existeUsuarioConEseUsername(string userName)
         {
             return dal.existeUsuarioConEseUsername(userName);
         }
 
-        public void bloquearUsuario(string userName)
+        public void bloquearUsuario(string dni)
         {
-            throw new NotImplementedException();
+            dal.bloquearUsuario(dni);
         }
     }
 }

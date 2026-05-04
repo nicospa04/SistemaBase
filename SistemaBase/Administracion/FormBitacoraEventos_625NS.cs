@@ -41,9 +41,9 @@ namespace GUI_625NS.Administracion
 
             dataGridView1.DataSource = filtrados;
 
-            var user = SessionManager_625NS.getInstancia().getUsuarioActivo();
+            var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
 
-            BE_Evento_56PS evento = new BE_Evento_625NS(
+            BE_Evento_56PS evento = new BE_Evento_56PS(
                 user.Dni,
                 DateTime.Now,
                 "Eventos",
@@ -60,13 +60,13 @@ namespace GUI_625NS.Administracion
         private void FormBitacoraEventos_625NS_Load(object sender, EventArgs e)
         {
             comboBox1.Items.Clear();
-            comboBox1.Items.AddRange(eventos.Select(ev => ev.modulo_625NS).Distinct().ToArray());
+            comboBox1.Items.AddRange(eventos.Select(ev => ev.modulo).Distinct().ToArray());
 
             comboBox2.Items.Clear();
             comboBox2.Items.AddRange(Enum.GetNames(typeof(BE_Evento_56PS.Criticidad)));
 
-            dateTimePicker1.Value = eventos.Min(ev => ev.fecha_625NS);
-            dateTimePicker2.Value = eventos.Max(ev => ev.fecha_625NS);
+            dateTimePicker1.Value = eventos.Min(ev => ev.fecha);
+            dateTimePicker2.Value = eventos.Max(ev => ev.fecha);
         }
 
 
@@ -76,10 +76,10 @@ namespace GUI_625NS.Administracion
             var query = eventos.AsEnumerable();
 
             if (!string.IsNullOrWhiteSpace(textBox1.Text))
-                query = query.Where(ev => ev.dni_625NS.Contains(textBox1.Text));
+                query = query.Where(ev => ev.dni.Contains(textBox1.Text));
 
             if (comboBox1.SelectedItem != null && !string.IsNullOrWhiteSpace(comboBox1.SelectedItem.ToString()))
-                query = query.Where(ev => ev.modulo_625NS == comboBox1.SelectedItem.ToString());
+                query = query.Where(ev => ev.modulo == comboBox1.SelectedItem.ToString());
 
             if (comboBox2.SelectedItem != null)
             {

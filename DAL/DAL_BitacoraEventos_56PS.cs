@@ -11,16 +11,16 @@ namespace DAL_625NS
 
         public void RegistrarEvento(BE_Evento_56PS e)
         {
-            string query = @"INSERT INTO Evento_625NS (dni_625NS, fecha_625NS, modulo_625NS, descripcion_625NS, criticidad_625NS) 
+            string query = @"INSERT INTO Evento_56PS (dni, fecha, modulo, descripcion, criticidad) 
                              VALUES (@dni, @fecha, @modulo, @descripcion, @criticidad)";
 
             SqlParameter[] parametros = new SqlParameter[]
             {
-                new SqlParameter("@dni", e.dni_625NS),
-                new SqlParameter("@fecha", e.fecha_625NS),
-                new SqlParameter("@modulo", e.modulo_625NS),
-                new SqlParameter("@descripcion", e.descripcion_625NS),
-                new SqlParameter("@criticidad", e.criticidad_625NS.ToString())
+                new SqlParameter("@dni", e.dni),
+                new SqlParameter("@fecha", e.fecha),
+                new SqlParameter("@modulo", e.modulo),
+                new SqlParameter("@descripcion", e.descripcion),
+                new SqlParameter("@criticidad", e.criticidad.ToString())
             };
 
             DAL_56PS.ExecuteNonQuery(query, parametros);
@@ -28,7 +28,7 @@ namespace DAL_625NS
 
         public List<BE_Evento_56PS> obtenerEventos()
         {
-            string query = "SELECT numero, dni_625NS, fecha_625NS, modulo_625NS, descripcion_625NS, criticidad_625NS FROM Evento_625NS ORDER BY fecha_625NS DESC";
+            string query = "SELECT numero, dni, fecha, modulo, descripcion, criticidad FROM Evento_56PS ORDER BY fecha DESC";
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, null);
 
@@ -38,11 +38,11 @@ namespace DAL_625NS
             {
                 BE_Evento_56PS evento = new BE_Evento_56PS(
                     Convert.ToInt32(row["numero"]),
-                    row["dni_625NS"].ToString(),
-                    Convert.ToDateTime(row["fecha_625NS"]),
-                    row["modulo_625NS"].ToString(),
-                    row["descripcion_625NS"].ToString(),
-                    (BE_Evento_56PS.Criticidad)Enum.Parse(typeof(BE_Evento_56PS.Criticidad), row["criticidad_625NS"].ToString())
+                    row["dni"].ToString(),
+                    Convert.ToDateTime(row["fecha"]),
+                    row["modulo"].ToString(),
+                    row["descripcion"].ToString(),
+                    (BE_Evento_56PS.Criticidad)Enum.Parse(typeof(BE_Evento_56PS.Criticidad), row["criticidad"].ToString())
                 );
 
                 lista.Add(evento);

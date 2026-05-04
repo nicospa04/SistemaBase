@@ -7,7 +7,7 @@ namespace DAL_625NS
 {
     public static class DAL_56PS
     {
-        private static string dbname = "SistemaMedicoDB";
+        private static string dbname = "SistemaBase";
         private static string conexion = $@"Data Source=COMPURELOCA;Initial Catalog={dbname};Integrated Security=True";
 
 
@@ -75,26 +75,26 @@ namespace DAL_625NS
         }
 
 
-        public static DataTable ConsultarTabla(string nombreTabla)
-        {
-            DataTable dt = new DataTable();
+        //public static DataTable ConsultarTabla(string nombreTabla)
+        //{
+        //    DataTable dt = new DataTable();
 
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(conexion))
-                {
-                    string query = $"SELECT * FROM {nombreTabla}";
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
-                    adapter.Fill(dt);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error al consultar la tabla {nombreTabla}: {ex.Message}");
-            }
+        //    try
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(conexion))
+        //        {
+        //            string query = $"SELECT * FROM {nombreTabla}";
+        //            SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+        //            adapter.Fill(dt);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception($"Error al consultar la tabla {nombreTabla}: {ex.Message}");
+        //    }
 
-            return dt;
-        }
+        //    return dt;
+        //}
 
 
 

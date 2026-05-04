@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace SistemaBase
 {
-    public partial class MenuPrincipal : Form
+    public partial class MenuPrincipal_56PS : Form
     {
-        public MenuPrincipal()
+        public MenuPrincipal_56PS()
         {
             InitializeComponent();
-        }
-
-        private void MenuPrincipal_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -67,17 +67,17 @@
     <Compile Include="Administracion\FormBitacoraEventos_625NS.Designer.cs">
       <DependentUpon>FormBitacoraEventos_625NS.cs</DependentUpon>
     </Compile>
+    <Compile Include="MenuPrincipal_56PS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MenuPrincipal_56PS.Designer.cs">
+      <DependentUpon>MenuPrincipal_56PS.cs</DependentUpon>
+    </Compile>
     <Compile Include="Usuario\FormIniciarSesion.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Usuario\FormIniciarSesion.Designer.cs">
       <DependentUpon>FormIniciarSesion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MenuPrincipal_56PS.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MenuPrincipal.Designer.cs">
-      <DependentUpon>MenuPrincipal_56PS.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -90,9 +90,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Usuario\FormIniciarSesion.resx">
       <DependentUpon>FormIniciarSesion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MenuPrincipal.resx">
-      <DependentUpon>MenuPrincipal_56PS.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

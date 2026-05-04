@@ -105,6 +105,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FormIniciarSesion";
             this.Text = "FormIniciarSesion";
+            this.Load += new System.EventHandler(this.FormIniciarSesion_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

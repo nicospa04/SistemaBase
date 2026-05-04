@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Usuario_625NS.cs" />
+    <Compile Include="Usuario_56PS.cs" />
     <Compile Include="CryptoManager_56PS.cs" />
     <Compile Include="IntentosLogin_56PS.cs" />
     <Compile Include="LoginAttemptManager_56PS.cs" />

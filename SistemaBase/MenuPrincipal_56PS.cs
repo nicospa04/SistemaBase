@@ -1,4 +1,6 @@
-﻿using SistemaBase.Administracion;
+﻿using ClassLibrary2;
+using GUI_625NS.Administracion;
+using SistemaBase.Administracion;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +18,9 @@ namespace SistemaBase
         public MenuPrincipal_56PS()
         {
             InitializeComponent();
+
+            MenuAdministracion.Enabled = false;
+            MenuCambiarContraseña.Enabled = false;
         }
 
         private void MenuPrincipal_56PS_Load(object sender, EventArgs e)
@@ -43,6 +48,55 @@ namespace SistemaBase
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormABMUsuario_625NS());
+
+        }
+
+        private void auditoriaDeEventosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(new FormBitacoraEventos_625NS());
+
+        }
+
+        private void iniciarSesionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(new FormIniciarSesion());
+
+        }
+
+        public ToolStripMenuItem MenuAdministracion => administracionToolStripMenuItem1;
+        public ToolStripMenuItem MenuCambiarContraseña => cambiarContraseñaToolStripMenuItem;
+
+
+
+        private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var instance = SessionManager_56PS.getInstancia();
+
+            if (!instance.haySesionActiva())
+            {
+                MessageBox.Show("Debe iniciar sesión primero");
+                return;
+            }
+
+            instance.cerrarSesion();
+            MessageBox.Show("Sesión cerrada");
+
+            MenuAdministracion.Enabled = false;
+            MenuCambiarContraseña.Enabled = false;
+        }
+
+        private void administracionToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cambiarContraseñaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void administracionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
         }
     }

@@ -63,7 +63,7 @@ namespace SistemaBase
 
             if (!valido) //si la contraseña NO coincide con el usuario ingresado sumamos un intento en el loginattemptmanager
             {
-                Console.WriteLine("Contraseña incorrecta"); //notificamos que la contraseña es incorrecta
+                MessageBox.Show("Contraseña incorrecta"); //notificamos que la contraseña es incorrecta
 
                 var attemptManager = LoginAttemptManager_56PS.GetInstancia();
 
@@ -115,11 +115,12 @@ namespace SistemaBase
                 BLL_Usuario_56PS bll = new BLL_Usuario_56PS();
 
 
-            //    MenuPrincipal_56PS menu = Application.OpenForms["FormPrincipal"] as MenuPrincipal_56PS;
+                MenuPrincipal_56PS menu = Application.OpenForms["MenuPrincipal_56PS"] as MenuPrincipal_56PS;
 
 
 
-              //  menu.MenuAdministracion.Enabled = userr.Rol == "Administrador";
+                menu.MenuAdministracion.Enabled = userr.Rol == "Administrador";
+            menu.MenuCambiarContraseña.Enabled = true;
                 
 
                 this.Close();

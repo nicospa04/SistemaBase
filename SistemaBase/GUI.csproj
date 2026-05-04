@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{49E8EBA2-F6F4-40DC-B7E9-3EBF72D10F86}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SistemaBase</RootNamespace>
     <AssemblyName>SistemaBase</AssemblyName>
@@ -73,6 +73,7 @@
     <Compile Include="MenuPrincipal_56PS.Designer.cs">
       <DependentUpon>MenuPrincipal_56PS.cs</DependentUpon>
     </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Usuario\FormIniciarSesion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +88,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Administracion\FormBitacoraEventos_625NS.resx">
       <DependentUpon>FormBitacoraEventos_625NS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuPrincipal_56PS.resx">
+      <DependentUpon>MenuPrincipal_56PS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Usuario\FormIniciarSesion.resx">
       <DependentUpon>FormIniciarSesion.cs</DependentUpon>

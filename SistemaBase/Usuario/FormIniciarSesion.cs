@@ -53,7 +53,7 @@ namespace SistemaBase
 
             if (!existeUsuarioConEseUsername) //si el userName directamente no existe
             {
-                MessageBox.Show("Usuario con ese nombre no existe");
+                MessageBox.Show("No existe usuario con ese nombre ");
                 return;
             }
 

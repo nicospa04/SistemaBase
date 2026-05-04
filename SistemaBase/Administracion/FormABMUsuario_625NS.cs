@@ -142,8 +142,16 @@ namespace SistemaBase.Administracion
                 bool bloqueadoActual = Convert.ToBoolean(fila.Cells["Bloqueado"].Value);
 
                 var bll = new BLL_Usuario_56PS();
-                // Invertimos: si está bloqueado, lo desbloqueamos (false) y viceversa
-                    bll.CambiarEstadoBloqueado(dni, !bloqueadoActual);
+
+                if (bloqueadoActual)
+                {
+                    bll.desbloquearUsuario(dni);
+                }
+                else
+                {
+                    MessageBox.Show("No puede desbloquear a un usuario que no se encuentra bloqueado");
+                    return;
+                }
 
                 MessageBox.Show("Estado actualizado con éxito.");
                 actualizar(); // Esto refresca la lista
@@ -266,13 +274,13 @@ namespace SistemaBase.Administracion
 
 
                 Usuario_56PS user = new Usuario_56PS( //ARREGLAR ESTOOOOOOOO !!!!!
-                    apellido,
-                    bloqueado,
-                    fila.Cells["Contraseña"].Value.ToString(),
-                    dni,
-                    emailEncriptado,
-                    nombre,
-                    nombreUsuario,
+                    apellido: apellido,
+                    bloqueado: bloqueado,
+                    contraseña: fila.Cells["Contraseña"].Value.ToString(),
+                    dni: dni,
+                    email: emailEncriptado,
+                    nombre: nombre,
+                    nombreUsuario: nombreUsuario,
                     activo:true,
                     idioma:"EN",
                     rol: comboBox1.SelectedItem.ToString());
@@ -413,6 +421,16 @@ namespace SistemaBase.Administracion
             LimpiarCampos();
 
             MessageBox.Show("Operacion cancelada");
+
+            deshabilitarBotonAplicar();
+            deshabilitarBotonCancelar();
+            habilitarBotonActivarDesactivar();
+            habilitarBotonCrear();
+            habilitarBotonDesbloquear();
+            habilitarBotonModificar();
+
+            textBox5.Text = textBox5.Text = "Mensaje: \nModo consulta";
+
         }
 
 
@@ -520,6 +538,14 @@ namespace SistemaBase.Administracion
         private void btnActivarDesactivar_Click(object sender, EventArgs e)
         {
 
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Debe seleccionar un usuario de la lista.");
+                return;
+            }
+
+
+
             modo = "activar/desactivar";
 
             textBox5.Text = textBox5.Text = "Mensaje: \nModo activar/desactivar";
@@ -582,6 +608,15 @@ namespace SistemaBase.Administracion
 
         private void button2_Click(object sender, EventArgs e)
         {
+
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+
+
+                MessageBox.Show("Debe seleccionar un usuario de la tabla");
+                return;
+            }
+
             modo = "desbloquear";
 
             textBox5.Text = "Mensaje: \nModo desbloquear";

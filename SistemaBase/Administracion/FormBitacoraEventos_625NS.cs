@@ -84,13 +84,13 @@ namespace GUI_625NS.Administracion
             if (comboBox2.SelectedItem != null)
             {
                 var crit = (BE_Evento_56PS.Criticidad)Enum.Parse(typeof(BE_Evento_56PS.Criticidad), comboBox2.SelectedItem.ToString());
-                query = query.Where(ev => ev.criticidad_625NS == crit);
+                query = query.Where(ev => ev.criticidad == crit);
             }
 
             var desde = dateTimePicker1.Value.Date;
             var hasta = dateTimePicker2.Value.Date.AddDays(1).AddSeconds(-1); // hasta fin del día
 
-            query = query.Where(ev => ev.fecha_625NS >= desde && ev.fecha_625NS <= hasta);
+            query = query.Where(ev => ev.fecha >= desde && ev.fecha <= hasta);
 
             filtrados = query.ToList();
             dataGridView1.DataSource = null;
@@ -105,8 +105,8 @@ namespace GUI_625NS.Administracion
             comboBox1.SelectedIndex = -1;
             comboBox2.SelectedIndex = -1;
 
-            dateTimePicker1.Value = eventos.Min(ev => ev.fecha_625NS);
-            dateTimePicker2.Value = eventos.Max(ev => ev.fecha_625NS);
+            dateTimePicker1.Value = eventos.Min(ev => ev.fecha);
+            dateTimePicker2.Value = eventos.Max(ev => ev.fecha);
 
             filtrados = new List<BE_Evento_56PS>(eventos);
             dataGridView1.DataSource = null;
@@ -182,7 +182,7 @@ namespace GUI_625NS.Administracion
 
                     MessageBox.Show("PDF exportado correctamente.");
 
-                    string a = SessionManager_625NS.getInstancia().getUsuarioActivo().Dni;
+                    string a = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
 
                     BE_Evento_56PS ee = new BE_Evento_56PS(a, DateTime.Now, "Eventos", "Exportacion a pdf de evento", BE_Evento_56PS.Criticidad.Bajo);
                     new BLL_BitacoraEvento_56PS().RegistrarEvento(ee);

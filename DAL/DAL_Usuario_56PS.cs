@@ -79,7 +79,7 @@ namespace DAL_625NS
 
         public void desbloquearUsuario(string dni)
         {
-            string query = "UPDATE dbo.Usuario_56PS SET Bloqueado = 0, IntentosFallidos = 0, Activo = 1 WHERE DNI = @DNI";
+            string query = "UPDATE dbo.Usuario_56PS SET Bloqueado = 0, Activo = 1 WHERE DNI = @DNI";
             DAL_56PS.ExecuteNonQuery(query, new SqlParameter[] { new SqlParameter("@DNI", dni) });
         }
 

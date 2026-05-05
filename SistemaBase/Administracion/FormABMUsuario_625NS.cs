@@ -40,9 +40,18 @@ namespace SistemaBase.Administracion
 
             //ActualizarIdioma_625NS();
 
+            comboBox1.SelectedItem = 0;
+
             actualizar();
 
             textBox5.Text = textBox5.Text = "Mensaje: \nModo consulta";
+
+            dataGridView1.Columns["Contraseña"].Visible = false;
+            dataGridView1.Columns["Email"].Visible = false;
+            dataGridView1.Columns["Bloqueado"].Visible = false;
+            dataGridView1.Columns["Activo"].Visible = false;
+            dataGridView1.Columns["idioma"].Visible = false;
+
         }
 
         void deshabilitarBotonAplicar()
@@ -121,6 +130,11 @@ namespace SistemaBase.Administracion
             habilitarBotonAplicar();
             habilitarBotonCancelar();
 
+            deshabilitarBotonActivarDesactivar();
+            deshabilitarBotonCrear();
+            deshabilitarBotonDesbloquear();
+            deshabilitarBotonModificar();
+
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -169,7 +183,7 @@ namespace SistemaBase.Administracion
 
                 var fila = dataGridView1.SelectedRows[0];
 
-                string dni = fila.Cells["DNI_625NS"].Value.ToString();
+                string dni = fila.Cells["DNI"].Value.ToString();
                 bool ActivoActual = Convert.ToBoolean(fila.Cells["Activo"].Value);
 
                   var bll = new BLL_Usuario_56PS();
@@ -192,37 +206,37 @@ namespace SistemaBase.Administracion
 
 
 
-            if (modo == "desbloquear")
-            {
-                try
-                {
+            //if (modo == "desbloquear")
+            //{
+            //    try
+            //    {
 
-                    DataGridViewRow fila = dataGridView1.SelectedRows[0];
-
-
-                    string dni = fila.Cells["DNI"].Value.ToString();
-
-                    Usuario_56PS usuarioADesbloquear = (Usuario_56PS)new BLL_Usuario_56PS().obtenerUsuarioPorDni(dni); // to do
-
-                    if (!usuarioADesbloquear.Bloqueado)
-                    {
-                        MessageBox.Show("No puede desbloquear un usuario que no se encuentra bloqueado");
-                        return;
-                    }
-
-                    new BLL_Usuario_56PS().desbloquearUsuario(dni);
-
-                    MessageBox.Show($"Usuario {usuarioADesbloquear.NombreUsuario} desbloqueado con exito");
+            //        DataGridViewRow fila = dataGridView1.SelectedRows[0];
 
 
-                }
-                catch
-                {
-                    MessageBox.Show("Debe seleccionar un usuario para poder desbloquearlo");
-                }
+            //        string dni = fila.Cells["DNI"].Value.ToString();
+
+            //        Usuario_56PS usuarioADesbloquear = (Usuario_56PS)new BLL_Usuario_56PS().obtenerUsuarioPorDni(dni); // to do
+
+            //        if (!usuarioADesbloquear.Bloqueado)
+            //        {
+            //            MessageBox.Show("No puede desbloquear un usuario que no se encuentra bloqueado");
+            //            return;
+            //        }
+
+            //        new BLL_Usuario_56PS().desbloquearUsuario(dni);
+
+            //        MessageBox.Show($"Usuario {usuarioADesbloquear.NombreUsuario} desbloqueado con exito");
 
 
-            }
+            //    }
+            //    catch
+            //    {
+            //        MessageBox.Show("Debe seleccionar un usuario para poder desbloquearlo");
+            //    }
+
+
+            //}
 
             if (modo == "modificar")
             {
@@ -245,7 +259,6 @@ namespace SistemaBase.Administracion
 
 
 
-                string emailEncriptado = CryptoManager_56PS.EncriptarReversible(email);
 
 
 
@@ -256,39 +269,31 @@ namespace SistemaBase.Administracion
                 }
                 string nombreUsuario = fila.Cells["NombreUsuario"].Value.ToString();
 
-                if (activo && bloqueado)
+                if (activo == bloqueado)
                 {
 
-                    MessageBox.Show("Solo puede tener un estado");
-                    return;
-                }
-
-                if (!activo && !bloqueado)
-                {
-
-                    MessageBox.Show("Solo puede tener un estado");
+                    MessageBox.Show("Solo puede tener un estado, bloqueado y activo no pueden tener el mismo valor");
                     return;
                 }
 
 
 
 
-                Usuario_56PS user = new Usuario_56PS( //ARREGLAR ESTOOOOOOOO !!!!!
+                Usuario_56PS user = new Usuario_56PS( 
                     apellido: apellido,
                     bloqueado: bloqueado,
-                    contraseña: fila.Cells["Contraseña"].Value.ToString(),
+                    contraseña: fila.Cells["Contraseña"].Value.ToString(), //la contraseña no se puede cambiar desde este abm
                     dni: dni,
-                    email: emailEncriptado,
+                    email: email,
                     nombre: nombre,
                     nombreUsuario: nombreUsuario,
-                    activo:true,
+                    activo:activo,
                     idioma:"EN",
                     rol: comboBox1.SelectedItem.ToString());
 
 
               
 
-                user.Rol = comboBox1.SelectedValue.ToString();
 
 
 
@@ -298,7 +303,6 @@ namespace SistemaBase.Administracion
                 actualizar();
                 LimpiarCampos();
 
-                modo = "";
 
                 MessageBox.Show("Usuario modificado");
 
@@ -336,6 +340,11 @@ namespace SistemaBase.Administracion
                         return;
                     }
 
+                    if(checkBox1.Checked == checkBox2.Checked)
+                    {
+                        MessageBox.Show("Los botones de activo y bloqueado no pueden ser iguales"); return;
+                    }
+
 
                     string dni = textBox1.Text;
 
@@ -351,15 +360,7 @@ namespace SistemaBase.Administracion
                                            textBox2.Text.Substring(0, 2) +
                                            textBox1.Text.Substring(textBox1.Text.Length - 2);
 
-                    string emailEncriptado = CryptoManager_56PS.EncriptarReversible(textBox4.Text);
-
-                    //la contraseña se crea apartir de juntar el DNI + apellido
-                    if (emailEncriptado == null)
-                    {
-                        MessageBox.Show("Error al encriptar el email. Revise el valor ingresado.");
-                        return;
-                    }
-
+              
 
                     // Crear objeto Usuario
                     var usuario = new Usuario_56PS(
@@ -367,15 +368,14 @@ namespace SistemaBase.Administracion
                         bloqueado: checkBox2.Checked,
                         contraseña: CryptoManager_56PS.Encriptar(textBox1.Text + textBox2.Text),
                         dni: textBox1.Text,
-                        email: emailEncriptado,
+                        email: textBox4.Text,
                         nombre: textBox3.Text,
                         nombreUsuario: nombreUsuario,
                         idioma: "ES", //Español es el idioma por defecto,
-                        activo: true,
+                        activo: checkBox1.Checked,
                         rol: comboBox1.SelectedItem.ToString()
                     );
 
-                    usuario.Rol = comboBox1.SelectedValue.ToString();
 
                     // Guardar usuario
                     var usuarioBLL = new BLL_Usuario_56PS();
@@ -399,8 +399,10 @@ namespace SistemaBase.Administracion
 
                 actualizar();
                 LimpiarCampos();
-                modo = "";
-            }
+             }
+
+
+            modo = "";
         }
 
         void habilitarBotonCancelar()
@@ -452,7 +454,13 @@ namespace SistemaBase.Administracion
              ();
 
           
-            label2.Text += bl.obtenerUsuarios().Count();
+            label2.Text = "Numero de usuarios: " + bl.obtenerUsuarios().Count();
+
+
+            listaGeneral = new BLL_Usuario_56PS().obtenerUsuarios();
+
+            dataGridView1.DataSource = listaGeneral;
+
         }
 
         //private void CargarRoles()
@@ -552,6 +560,10 @@ namespace SistemaBase.Administracion
 
             habilitarBotonAplicar();
             habilitarBotonCancelar();
+            deshabilitarBotonModificar();
+            deshabilitarBotonCrear();
+            deshabilitarBotonActivarDesactivar();
+            deshabilitarBotonDesbloquear();
 
 
         }
@@ -623,6 +635,11 @@ namespace SistemaBase.Administracion
 
             habilitarBotonAplicar();
             habilitarBotonCancelar();
+
+            deshabilitarBotonDesbloquear();
+            deshabilitarBotonCrear();
+            deshabilitarBotonActivarDesactivar();
+            deshabilitarBotonModificar();
 
 
         }

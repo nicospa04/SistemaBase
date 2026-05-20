@@ -35,7 +35,7 @@ namespace DAL_625NS
                 new SqlParameter("@NombreUsuario", usuario.NombreUsuario),
                 new SqlParameter("@Contraseña", usuario.Contraseña),
                 new SqlParameter("@Idioma", usuario.idioma),
-                new SqlParameter("@NombreRol", usuario.Rol),
+                new SqlParameter("@NombreRol", usuario.Rol.nombre),
                 new SqlParameter("@Activo", usuario.Activo)
             };
 
@@ -79,7 +79,7 @@ namespace DAL_625NS
 
         public void desbloquearUsuario(string dni)
         {
-            string query = "UPDATE dbo.Usuario_56PS SET Bloqueado = 0, Activo = 1 WHERE DNI = @DNI";
+            string query = "UPDATE dbo.Usuario_56PS SET Bloqueado = 0 WHERE DNI = @DNI";
             DAL_56PS.ExecuteNonQuery(query, new SqlParameter[] { new SqlParameter("@DNI", dni) });
         }
 
@@ -103,7 +103,9 @@ namespace DAL_625NS
                     idioma: row["Idioma"].ToString(),
                     bloqueado: Convert.ToBoolean(row["Bloqueado"]),
                     activo: Convert.ToBoolean(row["Activo"]),
-                    rol: Convert.ToString(row["NombreRol"])
+                    rol: new Servicio.Rol_56PS(
+                        nombre:(row["NombreRol"].ToString())
+                        )
                 );
 
                
@@ -141,7 +143,7 @@ namespace DAL_625NS
                 new SqlParameter("@NombreUsuario", usuario.NombreUsuario),
                 new SqlParameter("@Contraseña", usuario.Contraseña),
                 new SqlParameter("@Idioma", usuario.idioma),
-                new SqlParameter("@CodRol", usuario.Rol),  
+                new SqlParameter("@CodRol", usuario.Rol.nombre),  
                 new SqlParameter("@Activo", usuario.Activo),
                 new SqlParameter("@DNI", usuario.Dni)
             }; 
@@ -173,7 +175,7 @@ namespace DAL_625NS
 
         public void bloquearUsuario(string dni)
         {
-            string query = "UPDATE dbo.Usuario_56PS SET Bloqueado = 1, Activo = 0 WHERE DNI = @DNI";
+            string query = "UPDATE dbo.Usuario_56PS SET Bloqueado = 1 WHERE DNI = @DNI";
             DAL_56PS.ExecuteNonQuery(query, new SqlParameter[] { new SqlParameter("@DNI", dni) });
         }
 
@@ -202,8 +204,25 @@ namespace DAL_625NS
                 idioma: row["Idioma"].ToString(),
                 bloqueado: Convert.ToBoolean(row["Bloqueado"]),
                 activo: Convert.ToBoolean(row["Activo"]),
-                rol: Convert.ToString(row["NombreRol"])
-            );
+                rol: new Servicio.Rol_56PS(
+                        nombre: (row["NombreRol"].ToString())
+                        ));
+        }
+
+        public void cambiarEstadoActivo(string dni)
+        {
+            string query = @"UPDATE dbo.Usuario_56PS 
+                     SET Activo = CASE 
+                                    WHEN Activo = 1 THEN 0
+                                    ELSE 1
+                                  END
+                     WHERE DNI = @DNI";
+
+            SqlParameter[] parameters = {
+        new SqlParameter("@DNI", dni)
+    };
+
+            DAL_56PS.ExecuteNonQuery(query, parameters);
         }
     }
 }

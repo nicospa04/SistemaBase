@@ -41,17 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Rol_56PS.cs" />
     <Compile Include="Usuario_56PS.cs" />
     <Compile Include="CryptoManager_56PS.cs" />
     <Compile Include="IntentosLogin_56PS.cs" />
-    <Compile Include="LoginAttemptManager_56PS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionManager_56PS.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BE\BE.csproj">
+    <ProjectReference Include="..\BE\BE_56PS.csproj">
       <Project>{745dc174-2870-46e8-b6a1-6cd5df5ccfbe}</Project>
-      <Name>BE</Name>
+      <Name>BE_56PS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

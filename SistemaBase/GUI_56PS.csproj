@@ -97,17 +97,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BE\BE.csproj">
+    <ProjectReference Include="..\BE\BE_56PS.csproj">
       <Project>{745dc174-2870-46e8-b6a1-6cd5df5ccfbe}</Project>
-      <Name>BE</Name>
+      <Name>BE_56PS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BLL\BLL.csproj">
+    <ProjectReference Include="..\BLL\BLL_56PS.csproj">
       <Project>{13ad768e-00b2-423d-882c-d18cfe299cd9}</Project>
-      <Name>BLL</Name>
+      <Name>BLL_56PS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Servicio\Servicio.csproj">
+    <ProjectReference Include="..\Servicio\Servicio_56PS.csproj">
       <Project>{3b233478-63a4-43a7-add7-d7cd3344ac17}</Project>
-      <Name>Servicio</Name>
+      <Name>Servicio_56PS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

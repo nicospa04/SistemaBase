@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{13AD768E-00B2-423D-882C-D18CFE299CD9}</ProjectGuid>
+    <ProjectGuid>{340867BB-0FEF-412B-98DA-B86A954956F9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BLL</RootNamespace>
-    <AssemblyName>BLL</AssemblyName>
+    <RootNamespace>DAL</RootNamespace>
+    <AssemblyName>DAL</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,22 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLL_BitacoraEvento_56PS.cs" />
-    <Compile Include="BLL_Usuario_56PS.cs" />
+    <Compile Include="DAL_56PS.cs" />
+    <Compile Include="DAL_BitacoraEventos_56PS.cs" />
+    <Compile Include="DAL_Usuario_56PS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BE\BE.csproj">
+    <ProjectReference Include="..\BE\BE_56PS.csproj">
       <Project>{745dc174-2870-46e8-b6a1-6cd5df5ccfbe}</Project>
-      <Name>BE</Name>
+      <Name>BE_56PS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{340867bb-0fef-412b-98da-b86a954956f9}</Project>
-      <Name>DAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Servicio\Servicio.csproj">
+    <ProjectReference Include="..\Servicio\Servicio_56PS.csproj">
       <Project>{3b233478-63a4-43a7-add7-d7cd3344ac17}</Project>
-      <Name>Servicio</Name>
+      <Name>Servicio_56PS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -82,5 +82,10 @@ namespace BLL
         {
             dal.bloquearUsuario(dni);
         }
+
+        public void cambiarEstadoActivo(string dni)
+        {
+            dal.cambiarEstadoActivo(dni);       
+        }
     }
 }

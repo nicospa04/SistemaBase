@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Servicio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace BE_56_PS
         public string Email { get; set; }
 
         [XmlIgnore]
-        public string Rol { get; set; } //Perfil 
+        public Rol_56PS Rol { get; set; } //Perfil 
 
 
         public string Nombre { get; set; }
@@ -27,7 +28,7 @@ namespace BE_56_PS
 
         public Usuario_56PS() { }
 
-        public Usuario_56PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, string idioma, bool bloqueado ,bool activo, string rol)
+        public Usuario_56PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, string idioma, bool bloqueado ,bool activo, Rol_56PS rol)
         {
             this.Apellido = apellido;
             this.Contraseña = contraseña;

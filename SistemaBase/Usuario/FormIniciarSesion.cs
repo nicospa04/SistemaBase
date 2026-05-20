@@ -38,6 +38,8 @@ namespace SistemaBase
             string userName = (string)textBox1.Text.Trim();
             string password = (string)textBox2.Text.Trim();
 
+    
+
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Complete todos los campos"); return;
@@ -57,40 +59,67 @@ namespace SistemaBase
                 return;
             }
 
+            List<Usuario_56PS> listaUsuarios = new BLL_Usuario_56PS().obtenerUsuarios();
+            Usuario_56PS usuarioLogueado = listaUsuarios.Find(u => u.NombreUsuario == userName);
+
             //si existe usuario con ese nombre... validamos si su contraseña coincide
 
             bool valido = usuarioBLL.validarUsuario(userName, password); //aca se valida si el usuario y la contraseña coinciden con algun usuario de la bd
 
-            if (!valido) //si la contraseña NO coincide con el usuario ingresado sumamos un intento en el loginattemptmanager
+            if (!valido)
             {
-                MessageBox.Show("Contraseña incorrecta"); //notificamos que la contraseña es incorrecta
+                MessageBox.Show("Contraseña incorrecta");
 
-                var attemptManager = LoginAttemptManager_56PS.GetInstancia();
+                //registramos evento en bitacora
+                BE_Evento_56PS eventoFallido = new BE_Evento_56PS(
+                    usuarioLogueado.Dni,
+                    DateTime.Now,
+                    "Usuarios",
+                    "Intento fallido",
+                    BE_Evento_56PS.Criticidad.Alto
+                );
 
-                bool bloqueado = attemptManager.RegistrarIntentoFallido(userName); //sumamos intento fallido
+                BLL_BitacoraEvento_56PS bitacoraBLL = new BLL_BitacoraEvento_56PS();
+                bitacoraBLL.RegistrarEvento(eventoFallido);
 
-                if (bloqueado) //si los intentos excedieron lo definido (cant/tiempo) entonces bloqueamos el usuario
+                //obtenemos eventos de los ultimos 5 minutos
+                List<BE_Evento_56PS> eventos = bitacoraBLL.obtenerEventos();
+
+                int cantidadIntentos = eventos.Count(ev =>
+                    ev.dni == usuarioLogueado.Dni &&
+                    ev.descripcion== "Intento fallido" &&
+                    ev.fecha >= DateTime.Now.AddMinutes(-5)
+                );
+
+                //si tiene 3 o mas intentos fallidos lo bloqueamos
+                if (cantidadIntentos >= 3)
                 {
-                    Console.WriteLine("Su cuenta ha sido bloqueada por demasiados intentos fallidos");
-                    usuarioBLL.bloquearUsuario(userName);
+                    usuarioBLL.bloquearUsuario(usuarioLogueado.Dni);
+                    MessageBox.Show("Usuario bloqueado por demasiados intentos fallidos");
                 }
-                return; //terminamos ejecucion
+
+                return;
             }
 
 
             //en caso de que el userName y la contraseña coincidan... verificamos que el usuario no se encuentre bloqueado
 
-            List<Usuario_56PS> listaUsuarios = usuarioBLL.obtenerUsuarios();
-            Usuario_56PS usuarioLogueado = listaUsuarios.Find(u => u.NombreUsuario == userName);
+ 
 
                 if (usuarioLogueado.Bloqueado)
                 {
                     MessageBox.Show("El usuario se encuentra bloqueado"); return;
                 }
 
+            if (!usuarioLogueado.Activo)
+            {
+                MessageBox.Show("El usuario se encuentra inactivo"); return;
+            }
 
 
-                SessionManager_56PS.getInstancia().iniciarSesion(usuarioLogueado);
+
+
+            SessionManager_56PS.getInstancia().iniciarSesion(usuarioLogueado);
 
 
                 var sessao = SessionManager_56PS.getInstancia();
@@ -99,7 +128,6 @@ namespace SistemaBase
 
                 MessageBox.Show("Sesión iniciada, bienvenido " + userNamee);
 
-            LoginAttemptManager_56PS.GetInstancia().ResetearIntentos(userName); //reseteamos intentos para el usuario que inicio sesion
 
 
             var user = SessionManager_56PS.getInstancia().getUsuarioActivo();

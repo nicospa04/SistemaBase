@@ -169,6 +169,18 @@ namespace SistemaBase.Administracion
 
                 MessageBox.Show("Estado actualizado con éxito.");
                 actualizar(); // Esto refresca la lista
+
+                var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
+
+                BE_Evento_56PS evento = new BE_Evento_56PS(
+                    user.Dni,
+                    DateTime.Now,
+                    "Usuarios",
+                    $"Desbloqueo de usuario DNI {dni}",
+                    BE_Evento_56PS.Criticidad.Medio
+                );
+
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
             }
 
 
@@ -190,18 +202,25 @@ namespace SistemaBase.Administracion
                 // Invertimos: si está bloqueado, lo desbloqueamos (false) y viceversa
 
 
-                if (ActivoActual) 
-                {
-                    bll.bloquearUsuario(dni); //hacemos lo opuesto a lo que ya existe
+                bll.cambiarEstadoActivo(dni);
 
-                }
-                else
-                {
-                    bll.desbloquearUsuario(dni);
-                }
                     MessageBox.Show("Estado actualizado con éxito.");
                     actualizar(); // Esto refresca la lista
-             
+
+                var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
+
+                string accion = ActivoActual ? "Desactivación" : "Activación";
+
+                BE_Evento_56PS evento = new BE_Evento_56PS(
+                    user.Dni,
+                    DateTime.Now,
+                    "Usuarios",
+                    $"{accion} de usuario DNI {dni}",
+                    BE_Evento_56PS.Criticidad.Alto
+                );
+
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
+
             }
 
 
@@ -311,6 +330,7 @@ namespace SistemaBase.Administracion
 
                 BE_Evento_56PS evento = new BE_Evento_56PS(currentUser.Dni, DateTime.Now, "Usuarios", "Modificación de usuario", BE_Evento_56PS.Criticidad.Medio);
 
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
 
             }
             if(modo == "crear")

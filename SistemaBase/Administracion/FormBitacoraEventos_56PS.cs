@@ -198,5 +198,86 @@ namespace GUI_625NS.Administracion
         {
 
         }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridView1.Rows.Count == 0)
+                {
+                    MessageBox.Show("No hay datos para exportar.");
+                    return;
+                }
+
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "PDF (*.pdf)|*.pdf";
+                saveFileDialog.FileName = "BitacoraEventos.pdf";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.Create))
+                    {
+                        Document pdfDoc = new Document(PageSize.A4, 20f, 20f, 20f, 20f);
+                        PdfWriter.GetInstance(pdfDoc, stream);
+                        pdfDoc.Open();
+
+                        iTextSharp.text.Font fontTitulo = new iTextSharp.text.Font(
+                           iTextSharp.text.Font.FontFamily.HELVETICA, 14, iTextSharp.text.Font.BOLD
+                       );
+
+                        iTextSharp.text.Font fontCabecera = new iTextSharp.text.Font(
+                            iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD
+                        );
+
+                        iTextSharp.text.Font fontContenido = new iTextSharp.text.Font(
+                            iTextSharp.text.Font.FontFamily.HELVETICA, 10, iTextSharp.text.Font.NORMAL
+                        );
+
+                        // Agregar título
+                        Paragraph titulo = new Paragraph("Bitácora de Eventos", fontTitulo);
+                        titulo.Alignment = Element.ALIGN_CENTER;
+                        pdfDoc.Add(titulo);
+                        pdfDoc.Add(new Paragraph("\n"));
+
+                        PdfPTable pdfTable = new PdfPTable(dataGridView1.Columns.Count);
+                        pdfTable.WidthPercentage = 100;
+
+                        foreach (DataGridViewColumn column in dataGridView1.Columns)
+                        {
+                            PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, fontCabecera));
+                            cell.BackgroundColor = BaseColor.LIGHT_GRAY;
+                            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                            pdfTable.AddCell(cell);
+                        }
+
+                        foreach (DataGridViewRow row in dataGridView1.Rows)
+                        {
+                            if (!row.IsNewRow)
+                            {
+                                foreach (DataGridViewCell cell in row.Cells)
+                                {
+                                    pdfTable.AddCell(new Phrase(cell.Value?.ToString() ?? "", fontContenido));
+                                }
+                            }
+                        }
+
+                        pdfDoc.Add(pdfTable);
+                        pdfDoc.Close();
+                        stream.Close();
+                    }
+
+                    MessageBox.Show("PDF exportado correctamente.");
+
+                    string a = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
+
+                    BE_Evento_56PS ee = new BE_Evento_56PS(a, DateTime.Now, "Eventos", "Exportacion a pdf de evento", BE_Evento_56PS.Criticidad.Bajo);
+                    new BLL_BitacoraEvento_56PS().RegistrarEvento(ee);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al exportar PDF: " + ex.Message);
+            }
+        }
     }
 }

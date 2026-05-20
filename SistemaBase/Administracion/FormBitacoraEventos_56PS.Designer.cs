@@ -54,6 +54,7 @@
             this.button3.TabIndex = 29;
             this.button3.Text = "PDF";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // button2
             // 
@@ -181,7 +182,7 @@
             this.label1.Tag = "bitacora";
             this.label1.Text = "Bitacora de eventos";
             // 
-            // FormBitacoraEventos_625NS
+            // FormBitacoraEventos_56PS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -201,7 +202,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
-            this.Name = "FormBitacoraEventos_625NS";
+            this.Name = "FormBitacoraEventos_56PS";
             this.Text = "FormBitacoraEventos_625NS";
             this.Load += new System.EventHandler(this.FormBitacoraEventos_625NS_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

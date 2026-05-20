@@ -1,6 +1,6 @@
 ﻿namespace SistemaBase.Administracion
 {
-    partial class FormABMUsuario_625NS
+    partial class FormABMUsuario_56PS
     {
         /// <summary>
         /// Required designer variable.

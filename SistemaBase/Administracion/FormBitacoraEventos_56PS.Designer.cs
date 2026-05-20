@@ -1,6 +1,6 @@
 ﻿namespace GUI_625NS.Administracion
 {
-    partial class FormBitacoraEventos_625NS
+    partial class FormBitacoraEventos_56PS
     {
         /// <summary>
         /// Required designer variable.

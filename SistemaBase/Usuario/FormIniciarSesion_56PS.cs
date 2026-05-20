@@ -16,9 +16,9 @@ using System.Windows.Forms;
 
 namespace SistemaBase
 {
-    public partial class FormIniciarSesion : Form
+    public partial class FormIniciarSesion_56PS : Form
     {
-        public FormIniciarSesion()
+        public FormIniciarSesion_56PS()
         {
             InitializeComponent();
         }
@@ -147,7 +147,7 @@ namespace SistemaBase
 
 
 
-                menu.MenuAdministracion.Enabled = userr.Rol == "Administrador";
+            menu.MenuAdministracion.Enabled = userr.Rol.nombre == "Administrador";
             menu.MenuCambiarContraseña.Enabled = true;
                 
 

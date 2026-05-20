@@ -1,6 +1,6 @@
 ﻿namespace SistemaBase
 {
-    partial class FormIniciarSesion
+    partial class FormIniciarSesion_56PS
     {
         /// <summary>
         /// Required designer variable.

@@ -16,7 +16,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Xml.Linq;
 namespace GUI_625NS.Administracion
 {
-    public partial class FormBitacoraEventos_625NS : Form //, IdiomaObserver_625NS
+    public partial class FormBitacoraEventos_56PS : Form //, IdiomaObserver_625NS
     {
         private List<BE_Evento_56PS> eventos;
         private List<BE_Evento_56PS> filtrados;
@@ -32,7 +32,7 @@ namespace GUI_625NS.Administracion
         //    traductor.Traducir_625NS(this);
         //}
 
-        public FormBitacoraEventos_625NS()
+        public FormBitacoraEventos_56PS()
         {
             InitializeComponent();
 

@@ -4,6 +4,7 @@ using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
 using Services_625NS;
+using Servicio;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,13 +18,13 @@ using System.Windows.Forms;
 
 namespace SistemaBase.Administracion
 {
-    public partial class FormABMUsuario_625NS : Form
+    public partial class FormABMUsuario_56PS : Form
     {
         string modo = "";
 
         List<Usuario_56PS> listaGeneral;
 
-        public FormABMUsuario_625NS()
+        public FormABMUsuario_56PS()
         {
             InitializeComponent();
 
@@ -51,7 +52,7 @@ namespace SistemaBase.Administracion
             dataGridView1.Columns["Bloqueado"].Visible = false;
             dataGridView1.Columns["Activo"].Visible = false;
             dataGridView1.Columns["idioma"].Visible = false;
-
+            dataGridView1.Columns["Rol"].Visible = false;
         }
 
         void deshabilitarBotonAplicar()
@@ -67,11 +68,15 @@ namespace SistemaBase.Administracion
 
         void CargarRoles()
         {
+            comboBox1.Items.Clear();
 
-            //hardcodeamos los roles ya que aun no existen en la bd
-            comboBox1.Items.Add("Administrador");
-            comboBox1.Items.Add("Base");
-            comboBox1.SelectedIndex = 1; //x defecto se selecciona el rol base
+            comboBox1.Items.Add(new Rol_56PS("Administrador", "2"));
+            comboBox1.Items.Add(new Rol_56PS("Base", "1"));
+
+            comboBox1.DisplayMember = "nombre";
+            comboBox1.ValueMember = "cod";
+
+            comboBox1.SelectedIndex = 1;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -104,7 +109,9 @@ namespace SistemaBase.Administracion
             DataGridViewRow fila = dataGridView1.SelectedRows[0];
 
 
+            string rolCod = ((Usuario_56PS)fila.DataBoundItem).Rol.cod;
 
+            comboBox1.SelectedIndex = rolCod == "2" ? 0 : 1;
 
 
 
@@ -308,7 +315,7 @@ namespace SistemaBase.Administracion
                     nombreUsuario: nombreUsuario,
                     activo:activo,
                     idioma:"EN",
-                    rol: comboBox1.SelectedItem.ToString());
+                    rol: (Rol_56PS)comboBox1.SelectedItem);
 
 
               
@@ -393,8 +400,8 @@ namespace SistemaBase.Administracion
                         nombreUsuario: nombreUsuario,
                         idioma: "ES", //Español es el idioma por defecto,
                         activo: checkBox1.Checked,
-                        rol: comboBox1.SelectedItem.ToString()
-                    );
+                        rol: (Rol_56PS)comboBox1.SelectedItem
+                        );
 
 
                     // Guardar usuario

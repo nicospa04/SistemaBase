@@ -55,17 +55,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Administracion\FormABMUsuario_625NS.cs">
+    <Compile Include="Administracion\FormABMUsuario_56PS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Administracion\FormABMUsuario_625NS.Designer.cs">
-      <DependentUpon>FormABMUsuario_625NS.cs</DependentUpon>
+    <Compile Include="Administracion\FormABMUsuario_56PS.Designer.cs">
+      <DependentUpon>FormABMUsuario_56PS.cs</DependentUpon>
     </Compile>
-    <Compile Include="Administracion\FormBitacoraEventos_625NS.cs">
+    <Compile Include="Administracion\FormBitacoraEventos_56PS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Administracion\FormBitacoraEventos_625NS.Designer.cs">
-      <DependentUpon>FormBitacoraEventos_625NS.cs</DependentUpon>
+    <Compile Include="Administracion\FormBitacoraEventos_56PS.Designer.cs">
+      <DependentUpon>FormBitacoraEventos_56PS.cs</DependentUpon>
     </Compile>
     <Compile Include="MenuPrincipal_56PS.cs">
       <SubType>Form</SubType>
@@ -74,26 +74,35 @@
       <DependentUpon>MenuPrincipal_56PS.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Usuario\FormIniciarSesion.cs">
+    <Compile Include="Usuario\FormCambiarContraseña_56PS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Usuario\FormIniciarSesion.Designer.cs">
-      <DependentUpon>FormIniciarSesion.cs</DependentUpon>
+    <Compile Include="Usuario\FormCambiarContraseña_56PS.Designer.cs">
+      <DependentUpon>FormCambiarContraseña_56PS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Usuario\FormIniciarSesion_56PS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Usuario\FormIniciarSesion_56PS.Designer.cs">
+      <DependentUpon>FormIniciarSesion_56PS.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Administracion\FormABMUsuario_625NS.resx">
-      <DependentUpon>FormABMUsuario_625NS.cs</DependentUpon>
+    <EmbeddedResource Include="Administracion\FormABMUsuario_56PS.resx">
+      <DependentUpon>FormABMUsuario_56PS.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Administracion\FormBitacoraEventos_625NS.resx">
-      <DependentUpon>FormBitacoraEventos_625NS.cs</DependentUpon>
+    <EmbeddedResource Include="Administracion\FormBitacoraEventos_56PS.resx">
+      <DependentUpon>FormBitacoraEventos_56PS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuPrincipal_56PS.resx">
       <DependentUpon>MenuPrincipal_56PS.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Usuario\FormIniciarSesion.resx">
-      <DependentUpon>FormIniciarSesion.cs</DependentUpon>
+    <EmbeddedResource Include="Usuario\FormCambiarContraseña_56PS.resx">
+      <DependentUpon>FormCambiarContraseña_56PS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Usuario\FormIniciarSesion_56PS.resx">
+      <DependentUpon>FormIniciarSesion_56PS.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

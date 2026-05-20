@@ -1,6 +1,7 @@
 ﻿using ClassLibrary2;
 using GUI_625NS.Administracion;
 using SistemaBase.Administracion;
+using SistemaBase.Usuario;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,19 +48,19 @@ namespace SistemaBase
 
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(new FormABMUsuario_625NS());
+            AbrirFormulario(new FormABMUsuario_56PS());
 
         }
 
         private void auditoriaDeEventosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(new FormBitacoraEventos_625NS());
+            AbrirFormulario(new FormBitacoraEventos_56PS());
 
         }
 
         private void iniciarSesionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(new FormIniciarSesion());
+            AbrirFormulario(new FormIniciarSesion_56PS());
 
         }
 
@@ -81,8 +82,15 @@ namespace SistemaBase
             instance.cerrarSesion();
             MessageBox.Show("Sesión cerrada");
 
+            foreach (Form form in this.MdiChildren)
+            {
+                form.Close();
+            }
+
             MenuAdministracion.Enabled = false;
             MenuCambiarContraseña.Enabled = false;
+
+
         }
 
         private void administracionToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -92,7 +100,7 @@ namespace SistemaBase
 
         private void cambiarContraseñaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            AbrirFormulario(new FormCambiarContraseña_56PS());
         }
 
         private void administracionToolStripMenuItem_Click(object sender, EventArgs e)

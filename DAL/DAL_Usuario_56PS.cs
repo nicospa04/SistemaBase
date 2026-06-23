@@ -15,29 +15,27 @@ namespace DAL_625NS
             if (validarUsuarioDNI(usuario.Dni))
                 throw new Exception("Usuario ya existe");
 
-
-
             string query = @"INSERT INTO Usuario_56PS 
-(DNI, Nombre, Apellido, Email, Bloqueado, 
-NombreUsuario, Contraseña, 
-Idioma, codRol, Activo) 
-VALUES 
-(@DNI, @Nombre, @Apellido, @Email, @Bloqueado, 
-@NombreUsuario, @Contraseña, 
-@Idioma, @CodRol, @Activo)";
+        (DNI, Nombre, Apellido, Email, Bloqueado, 
+        NombreUsuario, Contraseña, 
+        Idioma, Perfil, Activo) 
+        VALUES 
+        (@DNI, @Nombre, @Apellido, @Email, @Bloqueado, 
+        @NombreUsuario, @Contraseña, 
+        @Idioma, @Perfil, @Activo)";
 
             SqlParameter[] parameters = {
-                new SqlParameter("@DNI", usuario.Dni),
-                new SqlParameter("@Nombre", usuario.Nombre),
-                new SqlParameter("@Apellido", usuario.Apellido),
-                new SqlParameter("@Email", usuario.Email),
-                new SqlParameter("@Bloqueado", usuario.Bloqueado),
-                new SqlParameter("@NombreUsuario", usuario.NombreUsuario),
-                new SqlParameter("@Contraseña", usuario.Contraseña),
-                new SqlParameter("@Idioma", usuario.idioma),
-                new SqlParameter("@CodRol", usuario.Rol.cod),
-                new SqlParameter("@Activo", usuario.Activo)
-            };
+        new SqlParameter("@DNI", usuario.Dni),
+        new SqlParameter("@Nombre", usuario.Nombre),
+        new SqlParameter("@Apellido", usuario.Apellido),
+        new SqlParameter("@Email", usuario.Email),
+        new SqlParameter("@Bloqueado", usuario.Bloqueado),
+        new SqlParameter("@NombreUsuario", usuario.NombreUsuario),
+        new SqlParameter("@Contraseña", usuario.Contraseña),
+        new SqlParameter("@Idioma", usuario.idioma),
+        new SqlParameter("@Perfil", (object)usuario.Perfil?.Codigo ?? DBNull.Value),
+        new SqlParameter("@Activo", usuario.Activo)
+    };
 
             DAL_56PS.ExecuteNonQuery(query, parameters);
         }
@@ -86,11 +84,9 @@ VALUES
         public List<Usuario_56PS> obtenerUsuarios()
         {
             string query = @"
-SELECT U.*, R.nombre AS NombreRol, R.codRol
-FROM Usuario_56PS U
-INNER JOIN Rol_56PS R
-ON U.codRol = R.codRol";
-
+        SELECT U.*, P.Nombre AS NombrePerfil
+        FROM Usuario_56PS U
+        LEFT JOIN Perfiles P ON U.Perfil = P.CodigoPerfil";
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, null);
 
@@ -108,13 +104,11 @@ ON U.codRol = R.codRol";
                     idioma: row["Idioma"].ToString(),
                     bloqueado: Convert.ToBoolean(row["Bloqueado"]),
                     activo: Convert.ToBoolean(row["Activo"]),
-                    rol: new Servicio.Rol_56PS(
-    nombre: row["NombreRol"].ToString(),
-    cod: row["codRol"].ToString()
-)
+                    perfil: null  // lo seteamos abajo
                 );
 
-               
+                string codigoPerfil = row["Perfil"] != DBNull.Value ? row["Perfil"].ToString() : null;
+                usuario.Perfil = new DAL_Perfil_56PS().ObtenerPerfil(codigoPerfil);
 
 
                 lista.Add(usuario);
@@ -127,32 +121,30 @@ ON U.codRol = R.codRol";
 
         public void modificarUsuario(Usuario_56PS usuario)
         {
-
-
             string query = @"UPDATE dbo.Usuario_56PS SET 
-         Nombre = @Nombre,
-         Apellido = @Apellido,
-         Email = @Email,
-         Bloqueado = @Bloqueado,
-         NombreUsuario = @NombreUsuario,
-         Contraseña = @Contraseña,
-         Idioma = @Idioma,
-         codRol = @CodRol, 
-         Activo = @Activo
-         WHERE DNI = @DNI";
+        Nombre = @Nombre,
+        Apellido = @Apellido,
+        Email = @Email,
+        Bloqueado = @Bloqueado,
+        NombreUsuario = @NombreUsuario,
+        Contraseña = @Contraseña,
+        Idioma = @Idioma,
+        Perfil = @Perfil,
+        Activo = @Activo
+        WHERE DNI = @DNI";
 
             SqlParameter[] parameters = {
-                new SqlParameter("@Nombre", usuario.Nombre),
-                new SqlParameter("@Apellido", usuario.Apellido),
-                new SqlParameter("@Email", (object)usuario.Email ?? DBNull.Value),
-                new SqlParameter("@Bloqueado", usuario.Bloqueado),
-                new SqlParameter("@NombreUsuario", usuario.NombreUsuario),
-                new SqlParameter("@Contraseña", usuario.Contraseña),
-                new SqlParameter("@Idioma", usuario.idioma),
-new SqlParameter("@CodRol", usuario.Rol.cod),
-                new SqlParameter("@Activo", usuario.Activo),
-                new SqlParameter("@DNI", usuario.Dni)
-            }; 
+        new SqlParameter("@Nombre", usuario.Nombre),
+        new SqlParameter("@Apellido", usuario.Apellido),
+        new SqlParameter("@Email", (object)usuario.Email ?? DBNull.Value),
+        new SqlParameter("@Bloqueado", usuario.Bloqueado),
+        new SqlParameter("@NombreUsuario", usuario.NombreUsuario),
+        new SqlParameter("@Contraseña", usuario.Contraseña),
+        new SqlParameter("@Idioma", usuario.idioma),
+        new SqlParameter("@Perfil", (object)usuario.Perfil?.Codigo ?? DBNull.Value),
+        new SqlParameter("@Activo", usuario.Activo),
+        new SqlParameter("@DNI", usuario.Dni)
+    };
 
             DAL_56PS.ExecuteNonQuery(query, parameters);
         }
@@ -188,14 +180,12 @@ new SqlParameter("@CodRol", usuario.Rol.cod),
         public Usuario_56PS obtenerUsuarioPorDni(string dni)
         {
             string query = @"
-SELECT U.*, R.nombre AS NombreRol, R.codRol
-FROM Usuario_56PS U
-INNER JOIN Rol_56PS R
-ON U.codRol = R.codRol
-WHERE DNI = @DNI";
-            SqlParameter[] parameters = {
-        new SqlParameter("@DNI", dni)
-    };
+        SELECT U.*, P.Nombre AS NombrePerfil
+        FROM Usuario_56PS U
+        LEFT JOIN Perfiles P ON U.Perfil = P.CodigoPerfil
+        WHERE U.DNI = @DNI";
+
+            SqlParameter[] parameters = { new SqlParameter("@DNI", dni) };
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, parameters);
 
@@ -204,7 +194,7 @@ WHERE DNI = @DNI";
 
             DataRow row = ds.Tables[0].Rows[0];
 
-            return new Usuario_56PS(
+            var usuario = new Usuario_56PS(
                 apellido: row["Apellido"].ToString(),
                 contraseña: row["Contraseña"].ToString(),
                 dni: row["DNI"].ToString(),
@@ -214,11 +204,14 @@ WHERE DNI = @DNI";
                 idioma: row["Idioma"].ToString(),
                 bloqueado: Convert.ToBoolean(row["Bloqueado"]),
                 activo: Convert.ToBoolean(row["Activo"]),
-              rol: new Servicio.Rol_56PS(
-    nombre: row["NombreRol"].ToString(),
-    cod: row["codRol"].ToString()
-)
-                );
+                perfil: null
+            );
+
+            string codigoPerfil = row["Perfil"] != DBNull.Value ? row["Perfil"].ToString() : null;
+            usuario.Perfil = new DAL_Perfil_56PS().ObtenerPerfil(codigoPerfil);
+
+
+            return usuario;
         }
 
         public void cambiarEstadoActivo(string dni)
@@ -231,6 +224,21 @@ WHERE DNI = @DNI";
                      WHERE DNI = @DNI";
 
             SqlParameter[] parameters = {
+        new SqlParameter("@DNI", dni)
+    };
+
+            DAL_56PS.ExecuteNonQuery(query, parameters);
+        }
+
+        public void cambiarIdioma(string idioma, string dni)
+        {
+            string query = @"UPDATE dbo.Usuario_56PS
+                     SET Idioma = @Idioma
+                     WHERE DNI = @DNI";
+
+            SqlParameter[] parameters =
+            {
+        new SqlParameter("@Idioma", idioma),
         new SqlParameter("@DNI", dni)
     };
 

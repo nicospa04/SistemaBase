@@ -64,10 +64,10 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(252, 249);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(23, 13);
+            this.label7.Size = new System.Drawing.Size(30, 13);
             this.label7.TabIndex = 31;
-            this.label7.Tag = "labelRol";
-            this.label7.Text = "Rol";
+            this.label7.Tag = "perfilLabel";
+            this.label7.Text = "Perfil";
             // 
             // comboBox1
             // 
@@ -154,7 +154,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(32, 13);
             this.label6.TabIndex = 3;
-            this.label6.Tag = "EmailLabel2";
+            this.label6.Tag = "EmailLabel";
             this.label6.Text = "Email";
             // 
             // label5
@@ -164,7 +164,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(44, 13);
             this.label5.TabIndex = 2;
-            this.label5.Tag = "NombreLabel2";
+            this.label5.Tag = "NombreLabel";
             this.label5.Text = "Nombre";
             // 
             // label4
@@ -174,7 +174,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 13);
             this.label4.TabIndex = 1;
-            this.label4.Tag = "ApellidoLabel2";
+            this.label4.Tag = "ApellidoLabel";
             this.label4.Text = "Apellido";
             // 
             // label3
@@ -184,7 +184,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(26, 13);
             this.label3.TabIndex = 0;
-            this.label3.Tag = "DniLabel2";
+            this.label3.Tag = "DniLabel";
             this.label3.Text = "DNI";
             // 
             // label2
@@ -292,7 +292,7 @@
             this.btnActivarDesactivar.Name = "btnActivarDesactivar";
             this.btnActivarDesactivar.Size = new System.Drawing.Size(75, 38);
             this.btnActivarDesactivar.TabIndex = 33;
-            this.btnActivarDesactivar.Tag = "CancelarButton";
+            this.btnActivarDesactivar.Tag = "Activar/Desactivar";
             this.btnActivarDesactivar.Text = "Act. / Desact.";
             this.btnActivarDesactivar.UseVisualStyleBackColor = true;
             this.btnActivarDesactivar.Click += new System.EventHandler(this.btnActivarDesactivar_Click);
@@ -314,6 +314,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 35;
+            this.button4.Tag = "SalirButton";
             this.button4.Text = "Salir";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
@@ -336,12 +337,12 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 38);
             this.button2.TabIndex = 37;
-            this.button2.Tag = "CancelarButton";
+            this.button2.Tag = "DesbloquearButton";
             this.button2.Text = "Desbloquear";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // FormABMUsuario_625NS
+            // FormABMUsuario_56PS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -363,7 +364,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
-            this.Name = "FormABMUsuario_625NS";
+            this.Name = "FormABMUsuario_56PS";
             this.Text = "FormABMUsuario_625NS";
             this.Load += new System.EventHandler(this.FormABMUsuario_625NS_Load);
             this.panel1.ResumeLayout(false);

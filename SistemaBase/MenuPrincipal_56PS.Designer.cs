@@ -36,6 +36,8 @@
             this.administracionToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.auditoriaDeEventosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usuariosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.perfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.familiasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,7 +88,9 @@
             // 
             this.administracionToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.auditoriaDeEventosToolStripMenuItem,
-            this.usuariosToolStripMenuItem});
+            this.usuariosToolStripMenuItem,
+            this.perfilesToolStripMenuItem,
+            this.familiasToolStripMenuItem});
             this.administracionToolStripMenuItem1.Name = "administracionToolStripMenuItem1";
             this.administracionToolStripMenuItem1.Size = new System.Drawing.Size(100, 20);
             this.administracionToolStripMenuItem1.Text = "Administracion";
@@ -105,6 +109,20 @@
             this.usuariosToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.usuariosToolStripMenuItem.Text = "Usuarios";
             this.usuariosToolStripMenuItem.Click += new System.EventHandler(this.usuariosToolStripMenuItem_Click);
+            // 
+            // perfilesToolStripMenuItem
+            // 
+            this.perfilesToolStripMenuItem.Name = "perfilesToolStripMenuItem";
+            this.perfilesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.perfilesToolStripMenuItem.Text = "Perfiles";
+            this.perfilesToolStripMenuItem.Click += new System.EventHandler(this.perfilesToolStripMenuItem_Click);
+            // 
+            // familiasToolStripMenuItem
+            // 
+            this.familiasToolStripMenuItem.Name = "familiasToolStripMenuItem";
+            this.familiasToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.familiasToolStripMenuItem.Text = "Familias";
+            this.familiasToolStripMenuItem.Click += new System.EventHandler(this.familiasToolStripMenuItem_Click);
             // 
             // MenuPrincipal_56PS
             // 
@@ -134,5 +152,7 @@
         private System.Windows.Forms.ToolStripMenuItem administracionToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem auditoriaDeEventosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem usuariosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem perfilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem familiasToolStripMenuItem;
     }
 }

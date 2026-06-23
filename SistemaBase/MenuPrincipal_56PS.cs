@@ -1,4 +1,7 @@
-﻿using ClassLibrary2;
+﻿using BE_625NS;
+using BLL;
+using ClassLibrary2;
+using ClassLibrary3;
 using GUI_625NS.Administracion;
 using SistemaBase.Administracion;
 using SistemaBase.Usuario;
@@ -67,6 +70,9 @@ namespace SistemaBase
         public ToolStripMenuItem MenuAdministracion => administracionToolStripMenuItem1;
         public ToolStripMenuItem MenuCambiarContraseña => cambiarContraseñaToolStripMenuItem;
 
+        public ToolStripMenuItem MenuPerfiles => perfilesToolStripMenuItem;
+
+        public ToolStripMenuItem MenuFamilias => familiasToolStripMenuItem;
 
 
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -77,6 +83,20 @@ namespace SistemaBase
             {
                 MessageBox.Show("Debe iniciar sesión primero");
                 return;
+            }
+
+
+            var idiomaActual = instance.idiomaActual;
+
+            var idiomaOriginal = instance.getUsuarioActivo().idioma;
+
+            if(idiomaActual != idiomaOriginal) //si se cierra sesion con un idioma distinto al original del usuario se lo cambiamos en la db
+            {
+                new BLL_Usuario_56PS().cambiarIdioma(idiomaActual, instance.getUsuarioActivo().Dni);
+
+                Evento_56PS evento = new Evento_56PS(instance.getUsuarioActivo().Dni, DateTime.Now, "Usuarios", "Cambio de idioma", Evento_56PS.Criticidad.Bajo);
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
+
             }
 
             instance.cerrarSesion();
@@ -106,6 +126,16 @@ namespace SistemaBase
         private void administracionToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void perfilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(new FormPerfiles_56PS());
+        }
+
+        private void familiasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(new FormFamilias_56PS());
         }
     }
 }

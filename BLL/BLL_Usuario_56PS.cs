@@ -87,5 +87,10 @@ namespace BLL
         {
             dal.cambiarEstadoActivo(dni);       
         }
+
+        public void cambiarIdioma(string idiomaActual, string dni)
+        {
+            dal.cambiarIdioma(idiomaActual, dni);
+        }
     }
 }

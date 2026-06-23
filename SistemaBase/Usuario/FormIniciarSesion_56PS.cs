@@ -23,7 +23,7 @@ namespace SistemaBase
         public void actualizarIdioma()
         {
             var traductor = new BLL_Idioma_56PS();
-            traductor.Traducir_625NS(this);
+            traductor.Traducir(this);
         }
 
         public FormIniciarSesion_56PS()
@@ -130,9 +130,11 @@ namespace SistemaBase
 
 
             SessionManager_56PS.getInstancia().iniciarSesion(usuarioLogueado);
+            SessionManager_56PS.getInstancia().CambiarIdioma(usuarioLogueado.idioma);
 
 
-                var sessao = SessionManager_56PS.getInstancia();
+
+            var sessao = SessionManager_56PS.getInstancia();
                 string userNamee = sessao.getUsuarioActivo().NombreUsuario;
 
 
@@ -157,9 +159,14 @@ namespace SistemaBase
 
 
 
-            menu.MenuAdministracion.Enabled = userr.Rol.nombre == "Administrador";
+        
+            menu.MenuAdministracion.Enabled = userr.Perfil != null &&
+                userr.Perfil.Contiene("P01"); // P01 = Gestión de Usuarios
             menu.MenuCambiarContraseña.Enabled = true;
 
+            menu.MenuFamilias.Enabled = userr.Perfil.Contiene("P04");
+
+            menu.MenuPerfiles.Enabled = userr.Perfil.Contiene("P03");
             // Verificar si el usuario debe cambiar contraseña usando la bitácora
             if (DebeCambiarContraseña(userr.Dni))
             {

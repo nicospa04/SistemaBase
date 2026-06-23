@@ -8,11 +8,12 @@ using Newtonsoft.Json;
 using System.Windows.Forms;
 using ClassLibrary2;
 
+
 namespace BLL
 {
     public class BLL_Idioma_56PS
     {
-        public Dictionary<string, string> obtenerIdioma_625NS(string tipo)
+        public Dictionary<string, string> obtenerIdioma(string tipo)
         {
             if (tipo == "POR") { tipo = "PT"; }
 
@@ -23,10 +24,10 @@ namespace BLL
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
 
-        public void Traducir_625NS(Form formulario)
+        public void Traducir(Form formulario)
         {
             string tipo = ObtenerTipoDesdeSession();
-            var traducciones = obtenerIdioma_625NS(tipo);
+            var traducciones = obtenerIdioma(tipo);
             TraducirControles(formulario.Controls, traducciones);
         }
 

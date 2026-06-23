@@ -12,6 +12,7 @@ using BLL;
 using BE_625NS;
 using ClassLibrary2;
 using Servicio;
+using ClassLibrary3;
 
 namespace SistemaBase.Administracion
 {
@@ -63,7 +64,7 @@ namespace SistemaBase.Administracion
         public void actualizarIdioma()
         {
             var traductor = new BLL_Idioma_56PS();
-            traductor.Traducir_625NS(this);
+            traductor.Traducir(this);
         }
 
         // --- DATOS ---

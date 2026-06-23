@@ -56,6 +56,7 @@
             this.button6.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button6.Size = new System.Drawing.Size(277, 32);
             this.button6.TabIndex = 162;
+            this.button6.Tag = "eliminarPermiso/familiaDePerfil";
             this.button6.Text = "Eliminar permiso/familia de perfil";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
@@ -99,6 +100,7 @@
             this.button4.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button4.Size = new System.Drawing.Size(277, 33);
             this.button4.TabIndex = 158;
+            this.button4.Tag = "cancelar";
             this.button4.Text = "Cancelar";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
@@ -122,6 +124,7 @@
             this.button2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button2.Size = new System.Drawing.Size(202, 33);
             this.button2.TabIndex = 156;
+            this.button2.Tag = "asignarFamilia";
             this.button2.Text = "Asignar familia";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -144,6 +147,7 @@
             this.button3.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button3.Size = new System.Drawing.Size(202, 33);
             this.button3.TabIndex = 154;
+            this.button3.Tag = "asignarPermiso";
             this.button3.Text = "Asignar permiso";
             this.button3.UseVisualStyleBackColor = true;
             // 
@@ -156,6 +160,7 @@
             this.lblnombre.Name = "lblnombre";
             this.lblnombre.Size = new System.Drawing.Size(59, 19);
             this.lblnombre.TabIndex = 153;
+            this.lblnombre.Tag = "Nombre";
             this.lblnombre.Text = "Nombre";
             // 
             // txtnomb
@@ -175,6 +180,7 @@
             this.btncancelar.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.btncancelar.Size = new System.Drawing.Size(277, 33);
             this.btncancelar.TabIndex = 151;
+            this.btncancelar.Tag = "eliminarPerfil";
             this.btncancelar.Text = "Eliminar Perfil";
             this.btncancelar.UseVisualStyleBackColor = true;
             this.btncancelar.Click += new System.EventHandler(this.btncancelar_Click);
@@ -188,6 +194,7 @@
             this.btnbuscar.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.btnbuscar.Size = new System.Drawing.Size(277, 33);
             this.btnbuscar.TabIndex = 150;
+            this.btnbuscar.Tag = "crearPerfil";
             this.btnbuscar.Text = "Crear Perfil";
             this.btnbuscar.UseVisualStyleBackColor = true;
             this.btnbuscar.Click += new System.EventHandler(this.btnbuscar_Click);

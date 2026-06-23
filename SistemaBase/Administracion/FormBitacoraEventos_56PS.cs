@@ -25,7 +25,7 @@ namespace GUI_625NS.Administracion
         public void actualizarIdioma()
         {
             var traductor = new BLL_Idioma_56PS();
-            traductor.Traducir_625NS(this);
+            traductor.Traducir(this);
         }
 
         public FormBitacoraEventos_56PS()
@@ -205,6 +205,11 @@ namespace GUI_625NS.Administracion
             {
                 MessageBox.Show("Error al exportar PDF: " + ex.Message);
             }
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

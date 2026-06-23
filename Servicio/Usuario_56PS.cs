@@ -16,8 +16,8 @@ namespace BE_56_PS
         public string Dni { get; set; }
         public string Email { get; set; }
 
-        [XmlIgnore]
-        public Rol_56PS Rol { get; set; } //Perfil 
+    
+        public Perfil_56PS Perfil{ get; set; } //Perfil 
 
 
         public string Nombre { get; set; }
@@ -28,7 +28,7 @@ namespace BE_56_PS
 
         public Usuario_56PS() { }
 
-        public Usuario_56PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, string idioma, bool bloqueado ,bool activo, Rol_56PS rol)
+        public Usuario_56PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, string idioma, bool bloqueado ,bool activo, Perfil_56PS perfil)
         {
             this.Apellido = apellido;
             this.Contraseña = contraseña;
@@ -39,7 +39,7 @@ namespace BE_56_PS
             this.idioma = idioma;
             this.Bloqueado = bloqueado;
             this.Activo = activo;
-            this.Rol = rol;
+            this.Perfil = perfil;
         }
     }
 }

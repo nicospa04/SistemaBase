@@ -62,7 +62,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 28;
-            this.button2.Tag = "limpiaar";
+            this.button2.Tag = "limpiar";
             this.button2.Text = "Limpiar";
             this.button2.UseVisualStyleBackColor = true;
             // 
@@ -72,7 +72,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 27;
-            this.button1.Tag = "aplicaaar";
+            this.button1.Tag = "aplicar";
             this.button1.Text = "Aplicar";
             this.button1.UseVisualStyleBackColor = true;
             // 
@@ -130,7 +130,9 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 13);
             this.label5.TabIndex = 20;
+            this.label5.Tag = "hasta";
             this.label5.Text = "Hasta";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label4
             // 
@@ -160,6 +162,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 13);
             this.label2.TabIndex = 17;
+            this.label2.Tag = "DniLabel";
             this.label2.Text = "DNI";
             // 
             // dataGridView1
@@ -179,7 +182,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(354, 44);
             this.label1.TabIndex = 15;
-            this.label1.Tag = "bitacora";
+            this.label1.Tag = "bitacoraDeEventos";
             this.label1.Text = "Bitacora de eventos";
             // 
             // FormBitacoraEventos_56PS

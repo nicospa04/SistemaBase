@@ -55,6 +55,7 @@
             this.btnmodificar.Name = "btnmodificar";
             this.btnmodificar.Size = new System.Drawing.Size(277, 33);
             this.btnmodificar.TabIndex = 162;
+            this.btnmodificar.Tag = "modificarNombre";
             this.btnmodificar.Text = "Modificar nombre";
             this.btnmodificar.UseVisualStyleBackColor = true;
             // 
@@ -67,8 +68,10 @@
             this.button6.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button6.Size = new System.Drawing.Size(277, 32);
             this.button6.TabIndex = 161;
+            this.button6.Tag = "eliminarPermiso/familiaDePerfil";
             this.button6.Text = "Eliminar permiso/familia de familia";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // dataGridView1
             // 
@@ -98,8 +101,10 @@
             this.button4.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button4.Size = new System.Drawing.Size(277, 33);
             this.button4.TabIndex = 158;
+            this.button4.Tag = "cancelar";
             this.button4.Text = "Cancelar";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // cmbfa
             // 
@@ -119,8 +124,10 @@
             this.button2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button2.Size = new System.Drawing.Size(202, 33);
             this.button2.TabIndex = 156;
+            this.button2.Tag = "asignarFamilia";
             this.button2.Text = "Asignar familia";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // cmbpermiso
             // 
@@ -171,6 +178,7 @@
             this.btncancelar.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.btncancelar.Size = new System.Drawing.Size(277, 33);
             this.btncancelar.TabIndex = 151;
+            this.btncancelar.Tag = "eliminarFamilia";
             this.btncancelar.Text = "Eliminar Familia";
             this.btncancelar.UseVisualStyleBackColor = true;
             // 
@@ -183,6 +191,7 @@
             this.btnbuscar.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.btnbuscar.Size = new System.Drawing.Size(277, 33);
             this.btnbuscar.TabIndex = 150;
+            this.btnbuscar.Tag = "crearFamilia";
             this.btnbuscar.Text = "Crear Familia";
             this.btnbuscar.UseVisualStyleBackColor = true;
             // 
@@ -220,7 +229,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1301, 576);
             this.Controls.Add(this.btnmodificar);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.dataGridView1);

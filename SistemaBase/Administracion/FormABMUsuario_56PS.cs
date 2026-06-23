@@ -26,7 +26,7 @@ namespace SistemaBase.Administracion
         public void actualizarIdioma()
         {
             var traductor = new BLL_Idioma_56PS();
-            traductor.Traducir_625NS(this);
+            traductor.Traducir(this);
         }
 
         List<Usuario_56PS> listaGeneral;
@@ -78,15 +78,24 @@ namespace SistemaBase.Administracion
 
         void CargarRoles()
         {
-            comboBox1.Items.Clear();
+            try
+            {
+                var bll = new BLL_Perfil_56PS();
+                List<Perfil_56PS> perfiles = bll.ObtenerTodosLosPerfiles()
+                                                .Where(p => p.activo)
+                                                .ToList();
 
-            comboBox1.Items.Add(new Rol_56PS("Administrador", "2"));
-            comboBox1.Items.Add(new Rol_56PS("Base", "1"));
+                comboBox1.DataSource = perfiles;
+                comboBox1.DisplayMember = "Nombre";
+                comboBox1.ValueMember = "Codigo";
 
-            comboBox1.DisplayMember = "nombre";
-            comboBox1.ValueMember = "cod";
-
-            comboBox1.SelectedIndex = 1;
+                if (perfiles.Count > 0)
+                    comboBox1.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar perfiles: " + ex.Message);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -119,11 +128,13 @@ namespace SistemaBase.Administracion
             DataGridViewRow fila = dataGridView1.SelectedRows[0];
 
 
-            string rolCod = ((Usuario_56PS)fila.DataBoundItem).Rol.cod;
-
-            comboBox1.SelectedIndex = rolCod == "2" ? 0 : 1;
-
-
+            string codigoPerfil = ((Usuario_56PS)fila.DataBoundItem).Perfil?.Codigo;
+            if (!string.IsNullOrEmpty(codigoPerfil))
+            {
+                var items = comboBox1.DataSource as List<Perfil_56PS>;
+                int idx = items?.FindIndex(p => p.Codigo == codigoPerfil) ?? -1;
+                if (idx >= 0) comboBox1.SelectedIndex = idx;
+            }
 
             // Cargar datos al formulario
             textBox1.Text = fila.Cells["DNI"].Value.ToString();
@@ -315,7 +326,7 @@ namespace SistemaBase.Administracion
 
 
 
-                Usuario_56PS user = new Usuario_56PS( 
+                Usuario_56PS user = new Usuario_56PS(
                     apellido: apellido,
                     bloqueado: bloqueado,
                     contraseña: fila.Cells["Contraseña"].Value.ToString(), //la contraseña no se puede cambiar desde este abm
@@ -323,12 +334,13 @@ namespace SistemaBase.Administracion
                     email: email,
                     nombre: nombre,
                     nombreUsuario: nombreUsuario,
-                    activo:activo,
-                    idioma:"EN",
-                    rol: (Rol_56PS)comboBox1.SelectedItem);
+                    activo: activo,
+                    idioma: "EN",
+perfil: (Perfil_56PS)comboBox1.SelectedItem);
 
 
-              
+
+
 
 
 
@@ -410,7 +422,7 @@ namespace SistemaBase.Administracion
                         nombreUsuario: nombreUsuario,
                         idioma: "ES", //Español es el idioma por defecto,
                         activo: checkBox1.Checked,
-                        rol: (Rol_56PS)comboBox1.SelectedItem
+perfil: (Perfil_56PS)comboBox1.SelectedItem
                         );
 
 

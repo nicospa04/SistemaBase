@@ -141,7 +141,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="EN.json" />
+    <None Include="ES.json" />
     <None Include="packages.config" />
+    <None Include="pt.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

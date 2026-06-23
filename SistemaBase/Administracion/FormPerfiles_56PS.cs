@@ -11,6 +11,7 @@ using BLL;
 using BE_625NS;
 using ClassLibrary2;
 using Servicio;
+using ClassLibrary3;
 
 namespace SistemaBase.Administracion
 {
@@ -56,7 +57,7 @@ namespace SistemaBase.Administracion
         public void actualizarIdioma()
         {
             var traductor = new BLL_Idioma_56PS();
-            traductor.Traducir_625NS(this);
+            traductor.Traducir(this);
         }
 
         // --- DATOS ---
@@ -302,7 +303,7 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Perfiles", "Eliminación de perfil", Evento_56PS.Criticidad.Alto);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
-            }
+            }   
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);

@@ -1,6 +1,7 @@
 using BE_625NS;
 using BLL;
 using ClassLibrary2;
+using ClassLibrary3;
 using Services_625NS;
 using Servicio;
 using System;
@@ -27,7 +28,7 @@ namespace SistemaBase.Usuario
         public void actualizarIdioma()
         {
             var traductor = new BLL_Idioma_56PS();
-            traductor.Traducir_625NS(this);
+            traductor.Traducir(this);
         }
 
         private void button1_Click(object sender, EventArgs e)

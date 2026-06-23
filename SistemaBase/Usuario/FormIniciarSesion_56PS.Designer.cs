@@ -38,7 +38,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(337, 292);
+            this.button1.Location = new System.Drawing.Point(337, 287);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(114, 35);
             this.button1.TabIndex = 11;
@@ -92,7 +92,7 @@
             this.label1.Tag = "IniciarSesionText";
             this.label1.Text = "Iniciar sesion";
             // 
-            // FormIniciarSesion
+            // FormIniciarSesion_56PS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -103,7 +103,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "FormIniciarSesion";
+            this.Name = "FormIniciarSesion_56PS";
             this.Text = "FormIniciarSesion";
             this.Load += new System.EventHandler(this.FormIniciarSesion_Load);
             this.ResumeLayout(false);

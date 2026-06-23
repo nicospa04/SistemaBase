@@ -12,7 +12,7 @@ namespace ClassLibrary3
 
         DAL_BitacoraEventos_56PS dal = new DAL_BitacoraEventos_56PS();
 
-        public void RegistrarEvento(BE_Evento_56PS e)
+        public void RegistrarEvento(Evento_56PS e)
         {
             dal.RegistrarEvento(e);
 
@@ -21,7 +21,7 @@ namespace ClassLibrary3
 
         public BLL_BitacoraEvento_56PS() { dal = new DAL_BitacoraEventos_56PS(); }
 
-        public List<BE_Evento_56PS> obtenerEventos()
+        public List<Evento_56PS> obtenerEventos()
         {
             return dal.obtenerEventos();
         }

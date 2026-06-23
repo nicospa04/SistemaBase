@@ -1,4 +1,4 @@
-﻿using BE_625NS;
+using BE_625NS;
 using ClassLibrary2;
 using ClassLibrary3;
 using System;
@@ -14,47 +14,48 @@ using iTextSharp.text.pdf;
 using BLL;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Xml.Linq;
+using Servicio;
 namespace GUI_625NS.Administracion
 {
-    public partial class FormBitacoraEventos_56PS : Form //, IdiomaObserver_625NS
+    public partial class FormBitacoraEventos_56PS : Form, IdiomaObserver_56PS
     {
-        private List<BE_Evento_56PS> eventos;
-        private List<BE_Evento_56PS> filtrados;
+        private List<Evento_56PS> eventos;
+        private List<Evento_56PS> filtrados;
 
-
-        //public void ActualizarIdioma_625NS()
-        //{
-        //    Traducir_625NS();
-        //}
-        //public void Traducir_625NS()
-        //{
-        //    var traductor = new BLL_Idioma_625NS();
-        //    traductor.Traducir_625NS(this);
-        //}
+        public void actualizarIdioma()
+        {
+            var traductor = new BLL_Idioma_56PS();
+            traductor.Traducir_625NS(this);
+        }
 
         public FormBitacoraEventos_56PS()
         {
             InitializeComponent();
 
             eventos = new BLL_BitacoraEvento_56PS().obtenerEventos();
-            filtrados = new List<BE_Evento_56PS>(eventos);
+            filtrados = new List<Evento_56PS>(eventos);
 
             dataGridView1.DataSource = filtrados;
 
             var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
 
-            BE_Evento_56PS evento = new BE_Evento_56PS(
+            Evento_56PS evento = new Evento_56PS(
                 user.Dni,
                 DateTime.Now,
                 "Eventos",
                 "Consultó el listado de eventos",
-                BE_Evento_56PS.Criticidad.Bajo
+                Evento_56PS.Criticidad.Bajo
             );
 
-            //SessionManager_625NS.getInstancia().Suscribir_625NS(this);
+            // Limitar DateTimePickers: no permitir fechas futuras
+            dateTimePicker1.MaxDate = DateTime.Now;
+            dateTimePicker2.MaxDate = DateTime.Now;
 
-            //ActualizarIdioma_625NS();
+            // Conectar botones que no estaban enganchados en el Designer
+            button1.Click += button1_Click;
+            button2.Click += button2_Click;
 
+            actualizarIdioma();
         }
 
         private void FormBitacoraEventos_625NS_Load(object sender, EventArgs e)
@@ -63,16 +64,23 @@ namespace GUI_625NS.Administracion
             comboBox1.Items.AddRange(eventos.Select(ev => ev.modulo).Distinct().ToArray());
 
             comboBox2.Items.Clear();
-            comboBox2.Items.AddRange(Enum.GetNames(typeof(BE_Evento_56PS.Criticidad)));
+            comboBox2.Items.AddRange(Enum.GetNames(typeof(Evento_56PS.Criticidad)));
 
             dateTimePicker1.Value = eventos.Min(ev => ev.fecha);
-            dateTimePicker2.Value = eventos.Max(ev => ev.fecha);
+            dateTimePicker2.Value = DateTime.Now;
         }
 
 
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // Validar que Desde <= Hasta
+            if (dateTimePicker1.Value.Date > dateTimePicker2.Value.Date)
+            {
+                MessageBox.Show("La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.");
+                return;
+            }
+
             var query = eventos.AsEnumerable();
 
             if (!string.IsNullOrWhiteSpace(textBox1.Text))
@@ -83,7 +91,7 @@ namespace GUI_625NS.Administracion
 
             if (comboBox2.SelectedItem != null)
             {
-                var crit = (BE_Evento_56PS.Criticidad)Enum.Parse(typeof(BE_Evento_56PS.Criticidad), comboBox2.SelectedItem.ToString());
+                var crit = (Evento_56PS.Criticidad)Enum.Parse(typeof(Evento_56PS.Criticidad), comboBox2.SelectedItem.ToString());
                 query = query.Where(ev => ev.criticidad == crit);
             }
 
@@ -106,92 +114,11 @@ namespace GUI_625NS.Administracion
             comboBox2.SelectedIndex = -1;
 
             dateTimePicker1.Value = eventos.Min(ev => ev.fecha);
-            dateTimePicker2.Value = eventos.Max(ev => ev.fecha);
+            dateTimePicker2.Value = DateTime.Now;
 
-            filtrados = new List<BE_Evento_56PS>(eventos);
+            filtrados = new List<Evento_56PS>(eventos);
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = filtrados;
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (dataGridView1.Rows.Count == 0)
-                {
-                    MessageBox.Show("No hay datos para exportar.");
-                    return;
-                }
-
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "PDF (*.pdf)|*.pdf";
-                saveFileDialog.FileName = "BitacoraEventos.pdf";
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    using (FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.Create))
-                    {
-                        Document pdfDoc = new Document(PageSize.A4, 20f, 20f, 20f, 20f);
-                        PdfWriter.GetInstance(pdfDoc, stream);
-                        pdfDoc.Open();
-
-                        iTextSharp.text.Font fontTitulo = new iTextSharp.text.Font(
-                           iTextSharp.text.Font.FontFamily.HELVETICA, 14, iTextSharp.text.Font.BOLD
-                       );
-
-                        iTextSharp.text.Font fontCabecera = new iTextSharp.text.Font(
-                            iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD
-                        );
-
-                        iTextSharp.text.Font fontContenido = new iTextSharp.text.Font(
-                            iTextSharp.text.Font.FontFamily.HELVETICA, 10, iTextSharp.text.Font.NORMAL
-                        );
-
-                        // Agregar título
-                        Paragraph titulo = new Paragraph("Bitácora de Eventos", fontTitulo);
-                        titulo.Alignment = Element.ALIGN_CENTER;
-                        pdfDoc.Add(titulo);
-                        pdfDoc.Add(new Paragraph("\n"));
-
-                        PdfPTable pdfTable = new PdfPTable(dataGridView1.Columns.Count);
-                        pdfTable.WidthPercentage = 100;
-
-                        foreach (DataGridViewColumn column in dataGridView1.Columns)
-                        {
-                            PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, fontCabecera));
-                            cell.BackgroundColor = BaseColor.LIGHT_GRAY;
-                            cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                            pdfTable.AddCell(cell);
-                        }
-
-                        foreach (DataGridViewRow row in dataGridView1.Rows)
-                        {
-                            if (!row.IsNewRow)
-                            {
-                                foreach (DataGridViewCell cell in row.Cells)
-                                {
-                                    pdfTable.AddCell(new Phrase(cell.Value?.ToString() ?? "", fontContenido));
-                                }
-                            }
-                        }
-
-                        pdfDoc.Add(pdfTable);
-                        pdfDoc.Close();
-                        stream.Close();
-                    }
-
-                    MessageBox.Show("PDF exportado correctamente.");
-
-                    string a = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
-
-                    BE_Evento_56PS ee = new BE_Evento_56PS(a, DateTime.Now, "Eventos", "Exportacion a pdf de evento", BE_Evento_56PS.Criticidad.Bajo);
-                    new BLL_BitacoraEvento_56PS().RegistrarEvento(ee);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al exportar PDF: " + ex.Message);
-            }
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -270,7 +197,7 @@ namespace GUI_625NS.Administracion
 
                     string a = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
 
-                    BE_Evento_56PS ee = new BE_Evento_56PS(a, DateTime.Now, "Eventos", "Exportacion a pdf de evento", BE_Evento_56PS.Criticidad.Bajo);
+                    Evento_56PS ee = new Evento_56PS(a, DateTime.Now, "Eventos", "Exportacion a pdf de evento", Evento_56PS.Criticidad.Bajo);
                     new BLL_BitacoraEvento_56PS().RegistrarEvento(ee);
                 }
             }

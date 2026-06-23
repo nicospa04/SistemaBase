@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BE_625NS
 {
-    public class BE_Evento_56PS
+    public class Evento_56PS
     {
 
         public enum Criticidad
@@ -31,7 +31,7 @@ namespace BE_625NS
 
         public Criticidad criticidad{ get; set; }
 
-        public BE_Evento_56PS(int numero_625NS, string dni_625NS, DateTime fecha_625NS, string modulo_625NS, string descripcion_625NS, Criticidad criticidad_625NS)
+        public Evento_56PS(int numero_625NS, string dni_625NS, DateTime fecha_625NS, string modulo_625NS, string descripcion_625NS, Criticidad criticidad_625NS)
         {
             this.numero = numero_625NS;
             this.dni= dni_625NS;
@@ -41,7 +41,7 @@ namespace BE_625NS
             this.criticidad= criticidad_625NS;
         }
 
-        public BE_Evento_56PS(string dni_625NS, DateTime fecha_625NS, string modulo_625NS, string descripcion_625NS, Criticidad criticidad_625NS)
+        public Evento_56PS(string dni_625NS, DateTime fecha_625NS, string modulo_625NS, string descripcion_625NS, Criticidad criticidad_625NS)
         {
 
             this.dni= dni_625NS;

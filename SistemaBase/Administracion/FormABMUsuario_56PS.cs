@@ -18,9 +18,16 @@ using System.Windows.Forms;
 
 namespace SistemaBase.Administracion
 {
-    public partial class FormABMUsuario_56PS : Form
+    public partial class FormABMUsuario_56PS : Form, IdiomaObserver_56PS
     {
         string modo = "";
+
+
+        public void actualizarIdioma()
+        {
+            var traductor = new BLL_Idioma_56PS();
+            traductor.Traducir_625NS(this);
+        }
 
         List<Usuario_56PS> listaGeneral;
 
@@ -53,6 +60,9 @@ namespace SistemaBase.Administracion
             dataGridView1.Columns["Activo"].Visible = false;
             dataGridView1.Columns["idioma"].Visible = false;
             dataGridView1.Columns["Rol"].Visible = false;
+
+
+             actualizarIdioma();
         }
 
         void deshabilitarBotonAplicar()
@@ -179,12 +189,12 @@ namespace SistemaBase.Administracion
 
                 var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
 
-                BE_Evento_56PS evento = new BE_Evento_56PS(
+                Evento_56PS evento = new Evento_56PS(
                     user.Dni,
                     DateTime.Now,
                     "Usuarios",
                     $"Desbloqueo de usuario DNI {dni}",
-                    BE_Evento_56PS.Criticidad.Medio
+                    Evento_56PS.Criticidad.Medio
                 );
 
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
@@ -218,12 +228,12 @@ namespace SistemaBase.Administracion
 
                 string accion = ActivoActual ? "Desactivación" : "Activación";
 
-                BE_Evento_56PS evento = new BE_Evento_56PS(
+                Evento_56PS evento = new Evento_56PS(
                     user.Dni,
                     DateTime.Now,
                     "Usuarios",
                     $"{accion} de usuario DNI {dni}",
-                    BE_Evento_56PS.Criticidad.Alto
+                    Evento_56PS.Criticidad.Alto
                 );
 
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
@@ -335,7 +345,7 @@ namespace SistemaBase.Administracion
 
                 var currentUser = SessionManager_56PS.getInstancia().getUsuarioActivo();
 
-                BE_Evento_56PS evento = new BE_Evento_56PS(currentUser.Dni, DateTime.Now, "Usuarios", "Modificación de usuario", BE_Evento_56PS.Criticidad.Medio);
+                Evento_56PS evento = new Evento_56PS(currentUser.Dni, DateTime.Now, "Usuarios", "Modificación de usuario", Evento_56PS.Criticidad.Medio);
 
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
 
@@ -415,7 +425,7 @@ namespace SistemaBase.Administracion
 
                     string aa = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
 
-                    BE_Evento_56PS eee = new BE_Evento_56PS(aa, DateTime.Now, "Usuarios", "Creacion de usuario", BE_Evento_56PS.Criticidad.Bajo);
+                    Evento_56PS eee = new Evento_56PS(aa, DateTime.Now, "Usuarios", "Creacion de usuario", Evento_56PS.Criticidad.Bajo);
                     new BLL_BitacoraEvento_56PS().RegistrarEvento(eee);
 
                 }

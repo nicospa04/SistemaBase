@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Evento_56PS.cs" />
+    <Compile Include="Familia_56PS.cs" />
+    <Compile Include="IdiomaObserver_56PS.cs" />
+    <Compile Include="Idioma_56PS.cs" />
+    <Compile Include="IObservable_56PS.cs" />
+    <Compile Include="Patente_56PS.cs" />
+    <Compile Include="Perfil_56PS.cs" />
     <Compile Include="Rol_56PS.cs" />
     <Compile Include="Usuario_56PS.cs" />
     <Compile Include="CryptoManager_56PS.cs" />
@@ -53,6 +63,9 @@
       <Project>{745dc174-2870-46e8-b6a1-6cd5df5ccfbe}</Project>
       <Name>BE_56PS</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

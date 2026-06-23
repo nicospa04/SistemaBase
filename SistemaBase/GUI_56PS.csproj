@@ -43,6 +43,9 @@
     <Reference Include="itextsharp, Version=5.5.13.5, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.13.5\lib\net461\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -66,6 +69,18 @@
     </Compile>
     <Compile Include="Administracion\FormBitacoraEventos_56PS.Designer.cs">
       <DependentUpon>FormBitacoraEventos_56PS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Administracion\FormFamilias_56PS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Administracion\FormFamilias_56PS.Designer.cs">
+      <DependentUpon>FormFamilias_56PS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Administracion\FormPerfiles_56PS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Administracion\FormPerfiles_56PS.Designer.cs">
+      <DependentUpon>FormPerfiles_56PS.cs</DependentUpon>
     </Compile>
     <Compile Include="MenuPrincipal_56PS.cs">
       <SubType>Form</SubType>
@@ -94,6 +109,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Administracion\FormBitacoraEventos_56PS.resx">
       <DependentUpon>FormBitacoraEventos_56PS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Administracion\FormFamilias_56PS.resx">
+      <DependentUpon>FormFamilias_56PS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Administracion\FormPerfiles_56PS.resx">
+      <DependentUpon>FormPerfiles_56PS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuPrincipal_56PS.resx">
       <DependentUpon>MenuPrincipal_56PS.cs</DependentUpon>

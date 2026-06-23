@@ -8,13 +8,17 @@ using Servicio;
 
 namespace ClassLibrary2
 {
-    public class SessionManager_56PS //: IObservable_625NS
+    public class SessionManager_56PS : IObservable_56PS
     {
         private static SessionManager_56PS instancia;
         private Usuario_56PS usuarioActivo;
 
+        public string idiomaActual { get; private set; }
+        private List<IdiomaObserver_56PS> Observadores;
 
-      
+
+        private SessionManager_56PS() { Observadores = new List<IdiomaObserver_56PS>(); }
+
 
         public static SessionManager_56PS getInstancia()
         {
@@ -24,11 +28,28 @@ namespace ClassLibrary2
             return instancia;
         }
 
-        //public void CambiarIdioma_625NS(string idiomaNuevo)
-        //{
-        //    idiomaActual_625NS = idiomaNuevo;
-        //    //Notificar_625NS();
-        //}
+        public void CambiarIdioma(string idiomaNuevo)
+        {
+            idiomaActual = idiomaNuevo;
+            Notificar();
+        }
+
+        public void Suscribir(IdiomaObserver_56PS obs)
+        {
+            if (!Observadores.Contains(obs))
+                Observadores.Add(obs);
+        }
+
+        public void Desuscribir(IdiomaObserver_56PS obs)
+        {
+            Observadores.Remove(obs);
+        }
+
+        public void Notificar()
+        {
+            foreach (var obs in Observadores)
+                obs.actualizarIdioma();
+        }
 
 
         public void iniciarSesion(Usuario_56PS usuario)

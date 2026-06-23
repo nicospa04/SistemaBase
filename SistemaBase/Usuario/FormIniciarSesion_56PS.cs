@@ -1,9 +1,10 @@
-﻿using BE_56_PS;
+using BE_56_PS;
 using BE_625NS;
 using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
 using Servicio;
+using SistemaBase.Usuario;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,11 +17,20 @@ using System.Windows.Forms;
 
 namespace SistemaBase
 {
-    public partial class FormIniciarSesion_56PS : Form
+    public partial class FormIniciarSesion_56PS : Form, IdiomaObserver_56PS
     {
+
+        public void actualizarIdioma()
+        {
+            var traductor = new BLL_Idioma_56PS();
+            traductor.Traducir_625NS(this);
+        }
+
         public FormIniciarSesion_56PS()
         {
             InitializeComponent();
+
+            actualizarIdioma();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -71,19 +81,19 @@ namespace SistemaBase
                 MessageBox.Show("Contraseña incorrecta");
 
                 //registramos evento en bitacora
-                BE_Evento_56PS eventoFallido = new BE_Evento_56PS(
+                Evento_56PS eventoFallido = new Evento_56PS(
                     usuarioLogueado.Dni,
                     DateTime.Now,
                     "Usuarios",
                     "Intento fallido",
-                    BE_Evento_56PS.Criticidad.Alto
+                    Evento_56PS.Criticidad.Alto
                 );
 
                 BLL_BitacoraEvento_56PS bitacoraBLL = new BLL_BitacoraEvento_56PS();
                 bitacoraBLL.RegistrarEvento(eventoFallido);
 
                 //obtenemos eventos de los ultimos 5 minutos
-                List<BE_Evento_56PS> eventos = bitacoraBLL.obtenerEventos();
+                List<Evento_56PS> eventos = bitacoraBLL.obtenerEventos();
 
                 int cantidadIntentos = eventos.Count(ev =>
                     ev.dni == usuarioLogueado.Dni &&
@@ -133,7 +143,7 @@ namespace SistemaBase
             var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
 
 
-                BE_Evento_56PS evento = new BE_Evento_56PS(user.Dni, DateTime.Now, "Usuarios", "Inicio de sesión", BE_Evento_56PS.Criticidad.Bajo);
+                Evento_56PS evento = new Evento_56PS(user.Dni, DateTime.Now, "Usuarios", "Inicio de sesión", Evento_56PS.Criticidad.Bajo);
 
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
 
@@ -149,12 +159,52 @@ namespace SistemaBase
 
             menu.MenuAdministracion.Enabled = userr.Rol.nombre == "Administrador";
             menu.MenuCambiarContraseña.Enabled = true;
-                
+
+            // Verificar si el usuario debe cambiar contraseña usando la bitácora
+            if (DebeCambiarContraseña(userr.Dni))
+            {
+                MessageBox.Show("Debe cambiar su contraseña antes de continuar.");
+                FormCambiarContraseña_56PS formCambio = new FormCambiarContraseña_56PS();
+                formCambio.ShowDialog();
+            }
 
                 this.Close();
 
                 return;
             
+        }
+
+        /// <summary>
+        /// Verifica en la bitácora si el usuario debe cambiar su contraseña.
+        /// Un usuario debe cambiar contraseña si:
+        /// 1. Fue creado y nunca cambió su contraseña (no existe evento "Cambio de contraseña" para su DNI)
+        /// 2. Fue desbloqueado y no cambió su contraseña después del desbloqueo
+        /// </summary>
+        private bool DebeCambiarContraseña(string dniUsuario)
+        {
+            BLL_BitacoraEvento_56PS bitacoraBLL = new BLL_BitacoraEvento_56PS();
+            List<Evento_56PS> eventos = bitacoraBLL.obtenerEventos();
+
+            // Buscar el último evento de "Cambio de contraseña" de ESTE usuario
+            var ultimoCambio = eventos
+                .Where(ev => ev.dni == dniUsuario && ev.descripcion == "Cambio de contraseña")
+                .OrderByDescending(ev => ev.fecha)
+                .FirstOrDefault();
+
+            // Si nunca cambió la contraseña → debe cambiarla (usuario nuevo)
+            if (ultimoCambio == null)
+                return true;
+
+            // Buscar si hay un evento de desbloqueo posterior al último cambio de contraseña
+            // El evento de desbloqueo lo registra el ADMIN, y la descripción contiene el DNI del usuario desbloqueado
+            var desbloqueoPostCambio = eventos
+                .Where(ev =>
+                    ev.descripcion.Contains("Desbloqueo de usuario") &&
+                    ev.descripcion.Contains(dniUsuario) &&
+                    ev.fecha > ultimoCambio.fecha)
+                .Any();
+
+            return desbloqueoPostCambio;
         }
 
         private void FormIniciarSesion_Load(object sender, EventArgs e)

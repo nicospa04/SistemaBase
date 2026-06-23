@@ -1,7 +1,8 @@
-﻿using BE_625NS;
+using BE_625NS;
 using BLL;
 using ClassLibrary2;
 using Services_625NS;
+using Servicio;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,11 +15,19 @@ using System.Windows.Forms;
 
 namespace SistemaBase.Usuario
 {
-    public partial class FormCambiarContraseña_56PS : Form
+    public partial class FormCambiarContraseña_56PS : Form, IdiomaObserver_56PS
     {
         public FormCambiarContraseña_56PS()
         {
             InitializeComponent();
+
+            actualizarIdioma();
+        }
+
+        public void actualizarIdioma()
+        {
+            var traductor = new BLL_Idioma_56PS();
+            traductor.Traducir_625NS(this);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -75,11 +84,15 @@ namespace SistemaBase.Usuario
 
                 MessageBox.Show("La contraseña se cambió correctamente.");
 
-
-                BE_Evento_56PS evento = new BE_Evento_56PS(usuario.Dni, DateTime.Now, "Usuarios", "Cambio de contraseña", BE_Evento_56PS.Criticidad.Alto);
-
-
-
+                // Registrar evento en bitácora
+                Evento_56PS evento = new Evento_56PS(
+                    usuario.Dni,
+                    DateTime.Now,
+                    "Usuarios",
+                    "Cambio de contraseña",
+                    Evento_56PS.Criticidad.Alto
+                );
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
 
                 this.Close();
             }
@@ -87,6 +100,11 @@ namespace SistemaBase.Usuario
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
+        }
+
+        private void FormCambiarContraseña_56PS_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

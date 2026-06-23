@@ -126,6 +126,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FormCambiarContraseña_56PS";
             this.Text = "FormCambiarContraseña_56PS";
+            this.Load += new System.EventHandler(this.FormCambiarContraseña_56PS_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

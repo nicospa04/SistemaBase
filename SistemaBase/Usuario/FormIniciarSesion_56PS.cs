@@ -114,7 +114,7 @@ namespace SistemaBase
 
             //en caso de que el userName y la contraseña coincidan... verificamos que el usuario no se encuentre bloqueado
 
- 
+                if(usuarioLogueado == null) { MessageBox.Show("Usuario no existe"); return; }
 
                 if (usuarioLogueado.Bloqueado)
                 {
@@ -207,7 +207,7 @@ namespace SistemaBase
             var desbloqueoPostCambio = eventos
                 .Where(ev =>
                     ev.descripcion.Contains("Desbloqueo de usuario") &&
-                    ev.descripcion.Contains(dniUsuario) &&
+                    ev.dni.Contains(dniUsuario) &&
                     ev.fecha > ultimoCambio.fecha)
                 .Any();
 

@@ -29,6 +29,7 @@ namespace SistemaBase.Administracion
 
             cmbpermiso.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbfa.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.AutoScroll = true;
 
             MostrarFamilias();
             MostrarTodosLosPerfiles();
@@ -365,6 +366,65 @@ namespace SistemaBase.Administracion
         }
 
         private void FormPerfiles_56PS_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            //BOTON ASIGNAR PERMISO
+            p = new Perfil_56PS();
+            if (cmbpermiso.SelectedItem == null)
+            {
+                //MessageBox.Show("Seleccionar un permiso");
+                MessageBox.Show("Seleccionar un permiso");
+
+                return;
+            }
+
+            string nombre = cmbpermiso.SelectedItem.ToString();
+            string codigo = listapermisos.Where(p => p.Nombre.Equals(nombre)).Select(p => p.Codigo).FirstOrDefault();
+
+            if (string.IsNullOrEmpty(txtcod.Text))
+            {
+                //MessageBox.Show("Ingresar el código del perfil, seleccionar del datagrid");
+                MessageBox.Show("Ingresar el código del perfil, seleccionar del datagrid");
+                return;
+            }
+
+            string codperfil = txtcod.Text;
+            try
+            {
+                p = bllperfil.ObtenerPerfil(codperfil);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+
+            //MessageBox.Show("el codigo del permiso es: " + codigo);
+
+            Patente_56PS patente = new Patente_56PS();
+            patente.Nombre = nombre;
+            patente.Codigo = codigo;
+            patente.esfamilia = false;
+            p.esfamilia = true;
+            p.Codigo = codperfil;
+            try
+            {
+                p.Agregar(patente);
+                bllperfil.AsignarPermisosAPerfil(p, patente);
+                MostrarPerfilEnTreeView(p.Codigo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show((ex.Message));
+            }
+            Limpiar();
+        }
+
+        private void cmbpermiso_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

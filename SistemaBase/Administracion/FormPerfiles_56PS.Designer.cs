@@ -37,20 +37,20 @@
             this.button2 = new System.Windows.Forms.Button();
             this.cmbpermiso = new System.Windows.Forms.ComboBox();
             this.button3 = new System.Windows.Forms.Button();
-            this.lblnombre = new System.Windows.Forms.Label();
-            this.txtnomb = new System.Windows.Forms.TextBox();
             this.btncancelar = new System.Windows.Forms.Button();
             this.btnbuscar = new System.Windows.Forms.Button();
+            this.lblperfiles = new System.Windows.Forms.Label();
+            this.lblnombre = new System.Windows.Forms.Label();
+            this.txtnomb = new System.Windows.Forms.TextBox();
             this.lblcod = new System.Windows.Forms.Label();
             this.txtcod = new System.Windows.Forms.TextBox();
-            this.lblperfiles = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("Segoe UI Variable Display", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(-221, 117);
+            this.button6.Location = new System.Drawing.Point(56, 130);
             this.button6.Margin = new System.Windows.Forms.Padding(2);
             this.button6.Name = "button6";
             this.button6.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -75,7 +75,7 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(582, 11);
+            this.dataGridView1.Location = new System.Drawing.Point(859, 24);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
@@ -85,7 +85,7 @@
             // 
             // treeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(93, 11);
+            this.treeView1.Location = new System.Drawing.Point(370, 24);
             this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(444, 311);
@@ -94,7 +94,7 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("Segoe UI Variable Display", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(-221, 79);
+            this.button4.Location = new System.Drawing.Point(56, 92);
             this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
             this.button4.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -108,7 +108,7 @@
             // cmbfa
             // 
             this.cmbfa.FormattingEnabled = true;
-            this.cmbfa.Location = new System.Drawing.Point(39, 492);
+            this.cmbfa.Location = new System.Drawing.Point(316, 505);
             this.cmbfa.Margin = new System.Windows.Forms.Padding(2);
             this.cmbfa.Name = "cmbfa";
             this.cmbfa.Size = new System.Drawing.Size(204, 21);
@@ -118,7 +118,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Segoe UI Variable Display", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(39, 429);
+            this.button2.Location = new System.Drawing.Point(316, 450);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -132,16 +132,17 @@
             // cmbpermiso
             // 
             this.cmbpermiso.FormattingEnabled = true;
-            this.cmbpermiso.Location = new System.Drawing.Point(-201, 492);
+            this.cmbpermiso.Location = new System.Drawing.Point(39, 505);
             this.cmbpermiso.Margin = new System.Windows.Forms.Padding(2);
             this.cmbpermiso.Name = "cmbpermiso";
             this.cmbpermiso.Size = new System.Drawing.Size(204, 21);
             this.cmbpermiso.TabIndex = 155;
+            this.cmbpermiso.SelectedIndexChanged += new System.EventHandler(this.cmbpermiso_SelectedIndexChanged);
             // 
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Segoe UI Variable Display", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(-201, 429);
+            this.button3.Location = new System.Drawing.Point(39, 450);
             this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
             this.button3.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -150,31 +151,12 @@
             this.button3.Tag = "asignarPermiso";
             this.button3.Text = "Asignar permiso";
             this.button3.UseVisualStyleBackColor = true;
-            // 
-            // lblnombre
-            // 
-            this.lblnombre.AutoSize = true;
-            this.lblnombre.Font = new System.Drawing.Font("Segoe UI Variable Display", 10F);
-            this.lblnombre.Location = new System.Drawing.Point(-52, 281);
-            this.lblnombre.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblnombre.Name = "lblnombre";
-            this.lblnombre.Size = new System.Drawing.Size(59, 19);
-            this.lblnombre.TabIndex = 153;
-            this.lblnombre.Tag = "Nombre";
-            this.lblnombre.Text = "Nombre";
-            // 
-            // txtnomb
-            // 
-            this.txtnomb.Location = new System.Drawing.Point(-221, 283);
-            this.txtnomb.Margin = new System.Windows.Forms.Padding(2);
-            this.txtnomb.Name = "txtnomb";
-            this.txtnomb.Size = new System.Drawing.Size(158, 20);
-            this.txtnomb.TabIndex = 152;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // btncancelar
             // 
             this.btncancelar.Font = new System.Drawing.Font("Segoe UI Variable Display", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btncancelar.Location = new System.Drawing.Point(-221, 157);
+            this.btncancelar.Location = new System.Drawing.Point(56, 170);
             this.btncancelar.Margin = new System.Windows.Forms.Padding(2);
             this.btncancelar.Name = "btncancelar";
             this.btncancelar.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -188,7 +170,7 @@
             // btnbuscar
             // 
             this.btnbuscar.Font = new System.Drawing.Font("Segoe UI Variable Display", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnbuscar.Location = new System.Drawing.Point(-221, 201);
+            this.btnbuscar.Location = new System.Drawing.Point(56, 214);
             this.btnbuscar.Margin = new System.Windows.Forms.Padding(2);
             this.btnbuscar.Name = "btnbuscar";
             this.btnbuscar.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -198,25 +180,6 @@
             this.btnbuscar.Text = "Crear Perfil";
             this.btnbuscar.UseVisualStyleBackColor = true;
             this.btnbuscar.Click += new System.EventHandler(this.btnbuscar_Click);
-            // 
-            // lblcod
-            // 
-            this.lblcod.AutoSize = true;
-            this.lblcod.Font = new System.Drawing.Font("Segoe UI Variable Display", 10F);
-            this.lblcod.Location = new System.Drawing.Point(-52, 249);
-            this.lblcod.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblcod.Name = "lblcod";
-            this.lblcod.Size = new System.Drawing.Size(54, 19);
-            this.lblcod.TabIndex = 149;
-            this.lblcod.Text = "Código";
-            // 
-            // txtcod
-            // 
-            this.txtcod.Location = new System.Drawing.Point(-221, 250);
-            this.txtcod.Margin = new System.Windows.Forms.Padding(2);
-            this.txtcod.Name = "txtcod";
-            this.txtcod.Size = new System.Drawing.Size(158, 20);
-            this.txtcod.TabIndex = 148;
             // 
             // lblperfiles
             // 
@@ -229,11 +192,53 @@
             this.lblperfiles.TabIndex = 147;
             this.lblperfiles.Text = "Perfiles";
             // 
+            // lblnombre
+            // 
+            this.lblnombre.AutoSize = true;
+            this.lblnombre.Font = new System.Drawing.Font("Segoe UI Variable Display", 10F);
+            this.lblnombre.Location = new System.Drawing.Point(225, 346);
+            this.lblnombre.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblnombre.Name = "lblnombre";
+            this.lblnombre.Size = new System.Drawing.Size(59, 19);
+            this.lblnombre.TabIndex = 166;
+            this.lblnombre.Text = "Nombre";
+            // 
+            // txtnomb
+            // 
+            this.txtnomb.Location = new System.Drawing.Point(56, 348);
+            this.txtnomb.Margin = new System.Windows.Forms.Padding(2);
+            this.txtnomb.Name = "txtnomb";
+            this.txtnomb.Size = new System.Drawing.Size(158, 20);
+            this.txtnomb.TabIndex = 165;
+            // 
+            // lblcod
+            // 
+            this.lblcod.AutoSize = true;
+            this.lblcod.Font = new System.Drawing.Font("Segoe UI Variable Display", 10F);
+            this.lblcod.Location = new System.Drawing.Point(225, 314);
+            this.lblcod.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblcod.Name = "lblcod";
+            this.lblcod.Size = new System.Drawing.Size(54, 19);
+            this.lblcod.TabIndex = 164;
+            this.lblcod.Text = "Código";
+            // 
+            // txtcod
+            // 
+            this.txtcod.Location = new System.Drawing.Point(56, 315);
+            this.txtcod.Margin = new System.Windows.Forms.Padding(2);
+            this.txtcod.Name = "txtcod";
+            this.txtcod.Size = new System.Drawing.Size(158, 20);
+            this.txtcod.TabIndex = 163;
+            // 
             // FormPerfiles_56PS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1060, 589);
+            this.ClientSize = new System.Drawing.Size(1370, 589);
+            this.Controls.Add(this.lblnombre);
+            this.Controls.Add(this.txtnomb);
+            this.Controls.Add(this.lblcod);
+            this.Controls.Add(this.txtcod);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
@@ -243,12 +248,8 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.cmbpermiso);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.lblnombre);
-            this.Controls.Add(this.txtnomb);
             this.Controls.Add(this.btncancelar);
             this.Controls.Add(this.btnbuscar);
-            this.Controls.Add(this.lblcod);
-            this.Controls.Add(this.txtcod);
             this.Controls.Add(this.lblperfiles);
             this.Name = "FormPerfiles_56PS";
             this.Text = "FormPerfiles_56PS";
@@ -270,12 +271,12 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ComboBox cmbpermiso;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Label lblnombre;
-        private System.Windows.Forms.TextBox txtnomb;
         private System.Windows.Forms.Button btncancelar;
         private System.Windows.Forms.Button btnbuscar;
+        private System.Windows.Forms.Label lblperfiles;
+        private System.Windows.Forms.Label lblnombre;
+        private System.Windows.Forms.TextBox txtnomb;
         private System.Windows.Forms.Label lblcod;
         private System.Windows.Forms.TextBox txtcod;
-        private System.Windows.Forms.Label lblperfiles;
     }
 }

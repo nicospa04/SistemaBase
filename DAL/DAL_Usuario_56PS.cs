@@ -108,8 +108,11 @@ namespace DAL_625NS
                 );
 
                 string codigoPerfil = row["Perfil"] != DBNull.Value ? row["Perfil"].ToString() : null;
-                usuario.Perfil = new DAL_Perfil_56PS().ObtenerPerfil(codigoPerfil);
 
+                if (!string.IsNullOrEmpty(codigoPerfil))
+                    usuario.Perfil = new DAL_Perfil_56PS().ObtenerPerfil(codigoPerfil);
+                else
+                    usuario.Perfil = null;
 
                 lista.Add(usuario);
             }
@@ -208,8 +211,12 @@ namespace DAL_625NS
             );
 
             string codigoPerfil = row["Perfil"] != DBNull.Value ? row["Perfil"].ToString() : null;
-            usuario.Perfil = new DAL_Perfil_56PS().ObtenerPerfil(codigoPerfil);
 
+
+            if (!string.IsNullOrEmpty(codigoPerfil))
+                usuario.Perfil = new DAL_Perfil_56PS().ObtenerPerfil(codigoPerfil);
+            else
+                usuario.Perfil = null;
 
             return usuario;
         }

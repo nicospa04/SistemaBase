@@ -59,7 +59,7 @@ namespace SistemaBase.Administracion
             dataGridView1.Columns["Bloqueado"].Visible = false;
             dataGridView1.Columns["Activo"].Visible = false;
             dataGridView1.Columns["idioma"].Visible = false;
-            dataGridView1.Columns["Rol"].Visible = false;
+            dataGridView1.Columns["Perfil"].Visible = false;
 
 
              actualizarIdioma();

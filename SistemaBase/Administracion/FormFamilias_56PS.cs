@@ -30,7 +30,7 @@ namespace SistemaBase.Administracion
 
             cmbfa.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbpermiso.DropDownStyle = ComboBoxStyle.DropDownList;
-
+            this.AutoScroll = true;
             MostrarFamilias();
             MostrarPermisos();
             MostrarFamiliasenDatagrid();
@@ -137,11 +137,18 @@ namespace SistemaBase.Administracion
 
         public void MostrarPermisos()
         {
-            List<Patente_56PS> patentes = bllpatentes.ObtenerPatentes();
-            foreach (Patente_56PS pat in patentes)
+            try
             {
-                listapermisos.Add(pat);
-                cmbpermiso.Items.Add(pat.Nombre);
+                List<Patente_56PS> patentes = bllpatentes.ObtenerPatentes();
+                foreach (Patente_56PS pat in patentes)
+                {
+                    listapermisos.Add(pat);
+                    cmbpermiso.Items.Add(pat.Nombre);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error en MostrarPermisos: " + ex.Message);
             }
         }
 
@@ -150,57 +157,7 @@ namespace SistemaBase.Administracion
         // BOTON ASIGNAR PERMISO
         private void button3_Click(object sender, EventArgs e)
         {
-            p = new Familia_56PS();
-            if (cmbpermiso.SelectedItem == null)
-            {
-                MessageBox.Show("Seleccionar un permiso");
-                return;
-            }
 
-            string nombre = cmbpermiso.SelectedItem.ToString();
-            string codigo = listapermisos.Where(x => x.Nombre.Equals(nombre)).Select(x => x.Codigo).FirstOrDefault();
-
-            if (string.IsNullOrEmpty(txtcod.Text))
-            {
-                MessageBox.Show("Ingresar el código de la familia, seleccionar del datagrid");
-                return;
-            }
-
-            string codigofamilia = txtcod.Text;
-            try
-            {
-                p = bllfamilia.ObtenerFamilia(codigofamilia);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            Patente_56PS patente = new Patente_56PS();
-            patente.Nombre = nombre;
-            patente.Codigo = codigo;
-            patente.esfamilia = false;
-            p.esfamilia = true;
-            p.Codigo = codigofamilia;
-
-            try
-            {
-                p.Agregar(patente);
-                bllfamilia.AsignarPermisoAFamilia(p, patente);
-                p = bllfamilia.ObtenerFamilia(codigofamilia);
-                MostrarFamiliaEnTreeView(p.Codigo);
-                cmbpermiso.SelectedIndex = -1;
-
-                string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
-                Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Asignación de permiso a familia", Evento_56PS.Criticidad.Medio);
-                new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            Limpiar();
         }
 
         // BOTON CREAR FAMILIA
@@ -432,6 +389,168 @@ namespace SistemaBase.Administracion
         private void FormFamilias_56PS_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //BOTON ASIGNAR PERMISO
+            p = new Familia_56PS();
+            if (cmbpermiso.SelectedItem == null)
+            {
+                //MessageBox.Show("Seleccionar un permiso");
+                MessageBox.Show("Seleccionar un permiso");
+                return;
+            }
+
+            string nombre = cmbpermiso.SelectedItem.ToString();
+            string codigo = listapermisos.Where(p => p.Nombre.Equals(nombre)).Select(p => p.Codigo).FirstOrDefault();
+            if (string.IsNullOrEmpty(txtcod.Text))
+            {
+                //MessageBox.Show("Ingresar el código de la familia, seleccionar del datagrid");
+                MessageBox.Show("Ingresar el código de la familia, seleccionar del datagrid");
+                return;
+            }
+
+            string codigofamilia = txtcod.Text;
+            //MessageBox.Show("el codigo es: " + codigo);
+            try
+            {
+                p = bllfamilia.ObtenerFamilia(codigofamilia);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show((ex.Message));
+            }
+            Patente_56PS patente = new Patente_56PS();
+            patente.Nombre = nombre;
+            patente.Codigo = codigo;
+            patente.esfamilia = false;
+            p.esfamilia = true;
+            p.Codigo = codigofamilia;
+
+            try
+            {
+                p.Agregar(patente);
+
+                bllfamilia.AsignarPermisoAFamilia(p, patente);
+                p = bllfamilia.ObtenerFamilia(codigofamilia);
+                MostrarFamiliaEnTreeView(p.Codigo);
+                cmbpermiso.SelectedIndex = -1;
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show((ex.Message));
+            }
+
+            Limpiar();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnbuscar_Click_1(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtnomb.Text) || string.IsNullOrEmpty(txtcod.Text))
+            {
+                MessageBox.Show("Ingresar el nombre y código de la familia");
+                return;
+            }
+
+            string pattern = @"^.{1,10}$";
+            if (!Regex.IsMatch(txtcod.Text, pattern))
+            {
+                MessageBox.Show("El código no puede tener más de 10 caracteres.");
+                return;
+            }
+
+            p.Codigo = txtcod.Text;
+            p.activo = true;
+            p.Nombre = txtnomb.Text;
+
+            try
+            {
+                bllfamilia.CrearFamilia(p);
+                cmbfa.Text = null;
+                cmbpermiso.Text = null;
+                MostrarFamiliaEnTreeView(p.Codigo);
+                MostrarFamiliasenDatagrid();
+                cmbfa.Items.Clear();
+                MostrarFamilias();
+                Limpiar();
+
+                string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
+                Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Creación de familia", Evento_56PS.Criticidad.Medio);
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnmodificar_Click_1(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtnomb.Text) || string.IsNullOrEmpty(txtcod.Text))
+            {
+                MessageBox.Show("Ingresar el nombre y código de la familia");
+                return;
+            }
+
+            Familia_56PS f = new Familia_56PS();
+            f.Nombre = txtnomb.Text;
+            f.Codigo = txtcod.Text;
+            try
+            {
+                bllfamilia.ModificarFamilia(f);
+                MostrarFamiliaEnTreeView(f.Codigo);
+                MostrarFamiliasenDatagrid();
+                cmbfa.Items.Clear();
+                MostrarFamilias();
+                treeView1.Nodes.Clear();
+                txtcod.Text = "";
+                txtnomb.Text = "";
+
+                string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
+                Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Modificación de familia", Evento_56PS.Criticidad.Medio);
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btncancelar_Click_1(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtcod.Text))
+            {
+                MessageBox.Show("Ingresar el código de la familia");
+                return;
+            }
+
+            Familia_56PS f = new Familia_56PS();
+            f.Codigo = txtcod.Text;
+            try
+            {
+                bllfamilia.EliminarFamilia(f);
+                cmbfa.Items.Clear();
+                MostrarFamilias();
+                MostrarFamiliasenDatagrid();
+                treeView1.Nodes.Clear();
+
+                string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
+                Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Eliminación de familia", Evento_56PS.Criticidad.Alto);
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            Limpiar();
         }
     }
 }

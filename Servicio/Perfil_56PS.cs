@@ -21,8 +21,7 @@ namespace Servicio
             {
                 if (this.esfamilia)
                 {
-                    throw new Exception("exagregar");
-                    //"No se puede agregar una familia/perfil a sí misma"
+                    throw new Exception("No se puede agregar una familia/perfil a sí misma");
 
 
 
@@ -31,13 +30,12 @@ namespace Servicio
 
             if (Contiene(p.Codigo))
             {
-                throw new Exception("exagregar1");
-                //"Este perfil/familia ya contiene ese permiso o familia"
+                throw new Exception("Este perfil/familia ya contiene ese permiso o familia");
             }
 
             if (p.Contiene(this.Codigo))
             {
-                throw new Exception("exagregar2");
+                throw new Exception("error");
             }
 
             hijos.Add(p);

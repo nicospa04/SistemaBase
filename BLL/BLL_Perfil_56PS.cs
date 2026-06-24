@@ -19,12 +19,12 @@ namespace BLL
         {
             if (dalperfil.VerificarExistenciaPerfilCodigo(p))
             {
-                throw new Exception("ex7");
+                throw new Exception("Ya existe perfil con ese codigo");
             }
 
             if (dalperfil.VerificarExistenciaPerfilNombre(p))
             {
-                throw new Exception("ex8");
+                throw new Exception("Ya existe perfil con ese nombre");
             }
 
             dalperfil.CrearPerfil(p);

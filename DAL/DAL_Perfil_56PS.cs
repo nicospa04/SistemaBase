@@ -116,9 +116,8 @@ namespace DAL_625NS
 
         public bool VerificarAsignacion(Perfil_56PS p)
         {
-            string query = "SELECT COUNT(*) FROM Usuario WHERE Perfil = @cod";
+            string query = "SELECT COUNT(*) FROM Usuario_56PS WHERE Perfil = @cod";
             SqlParameter[] parametros = { new SqlParameter("@cod", p.Codigo) };
-
             int resultado = Convert.ToInt32(DAL_56PS.ExecuteScalar(query, parametros));
             return resultado > 0;
         }

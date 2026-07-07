@@ -162,6 +162,10 @@
       <Project>{13ad768e-00b2-423d-882c-d18cfe299cd9}</Project>
       <Name>BLL_56PS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL_56PS.csproj">
+      <Project>{340867bb-0fef-412b-98da-b86a954956f9}</Project>
+      <Name>DAL_56PS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Servicio\Servicio_56PS.csproj">
       <Project>{3b233478-63a4-43a7-add7-d7cd3344ac17}</Project>
       <Name>Servicio_56PS</Name>

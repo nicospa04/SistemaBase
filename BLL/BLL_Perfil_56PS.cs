@@ -8,6 +8,7 @@ using Servicio;
 using ClassLibrary2;
 using ClassLibrary3;
 using BE_625NS;
+using System.Data;
 
 namespace BLL
 {
@@ -38,6 +39,9 @@ namespace BLL
                 Evento_56PS.Criticidad.Alto
             );
             new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
+
+            DataTable dt = DAL_56PS.ConsultarTabla("Perfil");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Perfil", dt);
         }
 
         public string ObtenerNombredePerfil(string cod)
@@ -60,6 +64,11 @@ namespace BLL
             try
             {
                 dalperfil.EliminarPermisodePerfil(p, codperfil);
+
+                DataTable dt = DAL_56PS.ConsultarTabla("Perfil");
+                new BLL_DigitoVerificador_56PS().CalcularDV("Perfil", dt);
+
+
             }
             catch (Exception ex)
             {
@@ -82,6 +91,8 @@ namespace BLL
                     {
                         perfil.activo = false;
                         dalperfil.EliminarPerfil(perfil);
+                        DataTable dt = DAL_56PS.ConsultarTabla("Perfil");
+                        new BLL_DigitoVerificador_56PS().CalcularDV("Perfil", dt);
 
                         var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
                         Evento_56PS evento = new Evento_56PS(
@@ -124,7 +135,8 @@ namespace BLL
                     "Asignar permisos a perfil",
                     Evento_56PS.Criticidad.Medio
                 );
-                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento); DataTable dt = DAL_56PS.ConsultarTabla("Perfil");
+                new BLL_DigitoVerificador_56PS().CalcularDV("Perfil", dt);
             }
             catch (Exception ex)
             {

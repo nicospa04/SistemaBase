@@ -3,6 +3,7 @@ using BE_625NS;
 using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
+using DAL_625NS;
 using Services_625NS;
 using Servicio;
 using System;
@@ -209,6 +210,7 @@ namespace SistemaBase.Administracion
                 );
 
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
+
             }
 
 
@@ -248,7 +250,7 @@ namespace SistemaBase.Administracion
                 );
 
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
-
+               
             }
 
 
@@ -360,6 +362,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem);
                 Evento_56PS evento = new Evento_56PS(currentUser.Dni, DateTime.Now, "Usuarios", "Modificación de usuario", Evento_56PS.Criticidad.Medio);
 
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
+        
 
             }
             if(modo == "crear")
@@ -439,6 +442,8 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
                     Evento_56PS eee = new Evento_56PS(aa, DateTime.Now, "Usuarios", "Creacion de usuario", Evento_56PS.Criticidad.Bajo);
                     new BLL_BitacoraEvento_56PS().RegistrarEvento(eee);
+
+       
 
                 }
                 catch (Exception ex)

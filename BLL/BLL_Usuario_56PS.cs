@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DAL_625NS;
+using System.Data;
 namespace BLL
 {
     public class BLL_Usuario_56PS
@@ -19,6 +20,8 @@ namespace BLL
         public void cambiarContraseña(string dni, string nuevaContraseña) //si
         {
             dal.cambiarContraseña(dni, nuevaContraseña);
+            DataTable dt = DAL_56PS.ConsultarTabla("Usuario");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Usuario", dt);
         }
 
       
@@ -31,11 +34,17 @@ namespace BLL
         public void crearUsuario(Usuario_56PS usuario) //si
         {
             dal.crearUsuario(usuario);
+            DataTable dt = DAL_56PS.ConsultarTabla("Usuario");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Usuario", dt);
         }
 
         public void desbloquearUsuario(string dni) //si
         {
             dal.desbloquearUsuario(dni);
+
+
+            DataTable dt = DAL_56PS.ConsultarTabla("Usuario");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Usuario", dt);
         }
 
         public bool iniciarSesion(string nombreUsuario, string contraseña) //si
@@ -47,6 +56,8 @@ namespace BLL
         public void modificarUsuario(Usuario_56PS usuario) //si
         {
             dal.modificarUsuario(usuario);
+            DataTable dt = DAL_56PS.ConsultarTabla("Usuario");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Usuario", dt);
         }
 
         public List<Usuario_56PS> obtenerUsuarios() //si
@@ -81,16 +92,22 @@ namespace BLL
         public void bloquearUsuario(string dni)
         {
             dal.bloquearUsuario(dni);
+            DataTable dt = DAL_56PS.ConsultarTabla("Usuario");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Usuario", dt);
         }
 
         public void cambiarEstadoActivo(string dni)
         {
-            dal.cambiarEstadoActivo(dni);       
+            dal.cambiarEstadoActivo(dni);
+            DataTable dt = DAL_56PS.ConsultarTabla("Usuario");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Usuario", dt);
         }
 
         public void cambiarIdioma(string idiomaActual, string dni)
         {
             dal.cambiarIdioma(idiomaActual, dni);
+            DataTable dt = DAL_56PS.ConsultarTabla("Usuario");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Usuario", dt);
         }
     }
 }

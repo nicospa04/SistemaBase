@@ -4,6 +4,7 @@ using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
 using Servicio;
+using SistemaBase.Administracion;
 using SistemaBase.Usuario;
 using System;
 using System.Collections.Generic;
@@ -127,7 +128,33 @@ namespace SistemaBase
                 MessageBox.Show("El usuario se encuentra inactivo"); return;
             }
 
+            var revision = new BLL_DigitoVerificador_56PS().Revision();
 
+            bool tablavacia = revision.tablaDVVacia;
+            List<string> errores = revision.tablasConError;
+
+            if (tablavacia)
+            {
+                MessageBox.Show("No existen registros en la tabla DigitoVerificador.");
+            }
+            else if (errores.Count > 0)
+            {
+                MessageBox.Show("Se detectaron inconsistencias en la base de datos");
+
+                if (usuarioLogueado.Perfil.== "Administrador") //hay que arreglar esto
+                {
+
+                    FormReparacion_56PS form = new FormReparacion_56PS(errores);
+                    form.Show();
+                    this.Hide();
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("El sistema no se encuentra disponible en estos momentos, contacte al administrador.");
+                    return;
+                }
+            }
 
 
             SessionManager_56PS.getInstancia().iniciarSesion(usuarioLogueado);

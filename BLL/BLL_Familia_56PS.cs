@@ -9,6 +9,7 @@ using ClassLibrary2;
 using ClassLibrary3;
 using BE_56_PS;
 using BE_625NS;
+using System.Data;
 namespace BLL
 {
     public class BLL_Familia_56PS
@@ -32,6 +33,10 @@ namespace BLL
                         "Eliminar familia",
                         Evento_56PS.Criticidad.Alto
                     );
+
+
+                    DataTable dt = DAL_56PS.ConsultarTabla("Familia");
+                    new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
                     new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
                 }
                 else
@@ -56,6 +61,8 @@ namespace BLL
                 if (dalperfil.VerificarExistenciaFamiliaCodigo(f))
                 {
                     dalperfil.Modificar(f);
+                    DataTable dt = DAL_56PS.ConsultarTabla("Familia");
+                    new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
                 }
             }
         }
@@ -74,6 +81,8 @@ namespace BLL
             try
             {
                 dalperfil.CrearFamilia(fam);
+                DataTable dt = DAL_56PS.ConsultarTabla("Familia");
+                new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
 
@@ -108,6 +117,8 @@ namespace BLL
             try
             {
                 dalperfil.EliminarPermisodeFamilia(p, cod);
+                DataTable dt = DAL_56PS.ConsultarTabla("Familia");
+                new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
             }
             catch (Exception ex)
             {

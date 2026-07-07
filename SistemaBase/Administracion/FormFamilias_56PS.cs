@@ -13,6 +13,7 @@ using BE_625NS;
 using ClassLibrary2;
 using Servicio;
 using ClassLibrary3;
+using DAL_625NS;
 
 namespace SistemaBase.Administracion
 {
@@ -243,6 +244,10 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Asignación de familia a familia", Evento_56PS.Criticidad.Medio);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+
+
+                DataTable dt = DAL_56PS.ConsultarTabla("Familia");
+                new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
             }
             catch (Exception ex)
             {
@@ -327,6 +332,7 @@ namespace SistemaBase.Administracion
             Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Eliminación de permiso/familia de familia", Evento_56PS.Criticidad.Medio);
             new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
 
+
             MostrarFamiliaEnTreeView(txtcod.Text);
         }
 
@@ -355,6 +361,8 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Modificación de familia", Evento_56PS.Criticidad.Medio);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+
+           
             }
             catch (Exception ex)
             {
@@ -423,6 +431,7 @@ namespace SistemaBase.Administracion
                 cmbpermiso.SelectedIndex = -1;
 
 
+
             }
             catch (Exception ex)
             {
@@ -470,6 +479,8 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Creación de familia", Evento_56PS.Criticidad.Medio);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+
+
             }
             catch (Exception ex)
             {
@@ -502,6 +513,7 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Modificación de familia", Evento_56PS.Criticidad.Medio);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+
             }
             catch (Exception ex)
             {

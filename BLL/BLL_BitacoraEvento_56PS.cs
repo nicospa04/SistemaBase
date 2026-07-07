@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DAL_625NS;
+using BLL;
+using System.Data;
 namespace ClassLibrary3
 {
     public class BLL_BitacoraEvento_56PS
@@ -15,6 +17,9 @@ namespace ClassLibrary3
         public void RegistrarEvento(Evento_56PS e)
         {
             dal.RegistrarEvento(e);
+
+            DataTable dt = DAL_56PS.ConsultarTabla("Evento");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Evento", dt);
 
             return;
         }

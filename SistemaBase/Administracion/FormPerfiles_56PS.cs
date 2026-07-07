@@ -12,6 +12,7 @@ using BE_625NS;
 using ClassLibrary2;
 using Servicio;
 using ClassLibrary3;
+using DAL_625NS;
 
 namespace SistemaBase.Administracion
 {
@@ -207,6 +208,9 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Perfiles", "Creación de perfil", Evento_56PS.Criticidad.Medio);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+
+                DataTable dt = DAL_56PS.ConsultarTabla("Permiso");
+                new BLL_DigitoVerificador_56PS().CalcularDV("Permiso", dt);
             }
             catch (Exception ex)
             {
@@ -296,6 +300,9 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Perfiles", "Eliminación de perfil", Evento_56PS.Criticidad.Alto);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+
+                DataTable dt = DAL_56PS.ConsultarTabla("Permiso");
+                new BLL_DigitoVerificador_56PS().CalcularDV("Permiso", dt);
             }   
             catch (Exception ex)
             {
@@ -335,6 +342,8 @@ namespace SistemaBase.Administracion
             string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
             Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Perfiles", "Eliminación de permiso/familia de perfil", Evento_56PS.Criticidad.Medio);
             new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
+
+
 
             treeView1.SelectedNode.Remove();
         }
@@ -404,6 +413,8 @@ namespace SistemaBase.Administracion
                 p.Agregar(patente);
                 bllperfil.AsignarPermisosAPerfil(p, patente);
                 MostrarPerfilEnTreeView(p.Codigo);
+
+             
             }
             catch (Exception ex)
             {

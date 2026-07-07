@@ -21,6 +21,27 @@ namespace DAL_625NS
 
         }
 
+        public static DataTable ConsultarTabla(string nombreTabla)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(conexion))
+                {
+                    string query = $"SELECT * FROM {nombreTabla}";
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    adapter.Fill(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al consultar la tabla {nombreTabla}: {ex.Message}");
+            }
+
+            return dt;
+        }
+
         public static void EjecutarScript(string archivo)
         {
             string connStr = $"Data Source={Ins};Trusted_Connection=True;";

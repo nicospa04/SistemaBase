@@ -53,16 +53,14 @@ namespace SistemaBase.Administracion
             actualizarIdioma();
         }
 
-        // --- TRADUCCIONES ---
-
+ 
         public void actualizarIdioma()
         {
             var traductor = new BLL_Idioma_56PS();
             traductor.Traducir(this);
         }
 
-        // --- DATOS ---
-
+ 
         public void MostrarTodosLosPerfiles()
         {
             dataGridView1.DataSource = null;
@@ -131,9 +129,7 @@ namespace SistemaBase.Administracion
             }
         }
 
-        // --- BOTONES ---
-
-        // BOTON ASIGNAR PERMISO
+   
         private void button3_Click(object sender, EventArgs e)
         {
             p = new Perfil_56PS();
@@ -187,8 +183,7 @@ namespace SistemaBase.Administracion
             Limpiar();
         }
 
-        // BOTON CREAR PERFIL
-        private void btnbuscar_Click(object sender, EventArgs e)
+         private void btnbuscar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtnomb.Text) || string.IsNullOrEmpty(txtcod.Text))
             {
@@ -219,8 +214,7 @@ namespace SistemaBase.Administracion
             }
         }
 
-        // BOTON ASIGNAR FAMILIA
-        private void button2_Click(object sender, EventArgs e)
+         private void button2_Click(object sender, EventArgs e)
         {
             p = new Perfil_56PS();
             if (cmbfa.SelectedItem == null)
@@ -272,8 +266,7 @@ namespace SistemaBase.Administracion
             Limpiar();
         }
 
-        // BOTON CANCELAR
-        private void button4_Click(object sender, EventArgs e)
+         private void button4_Click(object sender, EventArgs e)
         {
             Limpiar();
         }
@@ -287,8 +280,7 @@ namespace SistemaBase.Administracion
             cmbpermiso.Text = "";
         }
 
-        // BOTON ELIMINAR PERFIL
-        private void btncancelar_Click(object sender, EventArgs e)
+         private void btncancelar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtcod.Text))
             {
@@ -313,8 +305,7 @@ namespace SistemaBase.Administracion
             Limpiar();
         }
 
-        // BOTON ELIMINAR PERMISO/FAMILIA DE PERFIL
-        private void button6_Click(object sender, EventArgs e)
+         private void button6_Click(object sender, EventArgs e)
         {
             if (treeView1.SelectedNode == null)
             {
@@ -348,8 +339,7 @@ namespace SistemaBase.Administracion
             treeView1.SelectedNode.Remove();
         }
 
-        // CLICK EN DATAGRIDVIEW
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
@@ -372,8 +362,7 @@ namespace SistemaBase.Administracion
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            //BOTON ASIGNAR PERMISO
-            p = new Perfil_56PS();
+             p = new Perfil_56PS();
             if (cmbpermiso.SelectedItem == null)
             {
                 //MessageBox.Show("Seleccionar un permiso");
@@ -403,8 +392,7 @@ namespace SistemaBase.Administracion
                 return;
             }
 
-            //MessageBox.Show("el codigo del permiso es: " + codigo);
-
+ 
             Patente_56PS patente = new Patente_56PS();
             patente.Nombre = nombre;
             patente.Codigo = codigo;

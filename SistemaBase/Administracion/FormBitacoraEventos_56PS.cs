@@ -32,8 +32,9 @@ namespace GUI_625NS.Administracion
         {
             InitializeComponent();
 
-            eventos = new BLL_BitacoraEvento_56PS().obtenerEventos();
-            filtrados = new List<Evento_56PS>(eventos);
+            eventos = new BLL_BitacoraEvento_56PS().obtenerEventos()
+                .Where(ev => ev.fecha >= DateTime.Today.AddDays(-3))
+                .ToList(); filtrados = new List<Evento_56PS>(eventos);
 
             dataGridView1.DataSource = filtrados;
 
@@ -47,14 +48,13 @@ namespace GUI_625NS.Administracion
                 Evento_56PS.Criticidad.Bajo
             );
 
-            // Limitar DateTimePickers: no permitir fechas futuras
-            dateTimePicker1.MaxDate = DateTime.Now;
-            dateTimePicker2.MaxDate = DateTime.Now;
+             dateTimePicker1.MaxDate = DateTime.Today.AddDays(1);
+            dateTimePicker2.MaxDate = DateTime.Today.AddDays(1);
 
-            // Conectar botones que no estaban enganchados en el Designer
-            button1.Click += button1_Click;
+             button1.Click += button1_Click;
             button2.Click += button2_Click;
 
+            SessionManager_56PS.getInstancia().Suscribir(this);
             actualizarIdioma();
         }
 
@@ -65,17 +65,15 @@ namespace GUI_625NS.Administracion
 
             comboBox2.Items.Clear();
             comboBox2.Items.AddRange(Enum.GetNames(typeof(Evento_56PS.Criticidad)));
-
-            dateTimePicker1.Value = eventos.Min(ev => ev.fecha);
-            dateTimePicker2.Value = DateTime.Now;
+            dateTimePicker1.Value = DateTime.Today.AddDays(-3);
+            dateTimePicker2.Value = DateTime.Today;
         }
 
 
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Validar que Desde <= Hasta
-            if (dateTimePicker1.Value.Date > dateTimePicker2.Value.Date)
+             if (dateTimePicker1.Value.Date > dateTimePicker2.Value.Date)
             {
                 MessageBox.Show("La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.");
                 return;
@@ -96,7 +94,7 @@ namespace GUI_625NS.Administracion
             }
 
             var desde = dateTimePicker1.Value.Date;
-            var hasta = dateTimePicker2.Value.Date.AddDays(1).AddSeconds(-1); // hasta fin del día
+            var hasta = dateTimePicker2.Value.Date.AddDays(1).AddSeconds(-1); 
 
             query = query.Where(ev => ev.fecha >= desde && ev.fecha <= hasta);
 
@@ -210,6 +208,12 @@ namespace GUI_625NS.Administracion
         private void label5_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            dateTimePicker1.Value = DateTime.Today.AddDays(-3);
+            dateTimePicker2.Value = DateTime.Today;
         }
     }
 }

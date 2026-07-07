@@ -59,16 +59,14 @@ namespace SistemaBase.Administracion
             actualizarIdioma();
         }
 
-        // --- TRADUCCIONES ---
-
+ 
         public void actualizarIdioma()
         {
             var traductor = new BLL_Idioma_56PS();
             traductor.Traducir(this);
         }
 
-        // --- DATOS ---
-
+ 
         public void OcultarColumnas()
         {
             if (dataGridView1.Columns.Contains("esfamilia"))
@@ -152,16 +150,13 @@ namespace SistemaBase.Administracion
             }
         }
 
-        // --- BOTONES ---
-
-        // BOTON ASIGNAR PERMISO
+      
         private void button3_Click(object sender, EventArgs e)
         {
 
         }
 
-        // BOTON CREAR FAMILIA
-        private void btnbuscar_Click(object sender, EventArgs e)
+         private void btnbuscar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtnomb.Text) || string.IsNullOrEmpty(txtcod.Text))
             {
@@ -201,8 +196,7 @@ namespace SistemaBase.Administracion
             }
         }
 
-        // BOTON ASIGNAR FAMILIA
-        private void button2_Click(object sender, EventArgs e)
+         private void button2_Click(object sender, EventArgs e)
         {
             p = new Familia_56PS();
             if (cmbfa.SelectedItem == null)
@@ -258,8 +252,7 @@ namespace SistemaBase.Administracion
             Limpiar();
         }
 
-        // BOTON CANCELAR
-        private void button4_Click(object sender, EventArgs e)
+         private void button4_Click(object sender, EventArgs e)
         {
             treeView1.Nodes.Clear();
             Limpiar();
@@ -274,8 +267,7 @@ namespace SistemaBase.Administracion
             p = new Familia_56PS();
         }
 
-        // BOTON ELIMINAR FAMILIA
-        private void btncancelar_Click(object sender, EventArgs e)
+         private void btncancelar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtcod.Text))
             {
@@ -304,8 +296,7 @@ namespace SistemaBase.Administracion
             Limpiar();
         }
 
-        // BOTON ELIMINAR PERMISO/FAMILIA DE FAMILIA
-        private void button6_Click(object sender, EventArgs e)
+         private void button6_Click(object sender, EventArgs e)
         {
             if (treeView1.SelectedNode == null)
             {
@@ -339,8 +330,7 @@ namespace SistemaBase.Administracion
             MostrarFamiliaEnTreeView(txtcod.Text);
         }
 
-        // BOTON MODIFICAR NOMBRE
-        private void btnmodificar_Click(object sender, EventArgs e)
+         private void btnmodificar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtnomb.Text) || string.IsNullOrEmpty(txtcod.Text))
             {
@@ -372,8 +362,7 @@ namespace SistemaBase.Administracion
             }
         }
 
-        // CLICK EN DATAGRIDVIEW
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
@@ -393,12 +382,10 @@ namespace SistemaBase.Administracion
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //BOTON ASIGNAR PERMISO
-            p = new Familia_56PS();
+             p = new Familia_56PS();
             if (cmbpermiso.SelectedItem == null)
             {
-                //MessageBox.Show("Seleccionar un permiso");
-                MessageBox.Show("Seleccionar un permiso");
+                 MessageBox.Show("Seleccionar un permiso");
                 return;
             }
 
@@ -406,14 +393,12 @@ namespace SistemaBase.Administracion
             string codigo = listapermisos.Where(p => p.Nombre.Equals(nombre)).Select(p => p.Codigo).FirstOrDefault();
             if (string.IsNullOrEmpty(txtcod.Text))
             {
-                //MessageBox.Show("Ingresar el código de la familia, seleccionar del datagrid");
-                MessageBox.Show("Ingresar el código de la familia, seleccionar del datagrid");
+                 MessageBox.Show("Ingresar el código de la familia, seleccionar del datagrid");
                 return;
             }
 
             string codigofamilia = txtcod.Text;
-            //MessageBox.Show("el codigo es: " + codigo);
-            try
+             try
             {
                 p = bllfamilia.ObtenerFamilia(codigofamilia);
             }

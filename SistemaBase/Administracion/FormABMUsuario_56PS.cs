@@ -37,7 +37,7 @@ namespace SistemaBase.Administracion
 
             CargarRoles();
 
-            listaGeneral = new BLL_Usuario_56PS().obtenerUsuarios();
+            listaGeneral = new BLL_Usuario_56PS().obtenerUsuarios().Where(e => e.Dni != SessionManager_56PS.getInstancia().getUsuarioActivo().Dni).ToList();
 
             dataGridView1.DataSource = listaGeneral;
 
@@ -60,9 +60,9 @@ namespace SistemaBase.Administracion
             dataGridView1.Columns["Activo"].Visible = false;
             dataGridView1.Columns["idioma"].Visible = false;
             dataGridView1.Columns["Perfil"].Visible = false;
+            SessionManager_56PS.getInstancia().Suscribir(this);
 
-
-             actualizarIdioma();
+            actualizarIdioma();
         }
 
         void deshabilitarBotonAplicar()
@@ -506,7 +506,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
             label2.Text = "Numero de usuarios: " + bl.obtenerUsuarios().Count();
 
 
-            listaGeneral = new BLL_Usuario_56PS().obtenerUsuarios();
+            listaGeneral = new BLL_Usuario_56PS().obtenerUsuarios().Where(e => e.Dni != SessionManager_56PS.getInstancia().getUsuarioActivo().Dni).ToList();
 
             dataGridView1.DataSource = listaGeneral;
 

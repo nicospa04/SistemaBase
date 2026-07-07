@@ -38,6 +38,7 @@
             this.usuariosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.perfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.familiasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cambiarIdiomaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,7 +58,8 @@
             this.administracionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.iniciarSesionToolStripMenuItem,
             this.cerrarSesionToolStripMenuItem,
-            this.cambiarContraseñaToolStripMenuItem});
+            this.cambiarContraseñaToolStripMenuItem,
+            this.cambiarIdiomaToolStripMenuItem});
             this.administracionToolStripMenuItem.Name = "administracionToolStripMenuItem";
             this.administracionToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.administracionToolStripMenuItem.Text = "Usuario";
@@ -124,6 +126,13 @@
             this.familiasToolStripMenuItem.Text = "Familias";
             this.familiasToolStripMenuItem.Click += new System.EventHandler(this.familiasToolStripMenuItem_Click);
             // 
+            // cambiarIdiomaToolStripMenuItem
+            // 
+            this.cambiarIdiomaToolStripMenuItem.Name = "cambiarIdiomaToolStripMenuItem";
+            this.cambiarIdiomaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cambiarIdiomaToolStripMenuItem.Text = "Cambiar idioma";
+            this.cambiarIdiomaToolStripMenuItem.Click += new System.EventHandler(this.cambiarIdiomaToolStripMenuItem_Click);
+            // 
             // MenuPrincipal_56PS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,5 +163,6 @@
         private System.Windows.Forms.ToolStripMenuItem usuariosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem perfilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem familiasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cambiarIdiomaToolStripMenuItem;
     }
 }

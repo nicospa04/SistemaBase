@@ -29,6 +29,7 @@ namespace SistemaBase
         public FormIniciarSesion_56PS()
         {
             InitializeComponent();
+            SessionManager_56PS.getInstancia().Suscribir(this);
 
             actualizarIdioma();
         }
@@ -167,6 +168,16 @@ namespace SistemaBase
             menu.MenuFamilias.Enabled = userr.Perfil.Contiene("P04");
 
             menu.MenuPerfiles.Enabled = userr.Perfil.Contiene("P03");
+
+            menu.MenuAuditoria.Enabled = userr.Perfil.Contiene("P02");
+
+            menu.MenuCambiarIdioma.Enabled = userr.Perfil.Contiene("P09");
+
+            if(userr.Perfil.Contiene("P01") || userr.Perfil.Contiene("P04") || userr.Perfil.Contiene("P03") || userr.Perfil.Contiene("P02"))
+            {
+                menu.menuAdmin.Enabled = true;
+            }
+
             // Verificar si el usuario debe cambiar contraseña usando la bitácora
             if (DebeCambiarContraseña(userr.Dni))
             {

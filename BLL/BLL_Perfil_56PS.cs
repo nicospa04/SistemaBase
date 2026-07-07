@@ -95,17 +95,18 @@ namespace BLL
                     }
                     else
                     {
-                        throw new Exception("ex9");
+                        throw new Exception("No puede borrarlo pq un usuario tiene este perfil");
                     }
                 }
                 else
                 {
-                    throw new Exception("ex10");
+                    throw new Exception("error");
                 }
             }
             else
             {
-                throw new Exception("ex11");
+                throw new Exception("error, el perfil no esta activo");
+
             }
         }
 

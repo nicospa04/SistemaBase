@@ -76,11 +76,23 @@
     <Compile Include="Administracion\FormFamilias_56PS.Designer.cs">
       <DependentUpon>FormFamilias_56PS.cs</DependentUpon>
     </Compile>
+    <Compile Include="Administracion\FormGestionBackUpRestore_56PS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Administracion\FormGestionBackUpRestore_56PS.Designer.cs">
+      <DependentUpon>FormGestionBackUpRestore_56PS.cs</DependentUpon>
+    </Compile>
     <Compile Include="Administracion\FormPerfiles_56PS.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Administracion\FormPerfiles_56PS.Designer.cs">
       <DependentUpon>FormPerfiles_56PS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Administracion\FormReparacion_56PS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Administracion\FormReparacion_56PS.Designer.cs">
+      <DependentUpon>FormReparacion_56PS.cs</DependentUpon>
     </Compile>
     <Compile Include="MenuPrincipal_56PS.cs">
       <SubType>Form</SubType>
@@ -94,6 +106,12 @@
     </Compile>
     <Compile Include="Usuario\FormCambiarContraseña_56PS.Designer.cs">
       <DependentUpon>FormCambiarContraseña_56PS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Usuario\FormCambiarIdioma_56PS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Usuario\FormCambiarIdioma_56PS.Designer.cs">
+      <DependentUpon>FormCambiarIdioma_56PS.cs</DependentUpon>
     </Compile>
     <Compile Include="Usuario\FormIniciarSesion_56PS.cs">
       <SubType>Form</SubType>
@@ -113,14 +131,23 @@
     <EmbeddedResource Include="Administracion\FormFamilias_56PS.resx">
       <DependentUpon>FormFamilias_56PS.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Administracion\FormGestionBackUpRestore_56PS.resx">
+      <DependentUpon>FormGestionBackUpRestore_56PS.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Administracion\FormPerfiles_56PS.resx">
       <DependentUpon>FormPerfiles_56PS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Administracion\FormReparacion_56PS.resx">
+      <DependentUpon>FormReparacion_56PS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuPrincipal_56PS.resx">
       <DependentUpon>MenuPrincipal_56PS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Usuario\FormCambiarContraseña_56PS.resx">
       <DependentUpon>FormCambiarContraseña_56PS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Usuario\FormCambiarIdioma_56PS.resx">
+      <DependentUpon>FormCambiarIdioma_56PS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Usuario\FormIniciarSesion_56PS.resx">
       <DependentUpon>FormIniciarSesion_56PS.cs</DependentUpon>

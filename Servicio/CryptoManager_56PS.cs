@@ -26,7 +26,7 @@ namespace Services_625NS
             }
         }
 
-        private static readonly string _clave = "ClaveDeSeguridadParaEncriptacionNoModificar_56PS"; // Cambiar por una clave fuerte
+        private static readonly string _clave = "ClaveDeSeguridadParaEncriptacionNoModificar_56PS";  
 
         public static string EncriptarReversible(string texto)
         {

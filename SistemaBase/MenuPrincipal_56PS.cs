@@ -24,7 +24,11 @@ namespace SistemaBase
             InitializeComponent();
 
             MenuAdministracion.Enabled = false;
+            MenuAuditoria.Enabled = false;
+            MenuFamilias.Enabled = false;
+            MenuPerfiles.Enabled = false;
             MenuCambiarContraseña.Enabled = false;
+            MenuCambiarIdioma.Enabled = false;
         }
 
         private void MenuPrincipal_56PS_Load(object sender, EventArgs e)
@@ -67,14 +71,18 @@ namespace SistemaBase
 
         }
 
-        public ToolStripMenuItem MenuAdministracion => administracionToolStripMenuItem1;
+        public ToolStripMenuItem MenuAdministracion => usuariosToolStripMenuItem;
         public ToolStripMenuItem MenuCambiarContraseña => cambiarContraseñaToolStripMenuItem;
 
         public ToolStripMenuItem MenuPerfiles => perfilesToolStripMenuItem;
 
         public ToolStripMenuItem MenuFamilias => familiasToolStripMenuItem;
 
+        public ToolStripMenuItem MenuAuditoria => auditoriaDeEventosToolStripMenuItem;
 
+        public ToolStripMenuItem MenuCambiarIdioma => cambiarIdiomaToolStripMenuItem;
+
+        public ToolStripMenuItem menuAdmin => administracionToolStripMenuItem;
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var instance = SessionManager_56PS.getInstancia();
@@ -110,6 +118,11 @@ namespace SistemaBase
             MenuAdministracion.Enabled = false;
             MenuCambiarContraseña.Enabled = false;
 
+            MenuCambiarIdioma.Enabled = false;
+            MenuAuditoria.Enabled = false;
+            MenuPerfiles.Enabled = false;
+            MenuFamilias.Enabled = false;
+
 
         }
 
@@ -136,6 +149,11 @@ namespace SistemaBase
         private void familiasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormFamilias_56PS());
+        }
+
+        private void cambiarIdiomaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(new FormCambiarIdioma_56PS());
         }
     }
 }

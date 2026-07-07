@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL_BackUpRestore_56PS.cs" />
     <Compile Include="BLL_BitacoraEvento_56PS.cs" />
+    <Compile Include="BLL_DigitoVerificador_56PS.cs" />
     <Compile Include="BLL_Familia_56PS.cs" />
     <Compile Include="BLL_Idioma_56PS.cs" />
     <Compile Include="BLL_Patente_56PS.cs" />

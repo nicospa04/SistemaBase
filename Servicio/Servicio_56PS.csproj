@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DigitoVerificador_56PS.cs" />
     <Compile Include="Evento_56PS.cs" />
     <Compile Include="Familia_56PS.cs" />
     <Compile Include="IdiomaObserver_56PS.cs" />

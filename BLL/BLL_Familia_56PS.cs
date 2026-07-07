@@ -41,7 +41,7 @@ namespace BLL
             }
             else
             {
-                throw new Exception("ex1");
+                throw new Exception("error");
             }
         }
 
@@ -49,7 +49,7 @@ namespace BLL
         {
             if (dalperfil.VerificarExistenciaFamiliaNombre(f))
             {
-                throw new Exception("ex3");
+                throw new Exception("error");
             }
             else
             {
@@ -64,11 +64,11 @@ namespace BLL
         {
             if (dalperfil.VerificarExistenciaFamiliaCodigo(fam))
             {
-                throw new Exception("ex2");
+                throw new Exception("error");
             }
             if (dalperfil.VerificarExistenciaFamiliaNombre(fam))
             {
-                throw new Exception("ex3");
+                throw new Exception("error");
             }
 
             try

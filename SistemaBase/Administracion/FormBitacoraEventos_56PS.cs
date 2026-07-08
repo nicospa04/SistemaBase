@@ -56,6 +56,7 @@ namespace GUI_625NS.Administracion
 
             SessionManager_56PS.getInstancia().Suscribir(this);
             actualizarIdioma();
+            button3.Enabled = TienePermiso(Permisos_56PS.ExportarPdfBitacora);
         }
 
         private void FormBitacoraEventos_625NS_Load(object sender, EventArgs e)
@@ -214,6 +215,12 @@ namespace GUI_625NS.Administracion
         {
             dateTimePicker1.Value = DateTime.Today.AddDays(-3);
             dateTimePicker2.Value = DateTime.Today;
+        }
+
+        private bool TienePermiso(string permiso)
+        {
+            var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
         }
     }
 }

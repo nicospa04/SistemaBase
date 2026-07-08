@@ -70,6 +70,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(111, 19);
             this.label1.TabIndex = 161;
+            this.label1.Tag = "todosLosPerfiles";
             this.label1.Text = "Todos los perfiles";
             // 
             // dataGridView1
@@ -190,6 +191,7 @@
             this.lblperfiles.Name = "lblperfiles";
             this.lblperfiles.Size = new System.Drawing.Size(99, 36);
             this.lblperfiles.TabIndex = 147;
+            this.lblperfiles.Tag = "perfilesTitle";
             this.lblperfiles.Text = "Perfiles";
             // 
             // lblnombre
@@ -201,6 +203,7 @@
             this.lblnombre.Name = "lblnombre";
             this.lblnombre.Size = new System.Drawing.Size(59, 19);
             this.lblnombre.TabIndex = 166;
+            this.lblnombre.Tag = "NombreLabel";
             this.lblnombre.Text = "Nombre";
             // 
             // txtnomb
@@ -220,6 +223,7 @@
             this.lblcod.Name = "lblcod";
             this.lblcod.Size = new System.Drawing.Size(54, 19);
             this.lblcod.TabIndex = 164;
+            this.lblcod.Tag = "codigoLabel";
             this.lblcod.Text = "Código";
             // 
             // txtcod

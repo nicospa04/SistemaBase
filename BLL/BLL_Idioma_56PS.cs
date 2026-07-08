@@ -38,8 +38,23 @@ namespace BLL
                 if (!string.IsNullOrEmpty(ctrl.Tag?.ToString()) && traducciones.ContainsKey(ctrl.Tag.ToString()))
                     ctrl.Text = traducciones[ctrl.Tag.ToString()];
 
+                if (ctrl is MenuStrip menuStrip)
+                    TraducirItemsMenu(menuStrip.Items, traducciones);
+
                 if (ctrl.HasChildren)
                     TraducirControles(ctrl.Controls, traducciones);
+            }
+        }
+
+        private void TraducirItemsMenu(ToolStripItemCollection items, Dictionary<string, string> traducciones)
+        {
+            foreach (ToolStripItem item in items)
+            {
+                if (!string.IsNullOrEmpty(item.Tag?.ToString()) && traducciones.ContainsKey(item.Tag.ToString()))
+                    item.Text = traducciones[item.Tag.ToString()];
+
+                if (item is ToolStripMenuItem menuItem && menuItem.DropDownItems.Count > 0)
+                    TraducirItemsMenu(menuItem.DropDownItems, traducciones);
             }
         }
 

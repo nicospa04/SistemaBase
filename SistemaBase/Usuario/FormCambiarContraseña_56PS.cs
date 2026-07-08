@@ -23,6 +23,7 @@ namespace SistemaBase.Usuario
             InitializeComponent();
 
             actualizarIdioma();
+            button1.Enabled = TienePermiso(Permisos_56PS.CambiarContrasena);
         }
 
         public void actualizarIdioma()
@@ -106,6 +107,12 @@ namespace SistemaBase.Usuario
         private void FormCambiarContraseña_56PS_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private bool TienePermiso(string permiso)
+        {
+            var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
         }
     }
 }

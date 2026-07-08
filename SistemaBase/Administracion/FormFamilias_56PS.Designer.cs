@@ -142,6 +142,7 @@
             this.button3.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button3.Size = new System.Drawing.Size(202, 33);
             this.button3.TabIndex = 154;
+            this.button3.Tag = "asignarPermiso";
             this.button3.Text = "Asignar permiso";
             this.button3.UseVisualStyleBackColor = true;
             // 
@@ -154,6 +155,7 @@
             this.lblnombre.Name = "lblnombre";
             this.lblnombre.Size = new System.Drawing.Size(59, 19);
             this.lblnombre.TabIndex = 153;
+            this.lblnombre.Tag = "NombreLabel";
             this.lblnombre.Text = "Nombre";
             // 
             // btncancelar
@@ -193,6 +195,7 @@
             this.lblcod.Name = "lblcod";
             this.lblcod.Size = new System.Drawing.Size(54, 19);
             this.lblcod.TabIndex = 149;
+            this.lblcod.Tag = "codigoLabel";
             this.lblcod.Text = "Código";
             // 
             // lblfm
@@ -204,6 +207,7 @@
             this.lblfm.Name = "lblfm";
             this.lblfm.Size = new System.Drawing.Size(106, 36);
             this.lblfm.TabIndex = 147;
+            this.lblfm.Tag = "familiasTitle";
             this.lblfm.Text = "Familias";
             // 
             // label1
@@ -215,6 +219,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 19);
             this.label1.TabIndex = 170;
+            this.label1.Tag = "NombreLabel";
             this.label1.Text = "Nombre";
             // 
             // txtnomb
@@ -234,6 +239,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(54, 19);
             this.label2.TabIndex = 168;
+            this.label2.Tag = "codigoLabel";
             this.label2.Text = "Código";
             // 
             // txtcod
@@ -263,6 +269,7 @@
             this.button1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button1.Size = new System.Drawing.Size(202, 33);
             this.button1.TabIndex = 171;
+            this.button1.Tag = "asignarPermiso";
             this.button1.Text = "Asignar permiso";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);

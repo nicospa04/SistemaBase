@@ -5,6 +5,7 @@ using ClassLibrary3;
 using GUI_625NS.Administracion;
 using SistemaBase.Administracion;
 using SistemaBase.Usuario;
+using Servicio;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,18 +18,33 @@ using System.Windows.Forms;
 
 namespace SistemaBase
 {
-    public partial class MenuPrincipal_56PS : Form
+    public partial class MenuPrincipal_56PS : Form, IdiomaObserver_56PS
     {
         public MenuPrincipal_56PS()
         {
             InitializeComponent();
+            SessionManager_56PS.getInstancia().Suscribir(this);
+            actualizarIdioma();
 
             MenuAdministracion.Enabled = false;
             MenuAuditoria.Enabled = false;
             MenuFamilias.Enabled = false;
+            MenuGestionRespaldo.Enabled = false;
             MenuPerfiles.Enabled = false;
             MenuCambiarContraseña.Enabled = false;
             MenuCambiarIdioma.Enabled = false;
+        }
+
+        public void actualizarIdioma()
+        {
+            var traductor = new BLL_Idioma_56PS();
+            traductor.Traducir(this);
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            SessionManager_56PS.getInstancia().Desuscribir(this);
+            base.OnFormClosed(e);
         }
 
         private void MenuPrincipal_56PS_Load(object sender, EventArgs e)
@@ -78,6 +94,8 @@ namespace SistemaBase
 
         public ToolStripMenuItem MenuFamilias => familiasToolStripMenuItem;
 
+        public ToolStripMenuItem MenuGestionRespaldo => gestionDeRespaldoToolStripMenuItem;
+
         public ToolStripMenuItem MenuAuditoria => auditoriaDeEventosToolStripMenuItem;
 
         public ToolStripMenuItem MenuCambiarIdioma => cambiarIdiomaToolStripMenuItem;
@@ -122,6 +140,7 @@ namespace SistemaBase
             MenuAuditoria.Enabled = false;
             MenuPerfiles.Enabled = false;
             MenuFamilias.Enabled = false;
+            MenuGestionRespaldo.Enabled = false;
 
 
         }
@@ -154,6 +173,11 @@ namespace SistemaBase
         private void cambiarIdiomaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormCambiarIdioma_56PS());
+        }
+
+        private void gestionDeRespaldoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(new FormGestionBackUpRestore_56PS());
         }
     }
 }

@@ -20,6 +20,7 @@ namespace SistemaBase.Usuario
         public FormCambiarIdioma_56PS()
         {
             InitializeComponent(); SessionManager_56PS.getInstancia().Suscribir(this);
+            button1.Enabled = TienePermiso(Permisos_56PS.CambiarIdioma);
 
         }
 
@@ -80,6 +81,12 @@ namespace SistemaBase.Usuario
         private void FormCambiarIdioma_56PS_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private bool TienePermiso(string permiso)
+        {
+            var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
         }
     }
 }

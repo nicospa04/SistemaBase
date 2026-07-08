@@ -52,6 +52,7 @@ namespace SistemaBase.Administracion
 
             SessionManager_56PS.getInstancia().Suscribir(this);
             actualizarIdioma();
+            AplicarPermisosAcciones();
         }
 
  
@@ -208,9 +209,6 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Perfiles", "Creación de perfil", Evento_56PS.Criticidad.Medio);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
-
-                DataTable dt = DAL_56PS.ConsultarTabla("Permiso");
-                new BLL_DigitoVerificador_56PS().CalcularDV("Permiso", dt);
             }
             catch (Exception ex)
             {
@@ -300,9 +298,6 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Perfiles", "Eliminación de perfil", Evento_56PS.Criticidad.Alto);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
-
-                DataTable dt = DAL_56PS.ConsultarTabla("Permiso");
-                new BLL_DigitoVerificador_56PS().CalcularDV("Permiso", dt);
             }   
             catch (Exception ex)
             {
@@ -426,6 +421,21 @@ namespace SistemaBase.Administracion
         private void cmbpermiso_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void AplicarPermisosAcciones()
+        {
+            btnbuscar.Enabled = TienePermiso(Permisos_56PS.CrearPerfil);
+            btncancelar.Enabled = TienePermiso(Permisos_56PS.EliminarPerfil);
+            button3.Enabled = TienePermiso(Permisos_56PS.AsignarPatenteAPerfil);
+            button2.Enabled = TienePermiso(Permisos_56PS.AsignarFamiliaAPerfil);
+            button6.Enabled = TienePermiso(Permisos_56PS.QuitarPermisoDePerfil);
+        }
+
+        private bool TienePermiso(string permiso)
+        {
+            var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
         }
     }
 }

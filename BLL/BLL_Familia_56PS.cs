@@ -35,8 +35,7 @@ namespace BLL
                     );
 
 
-                    DataTable dt = DAL_56PS.ConsultarTabla("Familia");
-                    new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
+                    new BLL_DigitoVerificador_56PS().CalcularDV("Familias", DAL_56PS.ConsultarTabla("Familias"));
                     new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
                 }
                 else
@@ -61,8 +60,7 @@ namespace BLL
                 if (dalperfil.VerificarExistenciaFamiliaCodigo(f))
                 {
                     dalperfil.Modificar(f);
-                    DataTable dt = DAL_56PS.ConsultarTabla("Familia");
-                    new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
+                    new BLL_DigitoVerificador_56PS().CalcularDV("Familias", DAL_56PS.ConsultarTabla("Familias"));
                 }
             }
         }
@@ -81,8 +79,7 @@ namespace BLL
             try
             {
                 dalperfil.CrearFamilia(fam);
-                DataTable dt = DAL_56PS.ConsultarTabla("Familia");
-                new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
+                new BLL_DigitoVerificador_56PS().CalcularDV("Familias", DAL_56PS.ConsultarTabla("Familias"));
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
 
@@ -100,6 +97,9 @@ namespace BLL
         public void AsignarPermisoAFamilia(Familia_56PS f, Perfil_56PS p)
         {
             dalperfil.AsignarPermisoAFamilia(p, f);
+            var dv = new BLL_DigitoVerificador_56PS();
+            dv.CalcularDV("FamiliaPatente", DAL_56PS.ConsultarTabla("FamiliaPatente"));
+            dv.CalcularDV("FamiliaFamilia", DAL_56PS.ConsultarTabla("FamiliaFamilia"));
 
             var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
             Evento_56PS evento = new Evento_56PS(
@@ -117,8 +117,9 @@ namespace BLL
             try
             {
                 dalperfil.EliminarPermisodeFamilia(p, cod);
-                DataTable dt = DAL_56PS.ConsultarTabla("Familia");
-                new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
+                var dv = new BLL_DigitoVerificador_56PS();
+                dv.CalcularDV("FamiliaPatente", DAL_56PS.ConsultarTabla("FamiliaPatente"));
+                dv.CalcularDV("FamiliaFamilia", DAL_56PS.ConsultarTabla("FamiliaFamilia"));
             }
             catch (Exception ex)
             {

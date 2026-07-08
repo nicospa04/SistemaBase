@@ -32,6 +32,8 @@ namespace SistemaBase.Administracion
 
             SessionManager_56PS.getInstancia().Suscribir(this);
             actualizarIdioma();
+            btnrecalcular.Enabled = TienePermiso(Permisos_56PS.RecalcularDigitosVerificadores);
+            btnrestore.Enabled = TienePermiso(Permisos_56PS.RestaurarBackup);
         }
 
         public void actualizarIdioma()
@@ -110,6 +112,12 @@ namespace SistemaBase.Administracion
             MenuPrincipal_56PS frm = new MenuPrincipal_56PS();
             frm.Show();
             this.Close();
+        }
+
+        private bool TienePermiso(string permiso)
+        {
+            var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
         }
     }
 }

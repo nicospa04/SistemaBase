@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -9,6 +10,19 @@ namespace DAL_625NS
     {
         private static string dbname = "SistemaBase";
         private static string conexion = $@"Data Source=COMPURELOCA;Initial Catalog={dbname};Integrated Security=True";
+        private static readonly Dictionary<string, string> ordenTablas = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "Evento_56PS", "Numero" },
+            { "FamiliaFamilia", "CodigoFamilia, CodFamiliaHija" },
+            { "FamiliaPatente", "CodigoFamilia, CodigoPatente" },
+            { "Familias", "CodigoFamilia" },
+            { "Patentes", "CodigoPatente" },
+            { "Perfiles", "CodigoPerfil" },
+            { "PerfilFamilia", "CodigoPerfil, CodigoFamilia" },
+            { "PerfilPatente", "CodigoPerfil, CodigoPatente" },
+            { "Rol_56PS", "codRol" },
+            { "Usuario_56PS", "DNI" }
+        };
 
 
         static string Ins;
@@ -27,9 +41,14 @@ namespace DAL_625NS
 
             try
             {
+                if (!ordenTablas.ContainsKey(nombreTabla))
+                {
+                    throw new Exception($"La tabla {nombreTabla} no esta habilitada para calculo de DV.");
+                }
+
                 using (SqlConnection conn = new SqlConnection(conexion))
                 {
-                    string query = $"SELECT * FROM {nombreTabla}";
+                    string query = $"SELECT * FROM dbo.[{nombreTabla}] ORDER BY {ordenTablas[nombreTabla]}";
                     SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
                     adapter.Fill(dt);
                 }

@@ -29,6 +29,7 @@ namespace SistemaBase.Administracion
 
             SessionManager_56PS.getInstancia().Suscribir(this);
             actualizarIdioma();
+            button1.Enabled = TieneAlgunPermiso(Permisos_56PS.RealizarBackup, Permisos_56PS.RestaurarBackup);
         }
 
         private void FormGestionBackUpRestore_56PS_Load(object sender, EventArgs e)
@@ -38,11 +39,35 @@ namespace SistemaBase.Administracion
 
         private void button2_Click(object sender, EventArgs e)
         {
-            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+            if (comboBox1.SelectedItem == null)
             {
-                if (folderDialog.ShowDialog() == DialogResult.OK)
+                MessageBox.Show("Selecciona Backup o Restore antes de buscar.");
+                return;
+            }
+
+            if (comboBox1.SelectedItem.ToString() == "Backup")
+            {
+                using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
                 {
-                    textBox1.Text = folderDialog.SelectedPath;
+                    if (folderDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        textBox1.Text = folderDialog.SelectedPath;
+                    }
+                }
+            }
+            else
+            {
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    openFileDialog.Filter = "Archivos de respaldo (*.bak)|*.bak|Todos los archivos (*.*)|*.*";
+                    openFileDialog.Title = "Seleccionar archivo de respaldo";
+                    openFileDialog.CheckFileExists = true;
+                    openFileDialog.CheckPathExists = true;
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        textBox1.Text = openFileDialog.FileName;
+                    }
                 }
             }
         }
@@ -59,6 +84,12 @@ namespace SistemaBase.Administracion
 
             if (comboBox1.SelectedItem.ToString() == "Backup")
             {
+                if (!TienePermiso(Permisos_56PS.RealizarBackup))
+                {
+                    MessageBox.Show("No tiene permiso para realizar backup.");
+                    return;
+                }
+
                 if (!string.IsNullOrEmpty(textBox1.Text))
                 {
                     try
@@ -84,18 +115,31 @@ namespace SistemaBase.Administracion
             }
             else
             {
+                if (!TienePermiso(Permisos_56PS.RestaurarBackup))
+                {
+                    MessageBox.Show("No tiene permiso para realizar restore.");
+                    return;
+                }
+
                 if (!string.IsNullOrEmpty(textBox1.Text))
                 {
                     try
                     {
+                        string dniUsuario = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                         bll.RealizarRestore(textBox1.Text);
-                        MessageBox.Show("Restauración realizada con éxito.");
+                        MessageBox.Show("Restauración realizada con éxito. Se cerrará la sesión para volver a iniciar con la base restaurada.");
 
-                        string a = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
+                        try
+                        {
+                            Evento_56PS ee = new Evento_56PS(dniUsuario, DateTime.Now, "Base de datos", "Realizacion de restore", Evento_56PS.Criticidad.Alto);
+                            new BLL_BitacoraEvento_56PS().RegistrarEvento(ee);
+                        }
+                        catch
+                        {
+                        }
 
-                        Evento_56PS ee = new Evento_56PS(a, DateTime.Now, "Base de datos", "Realizacion de restore", Evento_56PS.Criticidad.Alto);
-                        new BLL_BitacoraEvento_56PS().RegistrarEvento(ee);
                         textBox1.Text = "";
+                        SalirDelSistemaDespuesDeRestore();
                     }
                     catch (Exception ex)
                     {
@@ -106,6 +150,45 @@ namespace SistemaBase.Administracion
                 {
                     MessageBox.Show("Seleccione un archivo de restore.");
                 }
+            }
+        }
+
+        private bool TienePermiso(string permiso)
+        {
+            var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
+        }
+
+        private bool TieneAlgunPermiso(params string[] permisos)
+        {
+            var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            return usuario?.Perfil != null && usuario.Perfil.TieneAlgunPermiso(permisos);
+        }
+
+        private void SalirDelSistemaDespuesDeRestore()
+        {
+            SessionManager_56PS.getInstancia().cerrarSesion();
+
+            MenuPrincipal_56PS menu = this.MdiParent as MenuPrincipal_56PS;
+            if (menu != null)
+            {
+                foreach (Form form in menu.MdiChildren.ToList())
+                {
+                    form.Close();
+                }
+
+                menu.MenuAdministracion.Enabled = false;
+                menu.MenuCambiarContraseña.Enabled = false;
+                menu.MenuCambiarIdioma.Enabled = false;
+                menu.MenuAuditoria.Enabled = false;
+                menu.MenuPerfiles.Enabled = false;
+                menu.MenuFamilias.Enabled = false;
+                menu.MenuGestionRespaldo.Enabled = false;
+                menu.menuAdmin.Enabled = false;
+            }
+            else
+            {
+                this.Close();
             }
         }
     }

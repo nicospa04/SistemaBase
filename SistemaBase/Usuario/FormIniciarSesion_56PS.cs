@@ -141,8 +141,10 @@ namespace SistemaBase
             {
                 MessageBox.Show("Se detectaron inconsistencias en la base de datos");
 
-                if (usuarioLogueado.Perfil.== "Administrador") //hay que arreglar esto
+                if (TieneAlgunPermiso(usuarioLogueado.Perfil, Permisos_56PS.RecalcularDigitosVerificadores, Permisos_56PS.RestaurarBackup))
                 {
+                    SessionManager_56PS.getInstancia().iniciarSesion(usuarioLogueado);
+                    SessionManager_56PS.getInstancia().CambiarIdioma(usuarioLogueado.idioma);
 
                     FormReparacion_56PS form = new FormReparacion_56PS(errores);
                     form.Show();
@@ -188,22 +190,30 @@ namespace SistemaBase
 
 
         
-            menu.MenuAdministracion.Enabled = userr.Perfil != null &&
-                userr.Perfil.Contiene("P01"); // P01 = Gestión de Usuarios
-            menu.MenuCambiarContraseña.Enabled = true;
+            menu.MenuAdministracion.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Usuarios);
+            menu.MenuCambiarContraseña.Enabled = TienePermiso(userr.Perfil, Permisos_56PS.CambiarContrasena);
 
-            menu.MenuFamilias.Enabled = userr.Perfil.Contiene("P04");
+            menu.MenuFamilias.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Familias);
 
-            menu.MenuPerfiles.Enabled = userr.Perfil.Contiene("P03");
+            menu.MenuPerfiles.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Perfiles);
 
-            menu.MenuAuditoria.Enabled = userr.Perfil.Contiene("P02");
+            menu.MenuAuditoria.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Auditoria);
 
-            menu.MenuCambiarIdioma.Enabled = userr.Perfil.Contiene("P09");
+            menu.MenuCambiarIdioma.Enabled = TienePermiso(userr.Perfil, Permisos_56PS.CambiarIdioma);
 
-            if(userr.Perfil.Contiene("P01") || userr.Perfil.Contiene("P04") || userr.Perfil.Contiene("P03") || userr.Perfil.Contiene("P02"))
+            if(TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Administracion))
             {
                 menu.menuAdmin.Enabled = true;
             }
+
+            menu.MenuAdministracion.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Usuarios);
+            menu.MenuCambiarContraseña.Enabled = TienePermiso(userr.Perfil, Permisos_56PS.CambiarContrasena);
+            menu.MenuFamilias.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Familias);
+            menu.MenuPerfiles.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Perfiles);
+            menu.MenuAuditoria.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Auditoria);
+            menu.MenuCambiarIdioma.Enabled = TienePermiso(userr.Perfil, Permisos_56PS.CambiarIdioma);
+            menu.MenuGestionRespaldo.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.RealizarBackup, Permisos_56PS.RestaurarBackup);
+            menu.menuAdmin.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Administracion);
 
             // Verificar si el usuario debe cambiar contraseña usando la bitácora
             if (DebeCambiarContraseña(userr.Dni))
@@ -250,6 +260,16 @@ namespace SistemaBase
                 .Any();
 
             return desbloqueoPostCambio;
+        }
+
+        private bool TienePermiso(Perfil_56PS perfil, string permiso)
+        {
+            return perfil != null && perfil.TienePermiso(permiso);
+        }
+
+        private bool TieneAlgunPermiso(Perfil_56PS perfil, params string[] permisos)
+        {
+            return perfil != null && perfil.TieneAlgunPermiso(permisos);
         }
 
         private void FormIniciarSesion_Load(object sender, EventArgs e)

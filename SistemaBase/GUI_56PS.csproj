@@ -172,10 +172,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="EN.json" />
-    <None Include="ES.json" />
+    <None Include="EN.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ES.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
-    <None Include="pt.json" />
+    <None Include="pt.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

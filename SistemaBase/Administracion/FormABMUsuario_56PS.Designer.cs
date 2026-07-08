@@ -326,7 +326,7 @@
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(81, 17);
             this.radioButton3.TabIndex = 36;
-            this.radioButton3.Tag = "ActivosCheckBox";
+            this.radioButton3.Tag = "BloqueadosCheckBox";
             this.radioButton3.Text = "Bloqueados";
             this.radioButton3.UseVisualStyleBackColor = true;
             this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);

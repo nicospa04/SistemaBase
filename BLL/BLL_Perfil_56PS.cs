@@ -40,8 +40,7 @@ namespace BLL
             );
             new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
 
-            DataTable dt = DAL_56PS.ConsultarTabla("Perfil");
-            new BLL_DigitoVerificador_56PS().CalcularDV("Perfil", dt);
+            new BLL_DigitoVerificador_56PS().CalcularDV("Perfiles", DAL_56PS.ConsultarTabla("Perfiles"));
         }
 
         public string ObtenerNombredePerfil(string cod)
@@ -65,8 +64,9 @@ namespace BLL
             {
                 dalperfil.EliminarPermisodePerfil(p, codperfil);
 
-                DataTable dt = DAL_56PS.ConsultarTabla("Perfil");
-                new BLL_DigitoVerificador_56PS().CalcularDV("Perfil", dt);
+                var dv = new BLL_DigitoVerificador_56PS();
+                dv.CalcularDV("PerfilPatente", DAL_56PS.ConsultarTabla("PerfilPatente"));
+                dv.CalcularDV("PerfilFamilia", DAL_56PS.ConsultarTabla("PerfilFamilia"));
 
 
             }
@@ -91,8 +91,7 @@ namespace BLL
                     {
                         perfil.activo = false;
                         dalperfil.EliminarPerfil(perfil);
-                        DataTable dt = DAL_56PS.ConsultarTabla("Perfil");
-                        new BLL_DigitoVerificador_56PS().CalcularDV("Perfil", dt);
+                        new BLL_DigitoVerificador_56PS().CalcularDV("Perfiles", DAL_56PS.ConsultarTabla("Perfiles"));
 
                         var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
                         Evento_56PS evento = new Evento_56PS(
@@ -135,8 +134,10 @@ namespace BLL
                     "Asignar permisos a perfil",
                     Evento_56PS.Criticidad.Medio
                 );
-                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento); DataTable dt = DAL_56PS.ConsultarTabla("Perfil");
-                new BLL_DigitoVerificador_56PS().CalcularDV("Perfil", dt);
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
+                var dv = new BLL_DigitoVerificador_56PS();
+                dv.CalcularDV("PerfilPatente", DAL_56PS.ConsultarTabla("PerfilPatente"));
+                dv.CalcularDV("PerfilFamilia", DAL_56PS.ConsultarTabla("PerfilFamilia"));
             }
             catch (Exception ex)
             {

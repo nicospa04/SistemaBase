@@ -18,8 +18,8 @@ namespace ClassLibrary3
         {
             dal.RegistrarEvento(e);
 
-            DataTable dt = DAL_56PS.ConsultarTabla("Evento");
-            new BLL_DigitoVerificador_56PS().CalcularDV("Evento", dt);
+            DataTable dt = DAL_56PS.ConsultarTabla("Evento_56PS");
+            new BLL_DigitoVerificador_56PS().CalcularDV("Evento_56PS", dt);
 
             return;
         }

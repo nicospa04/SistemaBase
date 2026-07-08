@@ -58,6 +58,7 @@ namespace SistemaBase.Administracion
 
             SessionManager_56PS.getInstancia().Suscribir(this);
             actualizarIdioma();
+            AplicarPermisosAcciones();
         }
 
  
@@ -244,10 +245,6 @@ namespace SistemaBase.Administracion
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                 Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Asignación de familia a familia", Evento_56PS.Criticidad.Medio);
                 new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
-
-
-                DataTable dt = DAL_56PS.ConsultarTabla("Familia");
-                new BLL_DigitoVerificador_56PS().CalcularDV("Familia", dt);
             }
             catch (Exception ex)
             {
@@ -548,6 +545,22 @@ namespace SistemaBase.Administracion
                 MessageBox.Show(ex.Message);
             }
             Limpiar();
+        }
+
+        private void AplicarPermisosAcciones()
+        {
+            btnbuscar.Enabled = TienePermiso(Permisos_56PS.CrearFamilia);
+            btnmodificar.Enabled = TienePermiso(Permisos_56PS.ModificarFamilia);
+            btncancelar.Enabled = TienePermiso(Permisos_56PS.EliminarFamilia);
+            button1.Enabled = TienePermiso(Permisos_56PS.AsignarPatenteAFamilia);
+            button2.Enabled = TienePermiso(Permisos_56PS.AsignarFamiliaAFamilia);
+            button6.Enabled = TienePermiso(Permisos_56PS.QuitarPermisoDeFamilia);
+        }
+
+        private bool TienePermiso(string permiso)
+        {
+            var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
         }
     }
 }

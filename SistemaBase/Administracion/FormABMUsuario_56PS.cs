@@ -64,6 +64,7 @@ namespace SistemaBase.Administracion
             SessionManager_56PS.getInstancia().Suscribir(this);
 
             actualizarIdioma();
+            AplicarPermisosAcciones();
         }
 
         void deshabilitarBotonAplicar()
@@ -545,7 +546,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
         void habilitarBotonCrear()
         {
-            button1.Enabled = true;
+            button1.Enabled = TienePermiso(Permisos_56PS.CrearUsuario);
         }
 
         void deshabilitarBotonCrear()
@@ -555,7 +556,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
         void habilitarBotonModificar()
         {
-            button3.Enabled = true;
+            button3.Enabled = TienePermiso(Permisos_56PS.ModificarUsuario);
         }
 
         void deshabilitarBotonModificar()
@@ -565,7 +566,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
         void habilitarBotonActivarDesactivar()
         {
-            btnActivarDesactivar.Enabled = true;
+            btnActivarDesactivar.Enabled = TienePermiso(Permisos_56PS.ActivarDesactivarUsuario);
         }
 
         void deshabilitarBotonActivarDesactivar()
@@ -575,7 +576,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
         void habilitarBotonDesbloquear()
         {
-            button2.Enabled = true;
+            button2.Enabled = TienePermiso(Permisos_56PS.DesbloquearUsuario);
             
         }
 
@@ -696,6 +697,20 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
             deshabilitarBotonModificar();
 
 
+        }
+
+        private void AplicarPermisosAcciones()
+        {
+            habilitarBotonCrear();
+            habilitarBotonModificar();
+            habilitarBotonActivarDesactivar();
+            habilitarBotonDesbloquear();
+        }
+
+        private bool TienePermiso(string permiso)
+        {
+            var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
         }
     }
 }

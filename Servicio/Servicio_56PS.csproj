@@ -52,6 +52,7 @@
     <Compile Include="IObservable_56PS.cs" />
     <Compile Include="Patente_56PS.cs" />
     <Compile Include="Perfil_56PS.cs" />
+    <Compile Include="Permisos_56PS.cs" />
     <Compile Include="Usuario_56PS.cs" />
     <Compile Include="CryptoManager_56PS.cs" />
     <Compile Include="IntentosLogin_56PS.cs" />

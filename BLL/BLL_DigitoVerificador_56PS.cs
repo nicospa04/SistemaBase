@@ -18,8 +18,8 @@ namespace BLL
 
         public void CalcularDV(string tabla, DataTable registros)
         {
-            if (registros == null || registros.Rows.Count == 0)
-                return;
+            if (registros == null)
+                registros = new DataTable();
 
             long totalDVH = CalcularDVH(registros);
 

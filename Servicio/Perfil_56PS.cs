@@ -57,6 +57,28 @@ namespace Servicio
             return false;
         }
 
+        public bool TienePermiso(string codigo)
+        {
+            if (string.IsNullOrEmpty(codigo))
+                return false;
+
+            return Codigo == codigo || Contiene(codigo);
+        }
+
+        public bool TieneAlgunPermiso(params string[] codigos)
+        {
+            if (codigos == null)
+                return false;
+
+            foreach (string codigo in codigos)
+            {
+                if (TienePermiso(codigo))
+                    return true;
+            }
+
+            return false;
+        }
+
         public virtual void Eliminar(Perfil_56PS p)
         {
             hijos.Remove(p);

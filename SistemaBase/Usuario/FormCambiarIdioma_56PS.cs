@@ -66,7 +66,7 @@ namespace SistemaBase.Usuario
             //MessageBox.Show("Cambio de idioma con exito, se requiere reiniciar sistema");
 
 
-            SessionManager_56PS.getInstancia().CambiarIdioma(comboBox1.SelectedItem.ToString());
+            SessionManager_56PS.getInstancia().CambiarIdioma(new Idioma_56PS(comboBox1.SelectedItem.ToString()));
 
 
             string a = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;

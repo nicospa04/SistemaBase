@@ -15,24 +15,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace SistemaBase
 {
     public partial class MenuPrincipal_56PS : Form, IdiomaObserver_56PS
     {
+        private bool cierreSistemaEnCurso;
+
         public MenuPrincipal_56PS()
         {
             InitializeComponent();
             SessionManager_56PS.getInstancia().Suscribir(this);
+            SessionManager_56PS.getInstancia().CierreSistemaSolicitado += CierreSistemaSolicitado;
             actualizarIdioma();
-
-            MenuAdministracion.Enabled = false;
-            MenuAuditoria.Enabled = false;
-            MenuFamilias.Enabled = false;
-            MenuGestionRespaldo.Enabled = false;
-            MenuPerfiles.Enabled = false;
-            MenuCambiarContraseña.Enabled = false;
-            MenuCambiarIdioma.Enabled = false;
+            AplicarEstadoSinSesion();
         }
 
         public void actualizarIdioma()
@@ -44,12 +41,32 @@ namespace SistemaBase
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             SessionManager_56PS.getInstancia().Desuscribir(this);
+            SessionManager_56PS.getInstancia().CierreSistemaSolicitado -= CierreSistemaSolicitado;
             base.OnFormClosed(e);
         }
 
         private void MenuPrincipal_56PS_Load(object sender, EventArgs e)
         {
+            string ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "instancia.txt");
+            string instancia = "";
 
+            try
+            {
+                if (File.Exists(ruta))
+                {
+                    instancia = File.ReadAllText(ruta).Trim();
+                    BLL_BackUpRestore_56PS.Instalador(instancia);
+                }
+            }
+            catch (Exception ex)
+            {
+                string instanciaMensaje = string.IsNullOrWhiteSpace(instancia) ? "No configurada" : instancia;
+                MessageBox.Show("No se pudo inicializar la base de datos. Instancia: " + instanciaMensaje + ". Verifique que SQL Server este iniciado y que el nombre sea correcto. Detalle: " + ex.Message,
+                    "Error de instalacion",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+            }
         }
 
         private void AbrirFormulario(Form form)
@@ -100,7 +117,50 @@ namespace SistemaBase
 
         public ToolStripMenuItem MenuCambiarIdioma => cambiarIdiomaToolStripMenuItem;
 
-        public ToolStripMenuItem menuAdmin => administracionToolStripMenuItem;
+        public ToolStripMenuItem MenuIniciarSesion => iniciarSesionToolStripMenuItem;
+
+        public ToolStripMenuItem MenuCerrarSesion => cerrarSesionToolStripMenuItem;
+
+        public ToolStripMenuItem menuAdmin => administracionToolStripMenuItem1;
+
+        public void AplicarEstadoSinSesion()
+        {
+            MenuIniciarSesion.Enabled = true;
+            MenuCerrarSesion.Enabled = false;
+            MenuAdministracion.Enabled = false;
+            MenuCambiarContraseña.Enabled = false;
+            MenuCambiarIdioma.Enabled = false;
+            MenuAuditoria.Enabled = false;
+            MenuPerfiles.Enabled = false;
+            MenuFamilias.Enabled = false;
+            MenuGestionRespaldo.Enabled = false;
+            administracionToolStripMenuItem1.Enabled = false;
+        }
+
+        public void AplicarEstadoSesion(Perfil_56PS perfil)
+        {
+            MenuIniciarSesion.Enabled = false;
+            MenuCerrarSesion.Enabled = true;
+            MenuAdministracion.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Usuarios);
+            MenuCambiarContraseña.Enabled = TienePermiso(perfil, Permisos_56PS.CambiarContrasena);
+            MenuFamilias.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Familias);
+            MenuPerfiles.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Perfiles);
+            MenuAuditoria.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Auditoria);
+            MenuCambiarIdioma.Enabled = TienePermiso(perfil, Permisos_56PS.CambiarIdioma);
+            MenuGestionRespaldo.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.RealizarBackup, Permisos_56PS.RestaurarBackup);
+            administracionToolStripMenuItem1.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Administracion);
+        }
+
+        private bool TienePermiso(Perfil_56PS perfil, string permiso)
+        {
+            return perfil != null && perfil.TienePermiso(permiso);
+        }
+
+        private bool TieneAlgunPermiso(Perfil_56PS perfil, params string[] permisos)
+        {
+            return perfil != null && perfil.TieneAlgunPermiso(permisos);
+        }
+
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var instance = SessionManager_56PS.getInstancia();
@@ -112,7 +172,7 @@ namespace SistemaBase
             }
 
 
-            var idiomaActual = instance.idiomaActual;
+            var idiomaActual = instance.idiomaActual?.tipo;
 
             var idiomaOriginal = instance.getUsuarioActivo().idioma;
 
@@ -128,21 +188,8 @@ namespace SistemaBase
             instance.cerrarSesion();
             MessageBox.Show("Sesión cerrada");
 
-            foreach (Form form in this.MdiChildren)
-            {
-                form.Close();
-            }
-
-            MenuAdministracion.Enabled = false;
-            MenuCambiarContraseña.Enabled = false;
-
-            MenuCambiarIdioma.Enabled = false;
-            MenuAuditoria.Enabled = false;
-            MenuPerfiles.Enabled = false;
-            MenuFamilias.Enabled = false;
-            MenuGestionRespaldo.Enabled = false;
-
-
+            CerrarFormulariosHijos();
+            AplicarEstadoSinSesion();
         }
 
         private void administracionToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -178,6 +225,32 @@ namespace SistemaBase
         private void gestionDeRespaldoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormGestionBackUpRestore_56PS());
+        }
+
+        private void CierreSistemaSolicitado(object sender, EventArgs e)
+        {
+            if (cierreSistemaEnCurso)
+                return;
+
+            cierreSistemaEnCurso = true;
+            SessionManager_56PS.getInstancia().cerrarSesion();
+
+            foreach (Form form in Application.OpenForms.Cast<Form>().ToList())
+            {
+                if (form != this)
+                    form.Close();
+            }
+
+            AplicarEstadoSinSesion();
+            Application.Exit();
+        }
+
+        private void CerrarFormulariosHijos()
+        {
+            foreach (Form form in this.MdiChildren.ToList())
+            {
+                form.Close();
+            }
         }
     }
 }

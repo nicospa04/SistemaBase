@@ -127,7 +127,7 @@ namespace SistemaBase.Administracion
                     {
                         string dniUsuario = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                         bll.RealizarRestore(textBox1.Text);
-                        MessageBox.Show("Restauración realizada con éxito. Se cerrará la sesión para volver a iniciar con la base restaurada.");
+                        MessageBox.Show("Restauración realizada con éxito. El sistema se cerrará para volver a iniciar con la base restaurada.");
 
                         try
                         {
@@ -167,29 +167,7 @@ namespace SistemaBase.Administracion
 
         private void SalirDelSistemaDespuesDeRestore()
         {
-            SessionManager_56PS.getInstancia().cerrarSesion();
-
-            MenuPrincipal_56PS menu = this.MdiParent as MenuPrincipal_56PS;
-            if (menu != null)
-            {
-                foreach (Form form in menu.MdiChildren.ToList())
-                {
-                    form.Close();
-                }
-
-                menu.MenuAdministracion.Enabled = false;
-                menu.MenuCambiarContraseña.Enabled = false;
-                menu.MenuCambiarIdioma.Enabled = false;
-                menu.MenuAuditoria.Enabled = false;
-                menu.MenuPerfiles.Enabled = false;
-                menu.MenuFamilias.Enabled = false;
-                menu.MenuGestionRespaldo.Enabled = false;
-                menu.menuAdmin.Enabled = false;
-            }
-            else
-            {
-                this.Close();
-            }
+            SessionManager_56PS.getInstancia().SolicitarCierreSistema();
         }
     }
 }

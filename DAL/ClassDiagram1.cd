@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DAL_625NS.DAL_56PS">
+    <Position X="0.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAhAAAAAAAABAABUAABAAAAAIBAACgAAAAACE=</HashCode>
+      <FileName>DAL_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DAL_625NS.DAL_Perfil_56PS">
+    <Position X="2.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ECAAAgAAAAAAgAFQCAAAABAABAACAAAAgYAChAAAAyw=</HashCode>
+      <FileName>DAL_Perfil_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DAL_625NS.DAL_Usuario_56PS">
+    <Position X="4.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAACAAQIAAgAAAIACAgACAAAQAAAAAAAAABAAAgAAA=</HashCode>
+      <FileName>DAL_Usuario_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DAL_625NS.DAL_BitacoraEventos_56PS">
+    <Position X="4.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DAL_BitacoraEventos_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DAL.DAL_BackUpRestore_56PS">
+    <Position X="6" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEgAABAAQAAgAAAAAAAAEAAIACAAAAMAAAABAACA=</HashCode>
+      <FileName>DAL_BackUpRestore_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DAL.DAL_DigitoVerificador_56PS">
+    <Position X="7.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DAL_DigitoVerificador_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

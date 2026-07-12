@@ -60,20 +60,14 @@ namespace BLL
 
         public void EliminarPermisodePerfil(Perfil_56PS p, string codperfil)
         {
-            try
-            {
-                dalperfil.EliminarPermisodePerfil(p, codperfil);
+            if (p == null || string.IsNullOrWhiteSpace(p.Codigo) || string.IsNullOrWhiteSpace(codperfil))
+                throw new Exception("Debe seleccionar una asignación válida.");
 
-                var dv = new BLL_DigitoVerificador_56PS();
-                dv.CalcularDV("PerfilPatente", DAL_56PS.ConsultarTabla("PerfilPatente"));
-                dv.CalcularDV("PerfilFamilia", DAL_56PS.ConsultarTabla("PerfilFamilia"));
+            dalperfil.EliminarPermisodePerfil(p, codperfil);
 
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var dv = new BLL_DigitoVerificador_56PS();
+            dv.CalcularDV("PerfilPatente", DAL_56PS.ConsultarTabla("PerfilPatente"));
+            dv.CalcularDV("PerfilFamilia", DAL_56PS.ConsultarTabla("PerfilFamilia"));
         }
 
         public string ObtenerCodigoPerfil(Perfil_56PS p)
@@ -122,27 +116,33 @@ namespace BLL
 
         public void AsignarPermisosAPerfil(Perfil_56PS p, Perfil_56PS permiso)
         {
-            try
-            {
-                dalperfil.AsignarPermisosAPerfil(p, permiso);
+            if (p == null || string.IsNullOrWhiteSpace(p.Codigo))
+                throw new Exception("Debe seleccionar el perfil de destino.");
 
-                var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
-                Evento_56PS evento = new Evento_56PS(
-                    user.Dni,
-                    DateTime.Now,
-                    "Perfiles",
-                    "Asignar permisos a perfil",
-                    Evento_56PS.Criticidad.Medio
-                );
-                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
-                var dv = new BLL_DigitoVerificador_56PS();
-                dv.CalcularDV("PerfilPatente", DAL_56PS.ConsultarTabla("PerfilPatente"));
-                dv.CalcularDV("PerfilFamilia", DAL_56PS.ConsultarTabla("PerfilFamilia"));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            if (permiso == null || string.IsNullOrWhiteSpace(permiso.Codigo))
+                throw new Exception("Debe seleccionar un permiso o una familia.");
+
+            Perfil_56PS perfilActual = dalperfil.ObtenerPerfil(p.Codigo);
+            if (perfilActual.Contiene(permiso.Codigo))
+                throw new Exception("El perfil ya contiene ese elemento.");
+
+            if (permiso.esfamilia && !dalperfil.FamiliaEstaActiva(permiso.Codigo))
+                throw new Exception("La familia seleccionada no existe o se encuentra inactiva.");
+
+            dalperfil.AsignarPermisosAPerfil(p, permiso);
+
+            var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
+            Evento_56PS evento = new Evento_56PS(
+                user.Dni,
+                DateTime.Now,
+                "Perfiles",
+                "Asignar permisos a perfil",
+                Evento_56PS.Criticidad.Medio
+            );
+            new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
+            var dv = new BLL_DigitoVerificador_56PS();
+            dv.CalcularDV("PerfilPatente", DAL_56PS.ConsultarTabla("PerfilPatente"));
+            dv.CalcularDV("PerfilFamilia", DAL_56PS.ConsultarTabla("PerfilFamilia"));
         }
 
         public List<Perfil_56PS> ObtenerTodosLosPerfiles()

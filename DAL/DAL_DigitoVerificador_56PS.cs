@@ -33,16 +33,13 @@ namespace DAL
             return lista;
         }
 
-        // 💾 Inserta o actualiza el registro del DV de una tabla
-        public void GuardarDV(DigitoVerificador_56PS dv)
+         public void GuardarDV(DigitoVerificador_56PS dv)
         {
-            // 1️⃣ Verificar si ya existe registro para esa tabla
-            string queryExiste = "SELECT COUNT(*) FROM DigitoVerificador WHERE nombreTabla = @nombreTabla";
+             string queryExiste = "SELECT COUNT(*) FROM DigitoVerificador WHERE nombreTabla = @nombreTabla";
             SqlParameter[] paramExiste = { new SqlParameter("@nombreTabla", dv.tabla) };
             int existe = Convert.ToInt32(DAL_56PS.ExecuteScalar(queryExiste, paramExiste));
 
-            // 2️⃣ Elegir el query según exista o no
-            string query = existe > 0
+             string query = existe > 0
                 ? "UPDATE DigitoVerificador SET DVH = @DVH, DVV = @DVV WHERE nombreTabla = @nombreTabla"
                 : "INSERT INTO DigitoVerificador (nombreTabla, DVH, DVV) VALUES (@nombreTabla, @DVH, @DVV)";
 

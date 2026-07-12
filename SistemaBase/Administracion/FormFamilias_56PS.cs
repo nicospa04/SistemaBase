@@ -22,7 +22,6 @@ namespace SistemaBase.Administracion
         BLL_Familia_56PS bllfamilia = new BLL_Familia_56PS();
         BLL_Perfil_56PS bllperfil = new BLL_Perfil_56PS();
         BLL_Patente_56PS bllpatentes = new BLL_Patente_56PS();
-        List<Perfil_56PS> listapermisos = new List<Perfil_56PS>();
         Familia_56PS p = new Familia_56PS();
 
         public FormFamilias_56PS()
@@ -48,13 +47,6 @@ namespace SistemaBase.Administracion
             dataGridView1.ClearSelection();
 
             dataGridView1.CellClick += dataGridView1_CellClick;
-            button3.Click += button3_Click;
-            button6.Click += button6_Click;
-            button4.Click += button4_Click;
-            btncancelar.Click += btncancelar_Click;
-            btnbuscar.Click += btnbuscar_Click;
-            button2.Click += button2_Click;
-            btnmodificar.Click += btnmodificar_Click;
 
             SessionManager_56PS.getInstancia().Suscribir(this);
             actualizarIdioma();
@@ -95,11 +87,11 @@ namespace SistemaBase.Administracion
         public void MostrarFamilias()
         {
             List<Familia_56PS> familias = bllfamilia.ObtenerFamilias();
-            foreach (Familia_56PS f in familias)
-            {
-                listapermisos.Add(f);
-                cmbfa.Items.Add(f.Nombre);
-            }
+            cmbfa.DataSource = null;
+            cmbfa.DisplayMember = "Nombre";
+            cmbfa.ValueMember = "Codigo";
+            cmbfa.DataSource = familias;
+            cmbfa.SelectedIndex = -1;
         }
 
         private void MostrarFamiliaEnTreeView(string codigoFamilia)
@@ -140,11 +132,11 @@ namespace SistemaBase.Administracion
             try
             {
                 List<Patente_56PS> patentes = bllpatentes.ObtenerPatentes();
-                foreach (Patente_56PS pat in patentes)
-                {
-                    listapermisos.Add(pat);
-                    cmbpermiso.Items.Add(pat.Nombre);
-                }
+                cmbpermiso.DataSource = null;
+                cmbpermiso.DisplayMember = "Nombre";
+                cmbpermiso.ValueMember = "Codigo";
+                cmbpermiso.DataSource = patentes;
+                cmbpermiso.SelectedIndex = -1;
             }
             catch (Exception ex)
             {
@@ -180,11 +172,8 @@ namespace SistemaBase.Administracion
             try
             {
                 bllfamilia.CrearFamilia(p);
-                cmbfa.Text = null;
-                cmbpermiso.Text = null;
                 MostrarFamiliaEnTreeView(p.Codigo);
                 MostrarFamiliasenDatagrid();
-                cmbfa.Items.Clear();
                 MostrarFamilias();
                 Limpiar();
 
@@ -207,8 +196,12 @@ namespace SistemaBase.Administracion
                 return;
             }
 
-            string nombre = cmbfa.SelectedItem.ToString();
-            string codigo = listapermisos.Where(x => x.Nombre.Equals(nombre)).Select(x => x.Codigo).FirstOrDefault();
+            Familia_56PS familiaSeleccionada = cmbfa.SelectedItem as Familia_56PS;
+            if (familiaSeleccionada == null)
+            {
+                MessageBox.Show("Seleccionar una familia");
+                return;
+            }
 
             if (string.IsNullOrEmpty(txtcod.Text))
             {
@@ -224,22 +217,25 @@ namespace SistemaBase.Administracion
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return;
             }
 
-            Familia_56PS familia = new Familia_56PS();
-            familia.esfamilia = true;
-            familia.Nombre = cmbfa.SelectedItem.ToString();
-            familia.Codigo = codigo;
-            familia = bllfamilia.ObtenerFamilia(codigo);
-            p.esfamilia = true;
-            p.Codigo = codigofamilia;
+            Familia_56PS familia;
+            try
+            {
+                familia = bllfamilia.ObtenerFamilia(familiaSeleccionada.Codigo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
 
             try
             {
                 p.Agregar(familia);
                 bllfamilia.AsignarPermisoAFamilia(p, familia);
                 MostrarFamiliaEnTreeView(p.Codigo);
-                cmbpermiso.SelectedIndex = -1;
                 cmbfa.SelectedIndex = -1;
 
                 string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
@@ -264,8 +260,8 @@ namespace SistemaBase.Administracion
         {
             txtcod.Text = "";
             txtnomb.Text = "";
-            cmbfa.Text = "";
-            cmbpermiso.Text = "";
+            cmbfa.SelectedIndex = -1;
+            cmbpermiso.SelectedIndex = -1;
             p = new Familia_56PS();
         }
 
@@ -307,10 +303,9 @@ namespace SistemaBase.Administracion
             }
 
             TreeNode nodoseleccionado = treeView1.SelectedNode;
-            TreeNode raiz = treeView1.Nodes[0];
-            if (nodoseleccionado.Parent != raiz)
+            if (nodoseleccionado.Parent == null)
             {
-                MessageBox.Show("Solo se pueden eliminar permisos directos de la familia.");
+                MessageBox.Show("No se puede eliminar la familia raíz desde el árbol.");
                 return;
             }
 
@@ -322,7 +317,16 @@ namespace SistemaBase.Administracion
                 return;
             }
 
-            bllfamilia.EliminarPermisodeFamilia(permiso, txtcod.Text);
+            Familia_56PS familiaPadre = nodoseleccionado.Parent.Tag as Familia_56PS;
+            if (familiaPadre == null)
+            {
+                MessageBox.Show("No se pudo obtener la familia que contiene el elemento seleccionado.");
+                return;
+            }
+
+            try
+            {
+            bllfamilia.EliminarPermisodeFamilia(permiso, familiaPadre.Codigo);
             MessageBox.Show($"'{permiso.Nombre}' fue eliminado correctamente.");
 
             string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
@@ -331,6 +335,11 @@ namespace SistemaBase.Administracion
 
 
             MostrarFamiliaEnTreeView(txtcod.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
          private void btnmodificar_Click(object sender, EventArgs e)
@@ -349,7 +358,6 @@ namespace SistemaBase.Administracion
                 bllfamilia.ModificarFamilia(f);
                 MostrarFamiliaEnTreeView(f.Codigo);
                 MostrarFamiliasenDatagrid();
-                cmbfa.Items.Clear();
                 MostrarFamilias();
                 treeView1.Nodes.Clear();
                 txtcod.Text = "";
@@ -394,8 +402,12 @@ namespace SistemaBase.Administracion
                 return;
             }
 
-            string nombre = cmbpermiso.SelectedItem.ToString();
-            string codigo = listapermisos.Where(p => p.Nombre.Equals(nombre)).Select(p => p.Codigo).FirstOrDefault();
+            Patente_56PS patenteSeleccionada = cmbpermiso.SelectedItem as Patente_56PS;
+            if (patenteSeleccionada == null)
+            {
+                MessageBox.Show("Seleccionar un permiso");
+                return;
+            }
             if (string.IsNullOrEmpty(txtcod.Text))
             {
                  MessageBox.Show("Ingresar el código de la familia, seleccionar del datagrid");
@@ -410,13 +422,12 @@ namespace SistemaBase.Administracion
             catch (Exception ex)
             {
                 MessageBox.Show((ex.Message));
+                return;
             }
             Patente_56PS patente = new Patente_56PS();
-            patente.Nombre = nombre;
-            patente.Codigo = codigo;
+            patente.Nombre = patenteSeleccionada.Nombre;
+            patente.Codigo = patenteSeleccionada.Codigo;
             patente.esfamilia = false;
-            p.esfamilia = true;
-            p.Codigo = codigofamilia;
 
             try
             {
@@ -425,10 +436,6 @@ namespace SistemaBase.Administracion
                 bllfamilia.AsignarPermisoAFamilia(p, patente);
                 p = bllfamilia.ObtenerFamilia(codigofamilia);
                 MostrarFamiliaEnTreeView(p.Codigo);
-                cmbpermiso.SelectedIndex = -1;
-
-
-
             }
             catch (Exception ex)
             {
@@ -465,11 +472,8 @@ namespace SistemaBase.Administracion
             try
             {
                 bllfamilia.CrearFamilia(p);
-                cmbfa.Text = null;
-                cmbpermiso.Text = null;
                 MostrarFamiliaEnTreeView(p.Codigo);
                 MostrarFamiliasenDatagrid();
-                cmbfa.Items.Clear();
                 MostrarFamilias();
                 Limpiar();
 
@@ -501,7 +505,6 @@ namespace SistemaBase.Administracion
                 bllfamilia.ModificarFamilia(f);
                 MostrarFamiliaEnTreeView(f.Codigo);
                 MostrarFamiliasenDatagrid();
-                cmbfa.Items.Clear();
                 MostrarFamilias();
                 treeView1.Nodes.Clear();
                 txtcod.Text = "";
@@ -531,7 +534,6 @@ namespace SistemaBase.Administracion
             try
             {
                 bllfamilia.EliminarFamilia(f);
-                cmbfa.Items.Clear();
                 MostrarFamilias();
                 MostrarFamiliasenDatagrid();
                 treeView1.Nodes.Clear();

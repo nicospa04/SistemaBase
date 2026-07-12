@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,8 +12,9 @@ namespace DAL
 {
     public class DAL_BackUpRestore_56PS
     {
-        private string connectionString = DAL_625NS.DAL_56PS.obtenerConexion();
         private string dbname = DAL_625NS.DAL_56PS.obtenerdbName();
+        private string connectionString => DAL_625NS.DAL_56PS.obtenerConexion();
+        private string masterConnectionString => DAL_625NS.DAL_56PS.obtenerConexionMaster();
 
         public void RealizarBackup(string backupPath)
         {
@@ -20,32 +23,35 @@ namespace DAL
 
             string nombreArchivo = $"MiSistema.BCK_{DateTime.Now:ddMMyy_HHmm}.bak";
             string rutaDestinoUsuario = Path.Combine(backupPath, nombreArchivo);
-            string carpetaBackupServidor = ObtenerCarpetaBackupServidor();
-            string rutaBackupServidor = Path.Combine(carpetaBackupServidor, nombreArchivo);
+            Directory.CreateDirectory(backupPath);
 
-            string comandoBackup = $"BACKUP DATABASE [{dbname}] TO DISK = @RutaCompleta WITH INIT";
-
-            var parametros = new SqlParameter[]
-            {
-                new SqlParameter("@RutaCompleta", rutaBackupServidor)
-            };
-
-            DAL_625NS.DAL_56PS.ExecuteNonQuery(comandoBackup, parametros);
-
+            Exception errorBackupDirecto = null;
             try
             {
-                if (!RutasIguales(rutaBackupServidor, rutaDestinoUsuario))
-                {
-                    File.Copy(rutaBackupServidor, rutaDestinoUsuario, true);
-                    TryDelete(rutaBackupServidor);
-                }
+                EjecutarBackupEnRuta(rutaDestinoUsuario);
+                return;
+            }
+            catch (Exception ex)
+            {
+                errorBackupDirecto = ex;
+            }
+
+            string rutaBackupTrabajo = Path.Combine(ObtenerCarpetaTrabajoServidor(), nombreArchivo);
+            try
+            {
+                EjecutarBackupEnRuta(rutaBackupTrabajo);
+                File.Copy(rutaBackupTrabajo, rutaDestinoUsuario, true);
             }
             catch (Exception ex)
             {
                 throw new Exception(
-                    $"El backup se generó en '{rutaBackupServidor}', pero no se pudo copiar a '{rutaDestinoUsuario}'. Detalle: {ex.Message}",
+                    $"No se pudo guardar el backup en '{rutaDestinoUsuario}'. Detalle: {ex.Message}. Primer intento: {errorBackupDirecto.Message}",
                     ex
                 );
+            }
+            finally
+            {
+                TryDelete(rutaBackupTrabajo);
             }
         }
 
@@ -57,7 +63,6 @@ namespace DAL
             if (!File.Exists(backupFilePath))
                 throw new Exception("El archivo de respaldo seleccionado no existe.");
 
-            string masterConnectionString = connectionString.Replace(dbname, "master");
             string rutaRestoreServidor = PrepararArchivoRestoreParaServidor(backupFilePath);
 
             try
@@ -88,36 +93,39 @@ namespace DAL
             }
         }
 
-        static string Ins;
         public void RealizarRestoreIniciar(string instancia)
         {
-            Ins = instancia;
-            DAL_625NS.DAL_56PS.PasarleInstancia(Ins);
+            DAL_625NS.DAL_56PS.PasarleInstancia(instancia);
 
             string rutaPrimeraVez = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "entroInstalador.txt");
+            bool primeraEjecucionInstalador = File.Exists(rutaPrimeraVez);
+            bool existeBase = ExisteBaseDeDatos(dbname);
+            bool baseInicializada = existeBase && BaseDatosInicializada();
 
-            if (File.Exists(rutaPrimeraVez))
+            if (!existeBase || !baseInicializada)
             {
-
                 InicializarSistema();
+            }
 
-
+            if (primeraEjecucionInstalador)
+            {
                 File.Delete(rutaPrimeraVez);
             }
         }
         private void InicializarSistema()
         {
-            if (ExisteBaseDeDatos("SistemaMedicoDB"))
-                DAL_625NS.DAL_56PS.EjecutarScript("Script_Alter.sql");
+            bool existeBase = ExisteBaseDeDatos(dbname);
+            bool baseInicializada = existeBase && BaseDatosInicializada();
+
+            if (existeBase && baseInicializada)
+                DAL_625NS.DAL_56PS.EjecutarScript(ObtenerRutaScript("Script_Alter.sql"));
             else
-                DAL_625NS.DAL_56PS.EjecutarScript("Script_Create.sql");
+                DAL_625NS.DAL_56PS.EjecutarScript(ObtenerRutaScript("Script_Create.sql"));
         }
 
         public bool ExisteBaseDeDatos(string nombreBD)
         {
-            string masterConn = $"Data Source={Ins};Database=master;Trusted_Connection=True;";
-
-            using (var conn = new SqlConnection(masterConn))
+            using (var conn = new SqlConnection(masterConnectionString))
             {
                 conn.Open();
 
@@ -129,6 +137,32 @@ namespace DAL
 
                 return result != DBNull.Value && result != null;
             }
+        }
+
+        private bool BaseDatosInicializada()
+        {
+            if (!ExisteBaseDeDatos(dbname))
+                return false;
+
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SELECT OBJECT_ID(N'dbo.Usuario_56PS', N'U')", conn))
+                {
+                    object result = cmd.ExecuteScalar();
+                    return result != DBNull.Value && result != null;
+                }
+            }
+        }
+
+        private string ObtenerRutaScript(string nombreScript)
+        {
+            string ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nombreScript);
+            if (!File.Exists(ruta))
+                throw new Exception($"No se encontro el script de instalacion '{nombreScript}' en '{AppDomain.CurrentDomain.BaseDirectory}'.");
+
+            return ruta;
         }
 
         private string ObtenerCarpetaBackupServidor()
@@ -164,8 +198,8 @@ SELECT @path;";
 
         private string PrepararArchivoRestoreParaServidor(string backupFilePath)
         {
-            string carpetaBackupServidor = ObtenerCarpetaBackupServidor();
-            string rutaRestoreServidor = Path.Combine(carpetaBackupServidor, Path.GetFileName(backupFilePath));
+            string carpetaTrabajoServidor = ObtenerCarpetaTrabajoServidor();
+            string rutaRestoreServidor = Path.Combine(carpetaTrabajoServidor, Path.GetFileName(backupFilePath));
 
             if (!RutasIguales(backupFilePath, rutaRestoreServidor))
             {
@@ -182,6 +216,51 @@ SELECT @path;";
             return string.Equals(ruta1, ruta2, StringComparison.OrdinalIgnoreCase);
         }
 
+        private void EjecutarBackupEnRuta(string rutaCompleta)
+        {
+            string comandoBackup = $"BACKUP DATABASE [{dbname}] TO DISK = @RutaCompleta WITH INIT";
+
+            var parametros = new SqlParameter[]
+            {
+                new SqlParameter("@RutaCompleta", rutaCompleta)
+            };
+
+            DAL_625NS.DAL_56PS.ExecuteNonQuery(comandoBackup, parametros);
+        }
+
+        private string ObtenerCarpetaTrabajoServidor()
+        {
+            string carpeta = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                "SistemaBase",
+                "Backups");
+
+            Directory.CreateDirectory(carpeta);
+            DarPermisosCarpeta(carpeta);
+            return carpeta;
+        }
+
+        private void DarPermisosCarpeta(string carpeta)
+        {
+            try
+            {
+                DirectorySecurity seguridad = Directory.GetAccessControl(carpeta);
+                SecurityIdentifier todos = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                FileSystemAccessRule regla = new FileSystemAccessRule(
+                    todos,
+                    FileSystemRights.Modify,
+                    InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+                    PropagationFlags.None,
+                    AccessControlType.Allow);
+
+                seguridad.SetAccessRule(regla);
+                Directory.SetAccessControl(carpeta, seguridad);
+            }
+            catch
+            {
+            }
+        }
+
         private void TryDelete(string archivo)
         {
             try
@@ -193,7 +272,6 @@ SELECT @path;";
             {
             }
         }
-
 
     }
 }

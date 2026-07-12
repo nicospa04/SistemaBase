@@ -11,6 +11,12 @@ namespace BLL
     {
         private DAL_BackUpRestore_56PS dalbackup = new DAL_BackUpRestore_56PS();
 
+        public static void Instalador(string instancia)
+        {
+            DAL_BackUpRestore_56PS a = new DAL_BackUpRestore_56PS();
+            a.RealizarRestoreIniciar(instancia);
+        }
+
         public void RealizarBackup(string backupPath)
         {
             dalbackup.RealizarBackup(backupPath);

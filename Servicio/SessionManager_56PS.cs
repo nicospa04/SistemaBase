@@ -13,11 +13,16 @@ namespace ClassLibrary2
         private static SessionManager_56PS instancia;
         private Usuario_56PS usuarioActivo;
 
-        public string idiomaActual { get; private set; }
+        public Idioma_56PS idiomaActual { get; private set; }
+        public event EventHandler CierreSistemaSolicitado;
         private List<IdiomaObserver_56PS> Observadores;
 
 
-        private SessionManager_56PS() { Observadores = new List<IdiomaObserver_56PS>(); }
+        private SessionManager_56PS()
+        {
+            Observadores = new List<IdiomaObserver_56PS>();
+            idiomaActual = new Idioma_56PS("ES");
+        }
 
 
         public static SessionManager_56PS getInstancia()
@@ -28,8 +33,11 @@ namespace ClassLibrary2
             return instancia;
         }
 
-        public void CambiarIdioma(string idiomaNuevo)
+        public void CambiarIdioma(Idioma_56PS idiomaNuevo)
         {
+            if (idiomaNuevo == null || string.IsNullOrWhiteSpace(idiomaNuevo.tipo))
+                throw new ArgumentException("Debe indicar un idioma válido.", nameof(idiomaNuevo));
+
             idiomaActual = idiomaNuevo;
             Notificar();
         }
@@ -70,6 +78,11 @@ namespace ClassLibrary2
         public bool haySesionActiva()
         {
             return usuarioActivo != null;
+        }
+
+        public void SolicitarCierreSistema()
+        {
+            CierreSistemaSolicitado?.Invoke(this, EventArgs.Empty);
         }
 
  

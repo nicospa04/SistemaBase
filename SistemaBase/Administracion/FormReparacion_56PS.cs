@@ -32,6 +32,7 @@ namespace SistemaBase.Administracion
 
             SessionManager_56PS.getInstancia().Suscribir(this);
             actualizarIdioma();
+            CargarErrores();
             btnrecalcular.Enabled = TienePermiso(Permisos_56PS.RecalcularDigitosVerificadores);
             btnrestore.Enabled = TienePermiso(Permisos_56PS.RestaurarBackup);
         }
@@ -52,15 +53,22 @@ namespace SistemaBase.Administracion
             try
             {
                 blldv.RecalcularDV();
-                MessageBox.Show("Se guardaron los DV en la tabla");//""
+                var revision = blldv.Revision();
+                Errores = revision.tablasConError;
 
+                if (revision.tablaDVVacia && Errores.Count == 0)
+                    Errores.Add("Tabla DigitoVerificador sin registros");
 
+                CargarErrores();
 
-                var a = SessionManager_56PS.getInstancia();
-                a.cerrarSesion();
-                MenuPrincipal_56PS frm = new MenuPrincipal_56PS();
-                frm.Show();
-                this.Close();
+                if (revision.tablaDVVacia || Errores.Count > 0)
+                {
+                    MessageBox.Show("Se recalcularon los DV, pero todavia se detectan inconsistencias.");
+                    return;
+                }
+
+                MessageBox.Show("Se recalcularon los DV correctamente. Debe iniciar sesión nuevamente.");
+                CerrarSesionYVolverAlMenu();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
@@ -79,19 +87,14 @@ namespace SistemaBase.Administracion
 
                     new BLL_BackUpRestore_56PS().RealizarRestore(ruta);
 
-                    MessageBox.Show("Restauración realizada correctamente");
+                    MessageBox.Show("Restauración realizada correctamente. El sistema se cerrará para volver a iniciar con la base restaurada.");
 
                     string aa = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
 
                     Evento_56PS ee = new Evento_56PS(aa, DateTime.Now, "Reparaciones", "Restauracion de respaldo realizada", Evento_56PS.Criticidad.MuyAlto);
                     new BLL_BitacoraEvento_56PS().RegistrarEvento(ee);
 
-
-                    var a = SessionManager_56PS.getInstancia();
-                    a.cerrarSesion();
-                    MenuPrincipal_56PS frm = new MenuPrincipal_56PS();
-                    frm.Show();
-                    this.Close();
+                    SessionManager_56PS.getInstancia().SolicitarCierreSistema();
 
                 }
                 else
@@ -107,17 +110,43 @@ namespace SistemaBase.Administracion
 
         private void btnsalir_Click(object sender, EventArgs e)
         {
-            var a = SessionManager_56PS.getInstancia();
-            a.cerrarSesion();
-            MenuPrincipal_56PS frm = new MenuPrincipal_56PS();
-            frm.Show();
-            this.Close();
+            CerrarSesionYVolverAlMenu();
         }
 
         private bool TienePermiso(string permiso)
         {
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
             return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
+        }
+
+        private void CargarErrores()
+        {
+            listBox1.Items.Clear();
+
+            if (Errores == null || Errores.Count == 0)
+            {
+                listBox1.Items.Add("No se detectaron tablas con error.");
+                return;
+            }
+
+            foreach (string error in Errores)
+            {
+                listBox1.Items.Add(error);
+            }
+        }
+
+        private void CerrarSesionYVolverAlMenu()
+        {
+            SessionManager_56PS.getInstancia().cerrarSesion();
+
+            MenuPrincipal_56PS menu = this.MdiParent as MenuPrincipal_56PS;
+            if (menu == null)
+                menu = Application.OpenForms["MenuPrincipal_56PS"] as MenuPrincipal_56PS;
+
+            if (menu != null)
+                menu.AplicarEstadoSinSesion();
+
+            this.Close();
         }
     }
 }

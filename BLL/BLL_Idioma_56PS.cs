@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Windows.Forms;
 using ClassLibrary2;
+using Servicio;
 
 
 namespace BLL
@@ -41,9 +42,46 @@ namespace BLL
                 if (ctrl is MenuStrip menuStrip)
                     TraducirItemsMenu(menuStrip.Items, traducciones);
 
+                if (ctrl is DataGridView dataGridView)
+                {
+                    TraducirColumnas(dataGridView, traducciones);
+                    dataGridView.DataBindingComplete -= DataGridView_DataBindingComplete;
+                    dataGridView.DataBindingComplete += DataGridView_DataBindingComplete;
+                }
+
                 if (ctrl.HasChildren)
                     TraducirControles(ctrl.Controls, traducciones);
             }
+        }
+
+        private void TraducirColumnas(DataGridView dataGridView, Dictionary<string, string> traducciones)
+        {
+            foreach (DataGridViewColumn columna in dataGridView.Columns)
+            {
+                string nombre = string.IsNullOrWhiteSpace(columna.DataPropertyName)
+                    ? columna.Name
+                    : columna.DataPropertyName;
+                string clave = "grid" + nombre;
+
+                if (traducciones.ContainsKey(clave))
+                    columna.HeaderText = traducciones[clave];
+                else
+                {
+                    KeyValuePair<string, string> traduccion = traducciones.FirstOrDefault(item => string.Equals(item.Key, clave, StringComparison.OrdinalIgnoreCase));
+                    if (!string.IsNullOrEmpty(traduccion.Key))
+                        columna.HeaderText = traduccion.Value;
+                }
+            }
+        }
+
+        private static void DataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView dataGridView = sender as DataGridView;
+            if (dataGridView == null)
+                return;
+
+            BLL_Idioma_56PS traductor = new BLL_Idioma_56PS();
+            traductor.TraducirColumnas(dataGridView, traductor.obtenerIdioma(traductor.ObtenerTipoDesdeSession()));
         }
 
         private void TraducirItemsMenu(ToolStripItemCollection items, Dictionary<string, string> traducciones)
@@ -60,8 +98,8 @@ namespace BLL
 
         private string ObtenerTipoDesdeSession()
         {
-            string idiomaActual = SessionManager_56PS.getInstancia().idiomaActual;
-            return string.IsNullOrEmpty(idiomaActual) ? "ES" : idiomaActual;
+            Idioma_56PS idiomaActual = SessionManager_56PS.getInstancia().idiomaActual;
+            return idiomaActual == null || string.IsNullOrEmpty(idiomaActual.tipo) ? "ES" : idiomaActual.tipo;
         }
 
     }

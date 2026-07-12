@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BLL.BLL_BackUpRestore_56PS">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAABAAAE=</HashCode>
+      <FileName>BLL_BackUpRestore_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClassLibrary3.BLL_BitacoraEvento_56PS">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAwAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BLL_BitacoraEvento_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.BLL_DigitoVerificador_56PS">
+    <Position X="5.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAACAAAAAAAAAAAAAAAAEAiAAAAAgAACAACAAA=</HashCode>
+      <FileName>BLL_DigitoVerificador_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.BLL_Idioma_56PS">
+    <Position X="1.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAEAAAAAAQAAAAAABAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BLL_Idioma_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.BLL_Familia_56PS">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAgAAABAAAAACAAAAAAACAAAAAiA=</HashCode>
+      <FileName>BLL_Familia_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.BLL_Patente_56PS">
+    <Position X="5.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>BLL_Patente_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.BLL_Perfil_56PS">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAABQAgAAAAAABAAAAAAAAIAAAAAAASg=</HashCode>
+      <FileName>BLL_Perfil_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.BLL_Usuario_56PS">
+    <Position X="3.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAgCAAAIAEgAAAIACAgACAAAQAAAAAEAAABAAAgAAA=</HashCode>
+      <FileName>BLL_Usuario_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

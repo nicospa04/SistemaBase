@@ -132,23 +132,32 @@ namespace SistemaBase
 
             bool tablavacia = revision.tablaDVVacia;
             List<string> errores = revision.tablasConError;
+            bool puedeRepararSistema = TieneAlgunPermiso(usuarioLogueado.Perfil, Permisos_56PS.RecalcularDigitosVerificadores, Permisos_56PS.RestaurarBackup);
+            MenuPrincipal_56PS menu = Application.OpenForms["MenuPrincipal_56PS"] as MenuPrincipal_56PS;
 
-            if (tablavacia)
+            if (tablavacia || errores.Count > 0)
             {
-                MessageBox.Show("No existen registros en la tabla DigitoVerificador.");
-            }
-            else if (errores.Count > 0)
-            {
-                MessageBox.Show("Se detectaron inconsistencias en la base de datos");
-
-                if (TieneAlgunPermiso(usuarioLogueado.Perfil, Permisos_56PS.RecalcularDigitosVerificadores, Permisos_56PS.RestaurarBackup))
+                if (puedeRepararSistema)
                 {
+                    if (tablavacia && errores.Count == 0)
+                        errores.Add("Tabla DigitoVerificador sin registros");
+
+                    MessageBox.Show("Se detectaron inconsistencias en la base de datos");
                     SessionManager_56PS.getInstancia().iniciarSesion(usuarioLogueado);
-                    SessionManager_56PS.getInstancia().CambiarIdioma(usuarioLogueado.idioma);
+                    SessionManager_56PS.getInstancia().CambiarIdioma(new Idioma_56PS(usuarioLogueado.idioma));
+
+                    if (menu != null)
+                        menu.AplicarEstadoSesion(usuarioLogueado.Perfil);
 
                     FormReparacion_56PS form = new FormReparacion_56PS(errores);
+                    if (menu != null)
+                    {
+                        form.MdiParent = menu;
+                        form.WindowState = FormWindowState.Maximized;
+                    }
+
                     form.Show();
-                    this.Hide();
+                    this.Close();
                     return;
                 }
                 else
@@ -160,7 +169,7 @@ namespace SistemaBase
 
 
             SessionManager_56PS.getInstancia().iniciarSesion(usuarioLogueado);
-            SessionManager_56PS.getInstancia().CambiarIdioma(usuarioLogueado.idioma);
+            SessionManager_56PS.getInstancia().CambiarIdioma(new Idioma_56PS(usuarioLogueado.idioma));
 
 
 
@@ -184,36 +193,8 @@ namespace SistemaBase
                 var userr = SessionManager_56PS.getInstancia().getUsuarioActivo();
                 BLL_Usuario_56PS bll = new BLL_Usuario_56PS();
 
-
-                MenuPrincipal_56PS menu = Application.OpenForms["MenuPrincipal_56PS"] as MenuPrincipal_56PS;
-
-
-
-        
-            menu.MenuAdministracion.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Usuarios);
-            menu.MenuCambiarContraseña.Enabled = TienePermiso(userr.Perfil, Permisos_56PS.CambiarContrasena);
-
-            menu.MenuFamilias.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Familias);
-
-            menu.MenuPerfiles.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Perfiles);
-
-            menu.MenuAuditoria.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Auditoria);
-
-            menu.MenuCambiarIdioma.Enabled = TienePermiso(userr.Perfil, Permisos_56PS.CambiarIdioma);
-
-            if(TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Administracion))
-            {
-                menu.menuAdmin.Enabled = true;
-            }
-
-            menu.MenuAdministracion.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Usuarios);
-            menu.MenuCambiarContraseña.Enabled = TienePermiso(userr.Perfil, Permisos_56PS.CambiarContrasena);
-            menu.MenuFamilias.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Familias);
-            menu.MenuPerfiles.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Perfiles);
-            menu.MenuAuditoria.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Auditoria);
-            menu.MenuCambiarIdioma.Enabled = TienePermiso(userr.Perfil, Permisos_56PS.CambiarIdioma);
-            menu.MenuGestionRespaldo.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.RealizarBackup, Permisos_56PS.RestaurarBackup);
-            menu.menuAdmin.Enabled = TieneAlgunPermiso(userr.Perfil, Permisos_56PS.Administracion);
+                if (menu != null)
+                    menu.AplicarEstadoSesion(userr.Perfil);
 
             // Verificar si el usuario debe cambiar contraseña usando la bitácora
             if (DebeCambiarContraseña(userr.Dni))

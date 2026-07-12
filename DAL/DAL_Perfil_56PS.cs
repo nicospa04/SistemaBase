@@ -71,6 +71,8 @@ namespace DAL_625NS
 
         public void AsignarPermisoAFamilia(Perfil_56PS permiso, Familia_56PS familia)
         {
+            int filasAfectadas;
+
             if (permiso.esfamilia)
             {
                 string query = "INSERT INTO FamiliaFamilia (CodigoFamilia, CodFamiliaHija) VALUES (@codfam, @codhija)";
@@ -80,7 +82,7 @@ namespace DAL_625NS
                     new SqlParameter("@codhija", permiso.Codigo)
                 };
 
-                DAL_56PS.ExecuteNonQuery(query, parametros);
+                filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
             }
             else
             {
@@ -91,8 +93,11 @@ namespace DAL_625NS
                     new SqlParameter("@codpat", permiso.Codigo)
                 };
 
-                DAL_56PS.ExecuteNonQuery(query, parametros);
+                filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
             }
+
+            if (filasAfectadas != 1)
+                throw new Exception("No se pudo asignar el elemento a la familia.");
         }
 
         public List<Patente_56PS> ObtenerPatentes()
@@ -124,16 +129,53 @@ namespace DAL_625NS
 
         public bool VerificarAsignacionFamilia(Familia_56PS f)
         {
-            string query = "SELECT COUNT(*) FROM PerfilFamilia WHERE CodigoFamilia = @cod";
+            string query = @"SELECT
+                (SELECT COUNT(*) FROM PerfilFamilia WHERE CodigoFamilia = @cod) +
+                (SELECT COUNT(*) FROM FamiliaPatente WHERE CodigoFamilia = @cod) +
+                (SELECT COUNT(*) FROM FamiliaFamilia WHERE CodigoFamilia = @cod OR CodFamiliaHija = @cod)";
             SqlParameter[] parametros = { new SqlParameter("@cod", f.Codigo) };
 
             int resultado = Convert.ToInt32(DAL_56PS.ExecuteScalar(query, parametros));
             return resultado > 0;
         }
 
+        public bool FamiliaEstaActiva(string codigo)
+        {
+            string query = "SELECT COUNT(*) FROM Familias WHERE CodigoFamilia = @cod AND Activa = 1";
+            SqlParameter[] parametros = { new SqlParameter("@cod", codigo) };
+            return Convert.ToInt32(DAL_56PS.ExecuteScalar(query, parametros)) > 0;
+        }
+
+        public bool FamiliaContiene(string codigoFamilia, string codigoBuscado)
+        {
+            string query = @"WITH Jerarquia AS
+            (
+                SELECT CodFamiliaHija,
+                    CAST('|' + CodigoFamilia + '|' + CodFamiliaHija + '|' AS VARCHAR(MAX)) AS Ruta
+                FROM FamiliaFamilia
+                WHERE CodigoFamilia = @origen
+
+                UNION ALL
+
+                SELECT ff.CodFamiliaHija,
+                    CAST(j.Ruta + ff.CodFamiliaHija + '|' AS VARCHAR(MAX))
+                FROM FamiliaFamilia ff
+                INNER JOIN Jerarquia j ON ff.CodigoFamilia = j.CodFamiliaHija
+                WHERE j.Ruta NOT LIKE '%|' + ff.CodFamiliaHija + '|%'
+            )
+            SELECT COUNT(*) FROM Jerarquia WHERE CodFamiliaHija = @destino OPTION (MAXRECURSION 32767);";
+
+            SqlParameter[] parametros = {
+                new SqlParameter("@origen", codigoFamilia),
+                new SqlParameter("@destino", codigoBuscado)
+            };
+
+            return Convert.ToInt32(DAL_56PS.ExecuteScalar(query, parametros)) > 0;
+        }
+
         public List<Perfil_56PS> ObtenerTodosLosPerfiles()
         {
-            string query = "SELECT * FROM Perfiles";
+            string query = "SELECT * FROM Perfiles WHERE Activo = 1";
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, null);
 
@@ -145,6 +187,7 @@ namespace DAL_625NS
                 p.Nombre = row["Nombre"].ToString();
                 p.Codigo = row["CodigoPerfil"].ToString();
                 p.activo = Convert.ToBoolean(row["Activo"]);
+                p.esfamilia = true;
                 perfiles.Add(p);
             }
 
@@ -198,6 +241,8 @@ namespace DAL_625NS
                 Familia_56PS f = new Familia_56PS();
                 f.Nombre = row["Nombre"].ToString();
                 f.Codigo = row["CodigoFamilia"].ToString();
+                f.esfamilia = true;
+                f.activo = true;
                 familias.Add(f);
             }
 
@@ -233,8 +278,11 @@ namespace DAL_625NS
 
         public bool VerificarExistenciaFamiliaNombre(Familia_56PS f)
         {
-            string query = "SELECT COUNT(*) FROM Familias WHERE Nombre = @nom";
-            SqlParameter[] parametros = { new SqlParameter("@nom", f.Nombre) };
+            string query = "SELECT COUNT(*) FROM Familias WHERE Nombre = @nom AND CodigoFamilia <> @cod";
+            SqlParameter[] parametros = {
+                new SqlParameter("@nom", f.Nombre),
+                new SqlParameter("@cod", f.Codigo)
+            };
 
             int resultado = Convert.ToInt32(DAL_56PS.ExecuteScalar(query, parametros));
             return resultado > 0;
@@ -261,6 +309,8 @@ namespace DAL_625NS
 
         public void EliminarPermisodePerfil(Perfil_56PS p, string codperfil)
         {
+            int filasAfectadas;
+
             if (p.esfamilia)
             {
                 string query = "DELETE FROM PerfilFamilia WHERE CodigoPerfil = @codperf AND CodigoFamilia = @codfam";
@@ -270,7 +320,7 @@ namespace DAL_625NS
                     new SqlParameter("@codperf", codperfil)
                 };
 
-                DAL_56PS.ExecuteNonQuery(query, parametros);
+                filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
             }
             else
             {
@@ -281,12 +331,17 @@ namespace DAL_625NS
                     new SqlParameter("@codperf", codperfil)
                 };
 
-                DAL_56PS.ExecuteNonQuery(query, parametros);
+                filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
             }
+
+            if (filasAfectadas != 1)
+                throw new Exception("La asignación seleccionada ya no existe en el perfil.");
         }
 
         public void EliminarPermisodeFamilia(Perfil_56PS p, string codperfil)
         {
+            int filasAfectadas;
+
             if (p.esfamilia)
             {
                 string query = "DELETE FROM FamiliaFamilia WHERE CodigoFamilia = @codfam AND CodFamiliaHija = @codfamhija";
@@ -296,7 +351,7 @@ namespace DAL_625NS
                     new SqlParameter("@codfam", codperfil)
                 };
 
-                DAL_56PS.ExecuteNonQuery(query, parametros);
+                filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
             }
             else
             {
@@ -307,8 +362,11 @@ namespace DAL_625NS
                     new SqlParameter("@codfam", codperfil)
                 };
 
-                DAL_56PS.ExecuteNonQuery(query, parametros);
+                filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
             }
+
+            if (filasAfectadas != 1)
+                throw new Exception("La asignación seleccionada ya no existe en la familia.");
         }
 
         public string ObtenerCodigoPerfil(Perfil_56PS p)
@@ -365,11 +423,14 @@ namespace DAL_625NS
         public Perfil_56PS ObtenerPerfil(string codigo)
         {
             // Obtener nombre del perfil
-            string queryNom = "SELECT Nombre FROM Perfiles WHERE CodigoPerfil = @cod";
+            string queryNom = "SELECT Nombre FROM Perfiles WHERE CodigoPerfil = @cod AND Activo = 1";
             SqlParameter[] paramNom = { new SqlParameter("@cod", codigo) };
 
             object result = DAL_56PS.ExecuteScalar(queryNom, paramNom);
-            string nombrePerfil = result != null ? result.ToString() : "(Desconocido)";
+            if (result == null)
+                throw new Exception("El perfil no existe o se encuentra inactivo.");
+
+            string nombrePerfil = result.ToString();
 
             Perfil_56PS raiz = new Perfil_56PS
             {
@@ -381,7 +442,7 @@ namespace DAL_625NS
             // Obtener familias del perfil
             string queryFam = "SELECT f.CodigoFamilia, f.Nombre FROM Familias f " +
                 "INNER JOIN PerfilFamilia pf ON f.CodigoFamilia = pf.CodigoFamilia " +
-                "WHERE pf.CodigoPerfil = @cod";
+                "WHERE pf.CodigoPerfil = @cod AND f.Activa = 1";
             SqlParameter[] paramFam = { new SqlParameter("@cod", codigo) };
 
             DataSet dsFam = DAL_56PS.ExecuteDataSet(queryFam, paramFam);
@@ -400,7 +461,7 @@ namespace DAL_625NS
 
             foreach (var fam in familias)
             {
-                CargarHijosFamilia(fam);
+                CargarHijosFamilia(fam, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { fam.Codigo });
                 raiz.Agregar(fam);
             }
 
@@ -428,14 +489,14 @@ namespace DAL_625NS
 
         public Familia_56PS ObtenerFamilia(string codigo)
         {
-            string query = "SELECT * FROM Familias WHERE CodigoFamilia = @cod";
+            string query = "SELECT * FROM Familias WHERE CodigoFamilia = @cod AND Activa = 1";
             SqlParameter[] parametros = { new SqlParameter("@cod", codigo) };
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, parametros);
 
             if (ds.Tables[0].Rows.Count == 0)
             {
-                throw new Exception("ex6");
+                throw new Exception("La familia no existe o se encuentra inactiva.");
             }
 
             DataRow row = ds.Tables[0].Rows[0];
@@ -444,20 +505,21 @@ namespace DAL_625NS
             {
                 Codigo = row["CodigoFamilia"].ToString(),
                 Nombre = row["Nombre"].ToString(),
-                esfamilia = true
+                esfamilia = true,
+                activo = true
             };
 
-            CargarHijosFamilia(familia);
+            CargarHijosFamilia(familia, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { familia.Codigo });
 
             return familia;
         }
 
-        private void CargarHijosFamilia(Familia_56PS familia)
+        private void CargarHijosFamilia(Familia_56PS familia, HashSet<string> ruta)
         {
             // Cargar familias hijas
             string queryHijas = "SELECT f.CodigoFamilia, f.Nombre FROM FamiliaFamilia ff " +
                 "INNER JOIN Familias f ON ff.CodFamiliaHija = f.CodigoFamilia " +
-                "WHERE ff.CodigoFamilia = @cod";
+                "WHERE ff.CodigoFamilia = @cod AND f.Activa = 1";
             SqlParameter[] paramHijas = { new SqlParameter("@cod", familia.Codigo) };
 
             DataSet dsHijas = DAL_56PS.ExecuteDataSet(queryHijas, paramHijas);
@@ -474,8 +536,12 @@ namespace DAL_625NS
 
             foreach (var hija in familiasHijas)
             {
-                CargarHijosFamilia(hija);
+                if (!ruta.Add(hija.Codigo))
+                    continue;
+
+                CargarHijosFamilia(hija, ruta);
                 familia.Agregar(hija);
+                ruta.Remove(hija.Codigo);
             }
 
             // Cargar patentes

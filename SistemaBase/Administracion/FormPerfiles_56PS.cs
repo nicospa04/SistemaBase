@@ -19,7 +19,6 @@ namespace SistemaBase.Administracion
     public partial class FormPerfiles_56PS : Form, IdiomaObserver_56PS
     {
         BLL_Perfil_56PS bllperfil = new BLL_Perfil_56PS();
-        List<Perfil_56PS> listapermisos = new List<Perfil_56PS>();
         BLL_Patente_56PS bllpatente = new BLL_Patente_56PS();
         BLL_Familia_56PS bllfamilia = new BLL_Familia_56PS();
         Perfil_56PS p = new Perfil_56PS();
@@ -48,7 +47,6 @@ namespace SistemaBase.Administracion
             dataGridView1.ClearSelection();
 
             dataGridView1.CellClick += dataGridView1_CellClick;
-            button3.Click += button3_Click;
 
             SessionManager_56PS.getInstancia().Suscribir(this);
             actualizarIdioma();
@@ -85,21 +83,21 @@ namespace SistemaBase.Administracion
         public void MostrarFamilias()
         {
             List<Familia_56PS> familias = bllfamilia.ObtenerFamilias();
-            foreach (Familia_56PS f in familias)
-            {
-                listapermisos.Add(f);
-                cmbfa.Items.Add(f.Nombre);
-            }
+            cmbfa.DataSource = null;
+            cmbfa.DisplayMember = "Nombre";
+            cmbfa.ValueMember = "Codigo";
+            cmbfa.DataSource = familias;
+            cmbfa.SelectedIndex = -1;
         }
 
         public void MostrarPermisos()
         {
             List<Patente_56PS> patentes = bllpatente.ObtenerPatentes();
-            foreach (Patente_56PS pat in patentes)
-            {
-                listapermisos.Add(pat);
-                cmbpermiso.Items.Add(pat.Nombre);
-            }
+            cmbpermiso.DataSource = null;
+            cmbpermiso.DisplayMember = "Nombre";
+            cmbpermiso.ValueMember = "Codigo";
+            cmbpermiso.DataSource = patentes;
+            cmbpermiso.SelectedIndex = -1;
         }
 
         private void MostrarPerfilEnTreeView(string cod)
@@ -141,8 +139,12 @@ namespace SistemaBase.Administracion
                 return;
             }
 
-            string nombre = cmbpermiso.SelectedItem.ToString();
-            string codigo = listapermisos.Where(x => x.Nombre.Equals(nombre)).Select(x => x.Codigo).FirstOrDefault();
+            Patente_56PS patenteSeleccionada = cmbpermiso.SelectedItem as Patente_56PS;
+            if (patenteSeleccionada == null)
+            {
+                MessageBox.Show("Seleccionar un permiso");
+                return;
+            }
 
             if (string.IsNullOrEmpty(txtcod.Text))
             {
@@ -162,8 +164,8 @@ namespace SistemaBase.Administracion
             }
 
             Patente_56PS patente = new Patente_56PS();
-            patente.Nombre = nombre;
-            patente.Codigo = codigo;
+            patente.Nombre = patenteSeleccionada.Nombre;
+            patente.Codigo = patenteSeleccionada.Codigo;
             patente.esfamilia = false;
             p.esfamilia = true;
             p.Codigo = codperfil;
@@ -216,7 +218,7 @@ namespace SistemaBase.Administracion
             }
         }
 
-         private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             p = new Perfil_56PS();
             if (cmbfa.SelectedItem == null)
@@ -225,8 +227,12 @@ namespace SistemaBase.Administracion
                 return;
             }
 
-            string nombre = cmbfa.SelectedItem.ToString();
-            string codigo = listapermisos.Where(x => x.Nombre.Equals(nombre)).Select(x => x.Codigo).FirstOrDefault();
+            Familia_56PS familiaSeleccionada = cmbfa.SelectedItem as Familia_56PS;
+            if (familiaSeleccionada == null)
+            {
+                MessageBox.Show("Seleccionar una familia");
+                return;
+            }
 
             if (string.IsNullOrEmpty(txtcod.Text))
             {
@@ -242,14 +248,15 @@ namespace SistemaBase.Administracion
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return;
             }
 
-            Familia_56PS familia = new Familia_56PS();
-            familia.esfamilia = true;
-            familia.Nombre = cmbfa.SelectedItem.ToString();
-            familia.Codigo = codigo;
-            p.esfamilia = true;
-            p.Codigo = txtcod.Text;
+            Familia_56PS familia = new Familia_56PS
+            {
+                esfamilia = true,
+                Nombre = familiaSeleccionada.Nombre,
+                Codigo = familiaSeleccionada.Codigo
+            };
 
             try
             {
@@ -278,8 +285,8 @@ namespace SistemaBase.Administracion
             p = new Perfil_56PS();
             txtcod.Text = null;
             txtnomb.Text = null;
-            cmbfa.Text = "";
-            cmbpermiso.Text = "";
+            cmbfa.SelectedIndex = -1;
+            cmbpermiso.SelectedIndex = -1;
         }
 
          private void btncancelar_Click(object sender, EventArgs e)
@@ -331,6 +338,8 @@ namespace SistemaBase.Administracion
                 return;
             }
 
+            try
+            {
             bllperfil.EliminarPermisodePerfil(permiso, txtcod.Text);
             MessageBox.Show($"Permiso/Familia: '{permiso.Nombre}' eliminada correctamente.");
 
@@ -341,6 +350,11 @@ namespace SistemaBase.Administracion
 
 
             treeView1.SelectedNode.Remove();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
          private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -375,8 +389,12 @@ namespace SistemaBase.Administracion
                 return;
             }
 
-            string nombre = cmbpermiso.SelectedItem.ToString();
-            string codigo = listapermisos.Where(p => p.Nombre.Equals(nombre)).Select(p => p.Codigo).FirstOrDefault();
+            Patente_56PS patenteSeleccionada = cmbpermiso.SelectedItem as Patente_56PS;
+            if (patenteSeleccionada == null)
+            {
+                MessageBox.Show("Seleccionar un permiso");
+                return;
+            }
 
             if (string.IsNullOrEmpty(txtcod.Text))
             {
@@ -398,8 +416,8 @@ namespace SistemaBase.Administracion
 
  
             Patente_56PS patente = new Patente_56PS();
-            patente.Nombre = nombre;
-            patente.Codigo = codigo;
+            patente.Nombre = patenteSeleccionada.Nombre;
+            patente.Codigo = patenteSeleccionada.Codigo;
             patente.esfamilia = false;
             p.esfamilia = true;
             p.Codigo = codperfil;

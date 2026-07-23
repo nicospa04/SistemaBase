@@ -58,7 +58,7 @@
     <Compile Include="BLL_Familia_56PS.cs" />
     <Compile Include="BLL_Idioma_56PS.cs" />
     <Compile Include="BLL_Patente_56PS.cs" />
-    <Compile Include="BLL_Perfil_56PS.cs" />
+    <Compile Include="BLL_Rol_56PS.cs" />
     <Compile Include="BLL_Usuario_56PS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

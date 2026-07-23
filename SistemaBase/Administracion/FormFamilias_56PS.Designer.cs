@@ -72,7 +72,7 @@
             this.button6.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button6.Size = new System.Drawing.Size(277, 32);
             this.button6.TabIndex = 161;
-            this.button6.Tag = "eliminarPermiso/familiaDePerfil";
+            this.button6.Tag = "eliminarPermiso/familiaDeRol";
             this.button6.Text = "Eliminar permiso/familia de familia";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);

@@ -14,7 +14,8 @@ namespace BLL
         public static void Instalador(string instancia)
         {
             DAL_BackUpRestore_56PS a = new DAL_BackUpRestore_56PS();
-            a.RealizarRestoreIniciar(instancia);
+            if (a.RealizarRestoreIniciar(instancia))
+                new BLL_DigitoVerificador_56PS().RecalcularDV();
         }
 
         public void RealizarBackup(string backupPath)

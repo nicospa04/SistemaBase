@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace DAL_625NS
 {
@@ -15,11 +16,11 @@ namespace DAL_625NS
             { "FamiliaFamilia", "CodigoFamilia, CodFamiliaHija" },
             { "FamiliaPatente", "CodigoFamilia, CodigoPatente" },
             { "Familias", "CodigoFamilia" },
+            { "Idioma_56PS", "Tipo" },
             { "Patentes", "CodigoPatente" },
-            { "Perfiles", "CodigoPerfil" },
-            { "PerfilFamilia", "CodigoPerfil, CodigoFamilia" },
-            { "PerfilPatente", "CodigoPerfil, CodigoPatente" },
-            { "Rol_56PS", "codRol" },
+            { "Roles", "CodigoRol" },
+            { "RolFamilia", "CodigoRol, CodigoFamilia" },
+            { "RolPatente", "CodigoRol, CodigoPatente" },
             { "Usuario_56PS", "DNI" }
         };
 
@@ -70,9 +71,10 @@ namespace DAL_625NS
                 conn.Open();
                 string script = File.ReadAllText(archivo);
 
-                var comandos = script.Split(
-                    new[] { "\r\nGO\r\n", "\nGO\n", "\rGO\r" },
-                    StringSplitOptions.RemoveEmptyEntries);
+                var comandos = Regex.Split(
+                    script,
+                    @"^[ \t]*GO[ \t]*(?:\r\n|\n|\r|$)",
+                    RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
                 foreach (string comando in comandos)
                 {

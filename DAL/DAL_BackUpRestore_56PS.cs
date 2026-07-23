@@ -93,34 +93,36 @@ namespace DAL
             }
         }
 
-        public void RealizarRestoreIniciar(string instancia)
+        public bool RealizarRestoreIniciar(string instancia)
         {
             DAL_625NS.DAL_56PS.PasarleInstancia(instancia);
 
-            string rutaPrimeraVez = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "entroInstalador.txt");
+            string rutaPrimeraVez = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "SistemaBase",
+                "entroInstalador.txt");
             bool primeraEjecucionInstalador = File.Exists(rutaPrimeraVez);
             bool existeBase = ExisteBaseDeDatos(dbname);
             bool baseInicializada = existeBase && BaseDatosInicializada();
+            bool scriptEjecutado = false;
 
             if (!existeBase || !baseInicializada)
             {
-                InicializarSistema();
+                DAL_625NS.DAL_56PS.EjecutarScript(ObtenerRutaScript("Script_Create.sql"));
+                scriptEjecutado = true;
+            }
+            else if (primeraEjecucionInstalador)
+            {
+                DAL_625NS.DAL_56PS.EjecutarScript(ObtenerRutaScript("Script_Alter.sql"));
+                scriptEjecutado = true;
             }
 
             if (primeraEjecucionInstalador)
             {
                 File.Delete(rutaPrimeraVez);
             }
-        }
-        private void InicializarSistema()
-        {
-            bool existeBase = ExisteBaseDeDatos(dbname);
-            bool baseInicializada = existeBase && BaseDatosInicializada();
 
-            if (existeBase && baseInicializada)
-                DAL_625NS.DAL_56PS.EjecutarScript(ObtenerRutaScript("Script_Alter.sql"));
-            else
-                DAL_625NS.DAL_56PS.EjecutarScript(ObtenerRutaScript("Script_Create.sql"));
+            return scriptEjecutado;
         }
 
         public bool ExisteBaseDeDatos(string nombreBD)

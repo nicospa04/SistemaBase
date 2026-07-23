@@ -10,11 +10,11 @@ namespace BLL
 {
     public class BLL_Patente_56PS
     {
-        DAL_Perfil_56PS dalperfil = new DAL_Perfil_56PS();
+        DAL_Rol_56PS dalrol = new DAL_Rol_56PS();
 
         public List<Patente_56PS> ObtenerPatentes()
         {
-            return dalperfil.ObtenerPatentes();
+            return dalrol.ObtenerPatentes();
         }
     }
 }

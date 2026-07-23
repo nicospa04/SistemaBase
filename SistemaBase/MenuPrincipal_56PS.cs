@@ -1,4 +1,4 @@
-﻿using BE_625NS;
+using BE_625NS;
 using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
@@ -61,7 +61,7 @@ namespace SistemaBase
             catch (Exception ex)
             {
                 string instanciaMensaje = string.IsNullOrWhiteSpace(instancia) ? "No configurada" : instancia;
-                MessageBox.Show("No se pudo inicializar la base de datos. Instancia: " + instanciaMensaje + ". Verifique que SQL Server este iniciado y que el nombre sea correcto. Detalle: " + ex.Message,
+                new BLL_Idioma_56PS().MostrarMensaje("No se pudo inicializar la base de datos. Instancia: " + instanciaMensaje + ". Verifique que SQL Server este iniciado y que el nombre sea correcto. Detalle: " + ex.Message,
                     "Error de instalacion",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -75,8 +75,8 @@ namespace SistemaBase
             {
                 if (f.GetType() == form.GetType())
                 {
-                    f.Activate();
-                    return;
+                    f.Close();
+                    break;
                 }
             }
 
@@ -107,7 +107,7 @@ namespace SistemaBase
         public ToolStripMenuItem MenuAdministracion => usuariosToolStripMenuItem;
         public ToolStripMenuItem MenuCambiarContraseña => cambiarContraseñaToolStripMenuItem;
 
-        public ToolStripMenuItem MenuPerfiles => perfilesToolStripMenuItem;
+        public ToolStripMenuItem MenuRoles => rolesToolStripMenuItem;
 
         public ToolStripMenuItem MenuFamilias => familiasToolStripMenuItem;
 
@@ -131,34 +131,34 @@ namespace SistemaBase
             MenuCambiarContraseña.Enabled = false;
             MenuCambiarIdioma.Enabled = false;
             MenuAuditoria.Enabled = false;
-            MenuPerfiles.Enabled = false;
+            MenuRoles.Enabled = false;
             MenuFamilias.Enabled = false;
             MenuGestionRespaldo.Enabled = false;
             administracionToolStripMenuItem1.Enabled = false;
         }
 
-        public void AplicarEstadoSesion(Perfil_56PS perfil)
+        public void AplicarEstadoSesion(Rol_56PS rol)
         {
             MenuIniciarSesion.Enabled = false;
             MenuCerrarSesion.Enabled = true;
-            MenuAdministracion.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Usuarios);
-            MenuCambiarContraseña.Enabled = TienePermiso(perfil, Permisos_56PS.CambiarContrasena);
-            MenuFamilias.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Familias);
-            MenuPerfiles.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Perfiles);
-            MenuAuditoria.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Auditoria);
-            MenuCambiarIdioma.Enabled = TienePermiso(perfil, Permisos_56PS.CambiarIdioma);
-            MenuGestionRespaldo.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.RealizarBackup, Permisos_56PS.RestaurarBackup);
-            administracionToolStripMenuItem1.Enabled = TieneAlgunPermiso(perfil, Permisos_56PS.Administracion);
+            MenuAdministracion.Enabled = TieneAlgunPermiso(rol, Permisos_56PS.Usuarios);
+            MenuCambiarContraseña.Enabled = TienePermiso(rol, Permisos_56PS.CambiarContrasena);
+            MenuFamilias.Enabled = TieneAlgunPermiso(rol, Permisos_56PS.Familias);
+            MenuRoles.Enabled = TieneAlgunPermiso(rol, Permisos_56PS.Roles);
+            MenuAuditoria.Enabled = TieneAlgunPermiso(rol, Permisos_56PS.Auditoria);
+            MenuCambiarIdioma.Enabled = TienePermiso(rol, Permisos_56PS.CambiarIdioma);
+            MenuGestionRespaldo.Enabled = TieneAlgunPermiso(rol, Permisos_56PS.RealizarBackup, Permisos_56PS.RestaurarBackup);
+            administracionToolStripMenuItem1.Enabled = TieneAlgunPermiso(rol, Permisos_56PS.Administracion);
         }
 
-        private bool TienePermiso(Perfil_56PS perfil, string permiso)
+        private bool TienePermiso(Rol_56PS rol, string permiso)
         {
-            return perfil != null && perfil.TienePermiso(permiso);
+            return rol != null && rol.TienePermiso(permiso);
         }
 
-        private bool TieneAlgunPermiso(Perfil_56PS perfil, params string[] permisos)
+        private bool TieneAlgunPermiso(Rol_56PS rol, params string[] permisos)
         {
-            return perfil != null && perfil.TieneAlgunPermiso(permisos);
+            return rol != null && rol.TieneAlgunPermiso(permisos);
         }
 
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -167,14 +167,14 @@ namespace SistemaBase
 
             if (!instance.haySesionActiva())
             {
-                MessageBox.Show("Debe iniciar sesión primero");
+                new BLL_Idioma_56PS().MostrarMensaje("Debe iniciar sesión primero");
                 return;
             }
 
 
             var idiomaActual = instance.idiomaActual?.tipo;
 
-            var idiomaOriginal = instance.getUsuarioActivo().idioma;
+            var idiomaOriginal = instance.getUsuarioActivo().Idioma?.tipo;
 
             if(idiomaActual != idiomaOriginal) //si se cierra sesion con un idioma distinto al original del usuario se lo cambiamos en la db
             {
@@ -186,7 +186,7 @@ namespace SistemaBase
             }
 
             instance.cerrarSesion();
-            MessageBox.Show("Sesión cerrada");
+            new BLL_Idioma_56PS().MostrarMensaje("Sesión cerrada");
 
             CerrarFormulariosHijos();
             AplicarEstadoSinSesion();
@@ -207,9 +207,9 @@ namespace SistemaBase
 
         }
 
-        private void perfilesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void rolesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(new FormPerfiles_56PS());
+            AbrirFormulario(new FormRoles_56PS());
         }
 
         private void familiasToolStripMenuItem_Click(object sender, EventArgs e)

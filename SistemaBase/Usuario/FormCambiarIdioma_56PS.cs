@@ -1,4 +1,4 @@
-﻿using BE_625NS;
+using BE_625NS;
 using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
@@ -19,9 +19,10 @@ namespace SistemaBase.Usuario
     {
         public FormCambiarIdioma_56PS()
         {
-            InitializeComponent(); SessionManager_56PS.getInstancia().Suscribir(this);
+            InitializeComponent();
+            SessionManager_56PS.getInstancia().Suscribir(this);
+            CargarIdiomas();
             button1.Enabled = TienePermiso(Permisos_56PS.CambiarIdioma);
-
         }
 
         public void actualizarIdioma()
@@ -32,50 +33,29 @@ namespace SistemaBase.Usuario
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedItem == null)
+            Idioma_56PS idiomaSeleccionado = comboBox1.SelectedItem as Idioma_56PS;
+            if (idiomaSeleccionado == null)
             {
-                MessageBox.Show("Selecciona un idioma"); return;
-            }
-
-
-            try
-            {
-
-                if (string.IsNullOrEmpty(comboBox1.SelectedItem.ToString()))
-                {
-                    MessageBox.Show("Selecciona un idioma");
-                    return;
-                }
-            }
-            catch
-            {
-
-                MessageBox.Show("Selecciona un idioma");
+                new BLL_Idioma_56PS().MostrarMensaje("Selecciona un idioma");
                 return;
             }
 
-            if (comboBox1.SelectedItem.ToString() != "ES" && comboBox1.SelectedItem.ToString() != "EN" && comboBox1.SelectedItem.ToString() != "POR") { MessageBox.Show("El idioma solo puede ser EN,ES o POR"); return; }
-
-
-            var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
-
-            //BLL_Usuario_56PS bll = new BLL_Usuario_56PS();
-
-            //bll.cambiarIdioma(user, comboBox1.SelectedItem.ToString());
-
-            //MessageBox.Show("Cambio de idioma con exito, se requiere reiniciar sistema");
-
-
-            SessionManager_56PS.getInstancia().CambiarIdioma(new Idioma_56PS(comboBox1.SelectedItem.ToString()));
-
-
+            SessionManager_56PS.getInstancia().CambiarIdioma(idiomaSeleccionado);
             string a = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
-
             Evento_56PS eee = new Evento_56PS(a, DateTime.Now, "Usuarios", "Cambio de idioma", Evento_56PS.Criticidad.Bajo);
             new BLL_BitacoraEvento_56PS().RegistrarEvento(eee);
+        }
 
+        private void CargarIdiomas()
+        {
+            List<Idioma_56PS> idiomas = new BLL_Idioma_56PS().ObtenerIdiomas();
+            comboBox1.DataSource = idiomas;
+            comboBox1.DisplayMember = "nombre";
+            comboBox1.ValueMember = "tipo";
 
-            return;
+            string tipoActual = SessionManager_56PS.getInstancia().idiomaActual?.tipo;
+            int indice = idiomas.FindIndex(idioma => idioma.tipo == tipoActual);
+            comboBox1.SelectedIndex = indice >= 0 ? indice : 0;
         }
 
         private void FormCambiarIdioma_56PS_Load(object sender, EventArgs e)
@@ -86,7 +66,7 @@ namespace SistemaBase.Usuario
         private bool TienePermiso(string permiso)
         {
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
-            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
+            return usuario?.Rol != null && usuario.Rol.TienePermiso(permiso);
         }
     }
 }

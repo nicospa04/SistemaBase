@@ -82,11 +82,11 @@
     <Compile Include="Administracion\FormGestionBackUpRestore_56PS.Designer.cs">
       <DependentUpon>FormGestionBackUpRestore_56PS.cs</DependentUpon>
     </Compile>
-    <Compile Include="Administracion\FormPerfiles_56PS.cs">
+    <Compile Include="Administracion\FormRoles_56PS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Administracion\FormPerfiles_56PS.Designer.cs">
-      <DependentUpon>FormPerfiles_56PS.cs</DependentUpon>
+    <Compile Include="Administracion\FormRoles_56PS.Designer.cs">
+      <DependentUpon>FormRoles_56PS.cs</DependentUpon>
     </Compile>
     <Compile Include="Administracion\FormReparacion_56PS.cs">
       <SubType>Form</SubType>
@@ -134,8 +134,8 @@
     <EmbeddedResource Include="Administracion\FormGestionBackUpRestore_56PS.resx">
       <DependentUpon>FormGestionBackUpRestore_56PS.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Administracion\FormPerfiles_56PS.resx">
-      <DependentUpon>FormPerfiles_56PS.cs</DependentUpon>
+    <EmbeddedResource Include="Administracion\FormRoles_56PS.resx">
+      <DependentUpon>FormRoles_56PS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Administracion\FormReparacion_56PS.resx">
       <DependentUpon>FormReparacion_56PS.cs</DependentUpon>

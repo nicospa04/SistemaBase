@@ -20,7 +20,7 @@ namespace SistemaBase.Administracion
     public partial class FormFamilias_56PS : Form, IdiomaObserver_56PS
     {
         BLL_Familia_56PS bllfamilia = new BLL_Familia_56PS();
-        BLL_Perfil_56PS bllperfil = new BLL_Perfil_56PS();
+        BLL_Rol_56PS bllrol = new BLL_Rol_56PS();
         BLL_Patente_56PS bllpatentes = new BLL_Patente_56PS();
         Familia_56PS p = new Familia_56PS();
 
@@ -108,11 +108,11 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
             }
         }
 
-        private void AgregarNodosRecursivos(TreeNode nodoPadre, List<Perfil_56PS> hijos)
+        private void AgregarNodosRecursivos(TreeNode nodoPadre, List<Rol_56PS> hijos)
         {
             foreach (var hijo in hijos)
             {
@@ -140,72 +140,30 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error en MostrarPermisos: " + ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje("Error en MostrarPermisos: " + ex.Message);
             }
         }
 
       
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-         private void btnbuscar_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(txtnomb.Text) || string.IsNullOrEmpty(txtcod.Text))
-            {
-                MessageBox.Show("Ingresar el nombre y código de la familia");
-                return;
-            }
-
-            string pattern = @"^.{1,10}$";
-            if (!Regex.IsMatch(txtcod.Text, pattern))
-            {
-                MessageBox.Show("El código no puede tener más de 10 caracteres.");
-                return;
-            }
-
-            p.Codigo = txtcod.Text;
-            p.activo = true;
-            p.Nombre = txtnomb.Text;
-
-            try
-            {
-                bllfamilia.CrearFamilia(p);
-                MostrarFamiliaEnTreeView(p.Codigo);
-                MostrarFamiliasenDatagrid();
-                MostrarFamilias();
-                Limpiar();
-
-                string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
-                Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Creación de familia", Evento_56PS.Criticidad.Medio);
-                new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
          private void button2_Click(object sender, EventArgs e)
         {
             p = new Familia_56PS();
             if (cmbfa.SelectedItem == null)
             {
-                MessageBox.Show("Seleccionar una familia");
+                new BLL_Idioma_56PS().MostrarMensaje("Seleccionar una familia");
                 return;
             }
 
             Familia_56PS familiaSeleccionada = cmbfa.SelectedItem as Familia_56PS;
             if (familiaSeleccionada == null)
             {
-                MessageBox.Show("Seleccionar una familia");
+                new BLL_Idioma_56PS().MostrarMensaje("Seleccionar una familia");
                 return;
             }
 
             if (string.IsNullOrEmpty(txtcod.Text))
             {
-                MessageBox.Show("Ingresar el código de la familia, seleccionar del datagrid");
+                new BLL_Idioma_56PS().MostrarMensaje("Ingresar el código de la familia, seleccionar del datagrid");
                 return;
             }
 
@@ -216,7 +174,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
                 return;
             }
 
@@ -227,7 +185,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
                 return;
             }
 
@@ -244,7 +202,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
             }
 
             Limpiar();
@@ -269,7 +227,7 @@ namespace SistemaBase.Administracion
         {
             if (string.IsNullOrEmpty(txtcod.Text))
             {
-                MessageBox.Show("Ingresar el código de la familia");
+                new BLL_Idioma_56PS().MostrarMensaje("Ingresar el código de la familia");
                 return;
             }
 
@@ -289,7 +247,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
             }
             Limpiar();
         }
@@ -298,36 +256,36 @@ namespace SistemaBase.Administracion
         {
             if (treeView1.SelectedNode == null)
             {
-                MessageBox.Show("Debe seleccionar un permiso o familia para eliminar.");
+                new BLL_Idioma_56PS().MostrarMensaje("Debe seleccionar un permiso o familia para eliminar.");
                 return;
             }
 
             TreeNode nodoseleccionado = treeView1.SelectedNode;
             if (nodoseleccionado.Parent == null)
             {
-                MessageBox.Show("No se puede eliminar la familia raíz desde el árbol.");
+                new BLL_Idioma_56PS().MostrarMensaje("No se puede eliminar la familia raíz desde el árbol.");
                 return;
             }
 
-            Perfil_56PS permiso = nodoseleccionado.Tag as Perfil_56PS;
+            Rol_56PS permiso = nodoseleccionado.Tag as Rol_56PS;
 
             if (permiso == null)
             {
-                MessageBox.Show("Error: No se pudo obtener la información del elemento seleccionado.");
+                new BLL_Idioma_56PS().MostrarMensaje("Error: No se pudo obtener la información del elemento seleccionado.");
                 return;
             }
 
             Familia_56PS familiaPadre = nodoseleccionado.Parent.Tag as Familia_56PS;
             if (familiaPadre == null)
             {
-                MessageBox.Show("No se pudo obtener la familia que contiene el elemento seleccionado.");
+                new BLL_Idioma_56PS().MostrarMensaje("No se pudo obtener la familia que contiene el elemento seleccionado.");
                 return;
             }
 
             try
             {
             bllfamilia.EliminarPermisodeFamilia(permiso, familiaPadre.Codigo);
-            MessageBox.Show($"'{permiso.Nombre}' fue eliminado correctamente.");
+            new BLL_Idioma_56PS().MostrarMensaje($"'{permiso.Nombre}' fue eliminado correctamente.");
 
             string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
             Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Eliminación de permiso/familia de familia", Evento_56PS.Criticidad.Medio);
@@ -338,7 +296,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
             }
         }
 
@@ -346,7 +304,7 @@ namespace SistemaBase.Administracion
         {
             if (string.IsNullOrEmpty(txtnomb.Text) || string.IsNullOrEmpty(txtcod.Text))
             {
-                MessageBox.Show("Ingresar el nombre y código de la familia");
+                new BLL_Idioma_56PS().MostrarMensaje("Ingresar el nombre y código de la familia");
                 return;
             }
 
@@ -371,7 +329,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
             }
         }
 
@@ -398,19 +356,19 @@ namespace SistemaBase.Administracion
              p = new Familia_56PS();
             if (cmbpermiso.SelectedItem == null)
             {
-                 MessageBox.Show("Seleccionar un permiso");
+                 new BLL_Idioma_56PS().MostrarMensaje("Seleccionar un permiso");
                 return;
             }
 
             Patente_56PS patenteSeleccionada = cmbpermiso.SelectedItem as Patente_56PS;
             if (patenteSeleccionada == null)
             {
-                MessageBox.Show("Seleccionar un permiso");
+                new BLL_Idioma_56PS().MostrarMensaje("Seleccionar un permiso");
                 return;
             }
             if (string.IsNullOrEmpty(txtcod.Text))
             {
-                 MessageBox.Show("Ingresar el código de la familia, seleccionar del datagrid");
+                 new BLL_Idioma_56PS().MostrarMensaje("Ingresar el código de la familia, seleccionar del datagrid");
                 return;
             }
 
@@ -421,7 +379,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show((ex.Message));
+                new BLL_Idioma_56PS().MostrarMensaje((ex.Message));
                 return;
             }
             Patente_56PS patente = new Patente_56PS();
@@ -439,7 +397,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show((ex.Message));
+                new BLL_Idioma_56PS().MostrarMensaje((ex.Message));
             }
 
             Limpiar();
@@ -452,48 +410,94 @@ namespace SistemaBase.Administracion
 
         private void btnbuscar_Click_1(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtnomb.Text) || string.IsNullOrEmpty(txtcod.Text))
+            string codigo = txtcod.Text.Trim();
+            string nombre = txtnomb.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(codigo))
             {
-                MessageBox.Show("Ingresar el nombre y código de la familia");
+                new BLL_Idioma_56PS().MostrarMensaje("Ingresar el nombre y código de la familia");
                 return;
             }
 
             string pattern = @"^.{1,10}$";
-            if (!Regex.IsMatch(txtcod.Text, pattern))
+            if (!Regex.IsMatch(codigo, pattern))
             {
-                MessageBox.Show("El código no puede tener más de 10 caracteres.");
+                new BLL_Idioma_56PS().MostrarMensaje("El código no puede tener más de 10 caracteres.");
                 return;
             }
 
-            p.Codigo = txtcod.Text;
-            p.activo = true;
-            p.Nombre = txtnomb.Text;
+            List<Rol_56PS> elementosIniciales = ObtenerElementosIniciales();
+            if (elementosIniciales.Count == 0)
+            {
+                new BLL_Idioma_56PS().MostrarMensaje("Debe seleccionar al menos un permiso o una familia para crearla.");
+                return;
+            }
+
+            Familia_56PS familiaNueva = new Familia_56PS
+            {
+                Codigo = codigo,
+                Nombre = nombre,
+                activo = true
+            };
 
             try
             {
-                bllfamilia.CrearFamilia(p);
-                MostrarFamiliaEnTreeView(p.Codigo);
-                MostrarFamiliasenDatagrid();
-                MostrarFamilias();
-                Limpiar();
-
-                string dniUser = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
-                Evento_56PS ev = new Evento_56PS(dniUser, DateTime.Now, "Familias", "Creación de familia", Evento_56PS.Criticidad.Medio);
-                new BLL_BitacoraEvento_56PS().RegistrarEvento(ev);
-
-
+                bllfamilia.CrearFamilia(familiaNueva, elementosIniciales);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
+                return;
             }
+
+            Limpiar();
+
+            try
+            {
+                MostrarFamiliasenDatagrid();
+                MostrarFamilias();
+                MostrarFamiliaEnTreeView(codigo);
+            }
+            catch (Exception ex)
+            {
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
+            }
+        }
+
+        private List<Rol_56PS> ObtenerElementosIniciales()
+        {
+            List<Rol_56PS> elementos = new List<Rol_56PS>();
+
+            Patente_56PS patente = cmbpermiso.SelectedItem as Patente_56PS;
+            if (patente != null)
+            {
+                elementos.Add(new Patente_56PS
+                {
+                    Codigo = patente.Codigo,
+                    Nombre = patente.Nombre,
+                    esfamilia = false
+                });
+            }
+
+            Familia_56PS familia = cmbfa.SelectedItem as Familia_56PS;
+            if (familia != null)
+            {
+                elementos.Add(new Familia_56PS
+                {
+                    Codigo = familia.Codigo,
+                    Nombre = familia.Nombre,
+                    esfamilia = true
+                });
+            }
+
+            return elementos;
         }
 
         private void btnmodificar_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtnomb.Text) || string.IsNullOrEmpty(txtcod.Text))
             {
-                MessageBox.Show("Ingresar el nombre y código de la familia");
+                new BLL_Idioma_56PS().MostrarMensaje("Ingresar el nombre y código de la familia");
                 return;
             }
 
@@ -517,7 +521,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
             }
         }
 
@@ -525,7 +529,7 @@ namespace SistemaBase.Administracion
         {
             if (string.IsNullOrEmpty(txtcod.Text))
             {
-                MessageBox.Show("Ingresar el código de la familia");
+                new BLL_Idioma_56PS().MostrarMensaje("Ingresar el código de la familia");
                 return;
             }
 
@@ -544,7 +548,7 @@ namespace SistemaBase.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
             }
             Limpiar();
         }
@@ -562,7 +566,7 @@ namespace SistemaBase.Administracion
         private bool TienePermiso(string permiso)
         {
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
-            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
+            return usuario?.Rol != null && usuario.Rol.TienePermiso(permiso);
         }
     }
 }

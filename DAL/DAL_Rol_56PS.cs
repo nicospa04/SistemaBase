@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DAL_625NS
 {
-    public class DAL_Perfil_56PS
+    public class DAL_Rol_56PS
     {
         public void Modificar(Familia_56PS f)
         {
@@ -23,9 +23,9 @@ namespace DAL_625NS
             DAL_56PS.ExecuteNonQuery(query, parametros);
         }
 
-        public string ObtenerNombredePerfil(string codigo)
+        public string ObtenerNombredeRol(string codigo)
         {
-            string query = "SELECT Nombre FROM Perfiles WHERE CodigoPerfil = @c";
+            string query = "SELECT Nombre FROM Roles WHERE CodigoRol = @c";
             SqlParameter[] parametros = { new SqlParameter("@c", codigo) };
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, parametros);
@@ -36,16 +36,16 @@ namespace DAL_625NS
             return ds.Tables[0].Rows[0]["Nombre"].ToString();
         }
 
-        public void AsignarPermisosAPerfil(Perfil_56PS perfil, Perfil_56PS permiso)
+        public void AsignarPermisosARol(Rol_56PS rol, Rol_56PS permiso)
         {
             int rowsaf = 0;
 
             if (permiso.esfamilia)
             {
-                string query = "INSERT INTO PerfilFamilia(CodigoPerfil, CodigoFamilia) VALUES (@codperfil,@codfamilia)";
+                string query = "INSERT INTO RolFamilia(CodigoRol, CodigoFamilia) VALUES (@codrol,@codfamilia)";
 
                 SqlParameter[] parametros = {
-                    new SqlParameter("@codperfil", perfil.Codigo),
+                    new SqlParameter("@codrol", rol.Codigo),
                     new SqlParameter("@codfamilia", permiso.Codigo)
                 };
 
@@ -53,10 +53,10 @@ namespace DAL_625NS
             }
             else
             {
-                string query = "INSERT INTO PerfilPatente(CodigoPerfil, CodigoPatente) VALUES (@codperfil,@codpatente)";
+                string query = "INSERT INTO RolPatente(CodigoRol, CodigoPatente) VALUES (@codrol,@codpatente)";
 
                 SqlParameter[] parametros = {
-                    new SqlParameter("@codperfil", perfil.Codigo),
+                    new SqlParameter("@codrol", rol.Codigo),
                     new SqlParameter("@codpatente", permiso.Codigo)
                 };
 
@@ -69,7 +69,7 @@ namespace DAL_625NS
             }
         }
 
-        public void AsignarPermisoAFamilia(Perfil_56PS permiso, Familia_56PS familia)
+        public void AsignarPermisoAFamilia(Rol_56PS permiso, Familia_56PS familia)
         {
             int filasAfectadas;
 
@@ -119,9 +119,9 @@ namespace DAL_625NS
             return patentes;
         }
 
-        public bool VerificarAsignacion(Perfil_56PS p)
+        public bool VerificarAsignacion(Rol_56PS p)
         {
-            string query = "SELECT COUNT(*) FROM Usuario_56PS WHERE Perfil = @cod";
+            string query = "SELECT COUNT(*) FROM Usuario_56PS WHERE Rol = @cod";
             SqlParameter[] parametros = { new SqlParameter("@cod", p.Codigo) };
             int resultado = Convert.ToInt32(DAL_56PS.ExecuteScalar(query, parametros));
             return resultado > 0;
@@ -130,7 +130,7 @@ namespace DAL_625NS
         public bool VerificarAsignacionFamilia(Familia_56PS f)
         {
             string query = @"SELECT
-                (SELECT COUNT(*) FROM PerfilFamilia WHERE CodigoFamilia = @cod) +
+                (SELECT COUNT(*) FROM RolFamilia WHERE CodigoFamilia = @cod) +
                 (SELECT COUNT(*) FROM FamiliaPatente WHERE CodigoFamilia = @cod) +
                 (SELECT COUNT(*) FROM FamiliaFamilia WHERE CodigoFamilia = @cod OR CodFamiliaHija = @cod)";
             SqlParameter[] parametros = { new SqlParameter("@cod", f.Codigo) };
@@ -173,25 +173,25 @@ namespace DAL_625NS
             return Convert.ToInt32(DAL_56PS.ExecuteScalar(query, parametros)) > 0;
         }
 
-        public List<Perfil_56PS> ObtenerTodosLosPerfiles()
+        public List<Rol_56PS> ObtenerTodosLosRoles()
         {
-            string query = "SELECT * FROM Perfiles WHERE Activo = 1";
+            string query = "SELECT * FROM Roles WHERE Activo = 1";
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, null);
 
-            List<Perfil_56PS> perfiles = new List<Perfil_56PS>();
+            List<Rol_56PS> roles = new List<Rol_56PS>();
 
             foreach (DataRow row in ds.Tables[0].Rows)
             {
-                Perfil_56PS p = new Perfil_56PS();
+                Rol_56PS p = new Rol_56PS();
                 p.Nombre = row["Nombre"].ToString();
-                p.Codigo = row["CodigoPerfil"].ToString();
+                p.Codigo = row["CodigoRol"].ToString();
                 p.activo = Convert.ToBoolean(row["Activo"]);
                 p.esfamilia = true;
-                perfiles.Add(p);
+                roles.Add(p);
             }
 
-            return perfiles;
+            return roles;
         }
 
         public void EliminarFamilia(Familia_56PS f)
@@ -211,13 +211,13 @@ namespace DAL_625NS
             }
         }
 
-        public void EliminarPerfil(Perfil_56PS perfil)
+        public void EliminarRol(Rol_56PS rol)
         {
-            string query = "UPDATE Perfiles SET Activo = @act WHERE CodigoPerfil = @cod";
+            string query = "UPDATE Roles SET Activo = @act WHERE CodigoRol = @cod";
 
             SqlParameter[] parametros = {
-                new SqlParameter("@act", perfil.activo),
-                new SqlParameter("@cod", perfil.Codigo)
+                new SqlParameter("@act", rol.activo),
+                new SqlParameter("@cod", rol.Codigo)
             };
 
             int rowsaf = DAL_56PS.ExecuteNonQuery(query, parametros);
@@ -249,18 +249,18 @@ namespace DAL_625NS
             return familias;
         }
 
-        public bool VerificarExistenciaPerfilCodigo(Perfil_56PS p)
+        public bool VerificarExistenciaRolCodigo(Rol_56PS p)
         {
-            string query = "SELECT COUNT(*) FROM Perfiles WHERE CodigoPerfil = @cod";
+            string query = "SELECT COUNT(*) FROM Roles WHERE CodigoRol = @cod";
             SqlParameter[] parametros = { new SqlParameter("@cod", p.Codigo) };
 
             int resultado = Convert.ToInt32(DAL_56PS.ExecuteScalar(query, parametros));
             return resultado > 0;
         }
 
-        public bool VerificarExistenciaPerfilNombre(Perfil_56PS p)
+        public bool VerificarExistenciaRolNombre(Rol_56PS p)
         {
-            string query = "SELECT COUNT(*) FROM Perfiles WHERE Nombre = @nom";
+            string query = "SELECT COUNT(*) FROM Roles WHERE Nombre = @nom";
             SqlParameter[] parametros = { new SqlParameter("@nom", p.Nombre) };
 
             int resultado = Convert.ToInt32(DAL_56PS.ExecuteScalar(query, parametros));
@@ -288,14 +288,14 @@ namespace DAL_625NS
             return resultado > 0;
         }
 
-        public Perfil_56PS ObtenerPermiso(string nombre)
+        public Rol_56PS ObtenerPermiso(string nombre)
         {
             string query = "SELECT Nombre, CodigoPatente FROM Patentes WHERE Nombre = @nom";
             SqlParameter[] parametros = { new SqlParameter("@nom", nombre) };
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, parametros);
 
-            Perfil_56PS permiso = new Perfil_56PS();
+            Rol_56PS permiso = new Rol_56PS();
 
             if (ds.Tables[0].Rows.Count > 0)
             {
@@ -307,38 +307,38 @@ namespace DAL_625NS
             return permiso;
         }
 
-        public void EliminarPermisodePerfil(Perfil_56PS p, string codperfil)
+        public void EliminarPermisodeRol(Rol_56PS p, string codrol)
         {
             int filasAfectadas;
 
             if (p.esfamilia)
             {
-                string query = "DELETE FROM PerfilFamilia WHERE CodigoPerfil = @codperf AND CodigoFamilia = @codfam";
+                string query = "DELETE FROM RolFamilia WHERE CodigoRol = @codperf AND CodigoFamilia = @codfam";
 
                 SqlParameter[] parametros = {
                     new SqlParameter("@codfam", p.Codigo),
-                    new SqlParameter("@codperf", codperfil)
+                    new SqlParameter("@codperf", codrol)
                 };
 
                 filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
             }
             else
             {
-                string query = "DELETE FROM PerfilPatente WHERE CodigoPerfil = @codperf AND CodigoPatente = @codpat";
+                string query = "DELETE FROM RolPatente WHERE CodigoRol = @codperf AND CodigoPatente = @codpat";
 
                 SqlParameter[] parametros = {
                     new SqlParameter("@codpat", p.Codigo),
-                    new SqlParameter("@codperf", codperfil)
+                    new SqlParameter("@codperf", codrol)
                 };
 
                 filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
             }
 
             if (filasAfectadas != 1)
-                throw new Exception("La asignación seleccionada ya no existe en el perfil.");
+                throw new Exception("La asignación seleccionada ya no existe en el rol.");
         }
 
-        public void EliminarPermisodeFamilia(Perfil_56PS p, string codperfil)
+        public void EliminarPermisodeFamilia(Rol_56PS p, string codrol)
         {
             int filasAfectadas;
 
@@ -348,7 +348,7 @@ namespace DAL_625NS
 
                 SqlParameter[] parametros = {
                     new SqlParameter("@codfamhija", p.Codigo),
-                    new SqlParameter("@codfam", codperfil)
+                    new SqlParameter("@codfam", codrol)
                 };
 
                 filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
@@ -359,7 +359,7 @@ namespace DAL_625NS
 
                 SqlParameter[] parametros = {
                     new SqlParameter("@codpat", p.Codigo),
-                    new SqlParameter("@codfam", codperfil)
+                    new SqlParameter("@codfam", codrol)
                 };
 
                 filasAfectadas = DAL_56PS.ExecuteNonQuery(query, parametros);
@@ -369,9 +369,9 @@ namespace DAL_625NS
                 throw new Exception("La asignación seleccionada ya no existe en la familia.");
         }
 
-        public string ObtenerCodigoPerfil(Perfil_56PS p)
+        public string ObtenerCodigoRol(Rol_56PS p)
         {
-            string query = "SELECT CodigoPerfil FROM Perfiles WHERE Nombre = @nom";
+            string query = "SELECT CodigoRol FROM Roles WHERE Nombre = @nom";
             SqlParameter[] parametros = { new SqlParameter("@nom", p.Nombre) };
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, parametros);
@@ -379,7 +379,7 @@ namespace DAL_625NS
             if (ds.Tables[0].Rows.Count == 0)
                 return null;
 
-            return ds.Tables[0].Rows[0]["CodigoPerfil"].ToString();
+            return ds.Tables[0].Rows[0]["CodigoRol"].ToString();
         }
 
         public bool CrearFamilia(Familia_56PS fam)
@@ -402,14 +402,14 @@ namespace DAL_625NS
             return true;
         }
 
-        public void CrearPerfil(Perfil_56PS perfil)
+        public void CrearRol(Rol_56PS rol)
         {
-            string query = "INSERT INTO Perfiles(Nombre,CodigoPerfil,Activo) VALUES(@nom,@cod,@act)";
+            string query = "INSERT INTO Roles(Nombre,CodigoRol,Activo) VALUES(@nom,@cod,@act)";
 
             SqlParameter[] parametros = {
-                new SqlParameter("@nom", perfil.Nombre),
-                new SqlParameter("@cod", perfil.Codigo),
-                new SqlParameter("@act", perfil.activo)
+                new SqlParameter("@nom", rol.Nombre),
+                new SqlParameter("@cod", rol.Codigo),
+                new SqlParameter("@act", rol.activo)
             };
 
             int rowsaff = DAL_56PS.ExecuteNonQuery(query, parametros);
@@ -420,29 +420,115 @@ namespace DAL_625NS
             }
         }
 
-        public Perfil_56PS ObtenerPerfil(string codigo)
+        public void CrearFamiliaConElementos(Familia_56PS familia, IEnumerable<Rol_56PS> elementos)
         {
-            // Obtener nombre del perfil
-            string queryNom = "SELECT Nombre FROM Perfiles WHERE CodigoPerfil = @cod AND Activo = 1";
+            using (SqlConnection conexion = new SqlConnection(DAL_56PS.obtenerConexion()))
+            {
+                conexion.Open();
+                using (SqlTransaction transaccion = conexion.BeginTransaction())
+                {
+                    try
+                    {
+                        using (SqlCommand comando = new SqlCommand("INSERT INTO Familias(Nombre, CodigoFamilia, Activa) VALUES(@nom, @cod, @act)", conexion, transaccion))
+                        {
+                            comando.Parameters.AddWithValue("@nom", familia.Nombre);
+                            comando.Parameters.AddWithValue("@cod", familia.Codigo);
+                            comando.Parameters.AddWithValue("@act", familia.activo);
+                            if (comando.ExecuteNonQuery() != 1)
+                                throw new Exception("No se pudo crear la familia.");
+                        }
+
+                        foreach (Rol_56PS elemento in elementos)
+                        {
+                            string consulta = elemento.esfamilia
+                                ? "INSERT INTO FamiliaFamilia(CodigoFamilia, CodFamiliaHija) VALUES(@padre, @hijo)"
+                                : "INSERT INTO FamiliaPatente(CodigoFamilia, CodigoPatente) VALUES(@padre, @hijo)";
+
+                            using (SqlCommand comando = new SqlCommand(consulta, conexion, transaccion))
+                            {
+                                comando.Parameters.AddWithValue("@padre", familia.Codigo);
+                                comando.Parameters.AddWithValue("@hijo", elemento.Codigo);
+                                if (comando.ExecuteNonQuery() != 1)
+                                    throw new Exception("No se pudo asignar un elemento inicial a la familia.");
+                            }
+                        }
+
+                        transaccion.Commit();
+                    }
+                    catch
+                    {
+                        transaccion.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public void CrearRolConElementos(Rol_56PS rol, IEnumerable<Rol_56PS> elementos)
+        {
+            using (SqlConnection conexion = new SqlConnection(DAL_56PS.obtenerConexion()))
+            {
+                conexion.Open();
+                using (SqlTransaction transaccion = conexion.BeginTransaction())
+                {
+                    try
+                    {
+                        using (SqlCommand comando = new SqlCommand("INSERT INTO Roles(Nombre, CodigoRol, Activo) VALUES(@nom, @cod, @act)", conexion, transaccion))
+                        {
+                            comando.Parameters.AddWithValue("@nom", rol.Nombre);
+                            comando.Parameters.AddWithValue("@cod", rol.Codigo);
+                            comando.Parameters.AddWithValue("@act", rol.activo);
+                            if (comando.ExecuteNonQuery() != 1)
+                                throw new Exception("No se pudo crear el rol.");
+                        }
+
+                        foreach (Rol_56PS elemento in elementos)
+                        {
+                            string consulta = elemento.esfamilia
+                                ? "INSERT INTO RolFamilia(CodigoRol, CodigoFamilia) VALUES(@padre, @hijo)"
+                                : "INSERT INTO RolPatente(CodigoRol, CodigoPatente) VALUES(@padre, @hijo)";
+
+                            using (SqlCommand comando = new SqlCommand(consulta, conexion, transaccion))
+                            {
+                                comando.Parameters.AddWithValue("@padre", rol.Codigo);
+                                comando.Parameters.AddWithValue("@hijo", elemento.Codigo);
+                                if (comando.ExecuteNonQuery() != 1)
+                                    throw new Exception("No se pudo asignar un elemento inicial al rol.");
+                            }
+                        }
+
+                        transaccion.Commit();
+                    }
+                    catch
+                    {
+                        transaccion.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public Rol_56PS ObtenerRol(string codigo)
+        {
+            string queryNom = "SELECT Nombre FROM Roles WHERE CodigoRol = @cod AND Activo = 1";
             SqlParameter[] paramNom = { new SqlParameter("@cod", codigo) };
 
             object result = DAL_56PS.ExecuteScalar(queryNom, paramNom);
             if (result == null)
-                throw new Exception("El perfil no existe o se encuentra inactivo.");
+                throw new Exception("El rol no existe o se encuentra inactivo.");
 
-            string nombrePerfil = result.ToString();
+            string nombreRol = result.ToString();
 
-            Perfil_56PS raiz = new Perfil_56PS
+            Rol_56PS raiz = new Rol_56PS
             {
                 Codigo = codigo,
-                Nombre = nombrePerfil,
+                Nombre = nombreRol,
                 esfamilia = true
             };
 
-            // Obtener familias del perfil
             string queryFam = "SELECT f.CodigoFamilia, f.Nombre FROM Familias f " +
-                "INNER JOIN PerfilFamilia pf ON f.CodigoFamilia = pf.CodigoFamilia " +
-                "WHERE pf.CodigoPerfil = @cod AND f.Activa = 1";
+                "INNER JOIN RolFamilia pf ON f.CodigoFamilia = pf.CodigoFamilia " +
+                "WHERE pf.CodigoRol = @cod AND f.Activa = 1";
             SqlParameter[] paramFam = { new SqlParameter("@cod", codigo) };
 
             DataSet dsFam = DAL_56PS.ExecuteDataSet(queryFam, paramFam);
@@ -465,10 +551,9 @@ namespace DAL_625NS
                 raiz.Agregar(fam);
             }
 
-            // Obtener patentes del perfil
             string queryPat = "SELECT p.CodigoPatente, p.Nombre FROM Patentes p " +
-                "INNER JOIN PerfilPatente pp ON p.CodigoPatente = pp.CodigoPatente " +
-                "WHERE pp.CodigoPerfil = @cod";
+                "INNER JOIN RolPatente pp ON p.CodigoPatente = pp.CodigoPatente " +
+                "WHERE pp.CodigoRol = @cod";
             SqlParameter[] paramPat = { new SqlParameter("@cod", codigo) };
 
             DataSet dsPat = DAL_56PS.ExecuteDataSet(queryPat, paramPat);
@@ -516,7 +601,6 @@ namespace DAL_625NS
 
         private void CargarHijosFamilia(Familia_56PS familia, HashSet<string> ruta)
         {
-            // Cargar familias hijas
             string queryHijas = "SELECT f.CodigoFamilia, f.Nombre FROM FamiliaFamilia ff " +
                 "INNER JOIN Familias f ON ff.CodFamiliaHija = f.CodigoFamilia " +
                 "WHERE ff.CodigoFamilia = @cod AND f.Activa = 1";
@@ -544,7 +628,6 @@ namespace DAL_625NS
                 ruta.Remove(hija.Codigo);
             }
 
-            // Cargar patentes
             string queryPats = "SELECT p.CodigoPatente, p.Nombre FROM FamiliaPatente fp " +
                 "INNER JOIN Patentes p ON fp.CodigoPatente = p.CodigoPatente " +
                 "WHERE fp.CodigoFamilia = @cod";
@@ -577,9 +660,9 @@ namespace DAL_625NS
             return f.activo;
         }
 
-        public bool PerfilEstaActivo(Perfil_56PS p)
+        public bool RolEstaActivo(Rol_56PS p)
         {
-            string query = "SELECT Activo FROM Perfiles WHERE CodigoPerfil = @cod";
+            string query = "SELECT Activo FROM Roles WHERE CodigoRol = @cod";
             SqlParameter[] parametros = { new SqlParameter("@cod", p.Codigo) };
 
             DataSet ds = DAL_56PS.ExecuteDataSet(query, parametros);

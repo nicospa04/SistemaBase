@@ -48,7 +48,8 @@
     <Compile Include="DAL_BackUpRestore_56PS.cs" />
     <Compile Include="DAL_BitacoraEventos_56PS.cs" />
     <Compile Include="DAL_DigitoVerificador_56PS.cs" />
-    <Compile Include="DAL_Perfil_56PS.cs" />
+    <Compile Include="DAL_Idioma_56PS.cs" />
+    <Compile Include="DAL_Rol_56PS.cs" />
     <Compile Include="DAL_Usuario_56PS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

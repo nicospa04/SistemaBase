@@ -68,6 +68,8 @@ namespace ClassLibrary2
         public void cerrarSesion()
         {
             usuarioActivo = null;
+            idiomaActual = new Idioma_56PS("ES");
+            Notificar();
         }
 
         public Usuario_56PS getUsuarioActivo()

@@ -7,11 +7,11 @@
       <FileName>DAL_56PS.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DAL_625NS.DAL_Perfil_56PS">
+  <Class Name="DAL_625NS.DAL_Rol_56PS">
     <Position X="2.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ECAAAgAAAAAAgAFQCAAAABAABAACAAAAgYAChAAAAyw=</HashCode>
-      <FileName>DAL_Perfil_56PS.cs</FileName>
+      <FileName>DAL_Rol_56PS.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DAL_625NS.DAL_Usuario_56PS">
@@ -40,6 +40,12 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
       <FileName>DAL_DigitoVerificador_56PS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DAL_625NS.DAL_Idioma_56PS">
+    <Position X="7.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DAL_Idioma_56PS.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

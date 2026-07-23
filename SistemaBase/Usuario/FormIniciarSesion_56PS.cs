@@ -8,254 +8,182 @@ using SistemaBase.Administracion;
 using SistemaBase.Usuario;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SistemaBase
 {
     public partial class FormIniciarSesion_56PS : Form, IdiomaObserver_56PS
     {
-
-        public void actualizarIdioma()
-        {
-            var traductor = new BLL_Idioma_56PS();
-            traductor.Traducir(this);
-        }
-
         public FormIniciarSesion_56PS()
         {
             InitializeComponent();
             SessionManager_56PS.getInstancia().Suscribir(this);
-
             actualizarIdioma();
+        }
+
+        public void actualizarIdioma()
+        {
+            new BLL_Idioma_56PS().Traducir(this);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var instance = SessionManager_56PS.getInstancia();
+            SessionManager_56PS sesion = SessionManager_56PS.getInstancia();
+            BLL_Idioma_56PS mensajes = new BLL_Idioma_56PS();
 
-            if (instance.haySesionActiva()) //validamos que no exista una sesion ya iniciada
+            if (sesion.haySesionActiva())
             {
-                MessageBox.Show("Ya inicio sesion, cierre sesion primero");
+                mensajes.MostrarMensaje("Ya inicio sesion, cierre sesion primero");
                 return;
             }
 
-
-
-            string userName = (string)textBox1.Text.Trim();
-            string password = (string)textBox2.Text.Trim();
-
-    
-
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+            string nombreUsuario = textBox1.Text.Trim();
+            string contraseña = textBox2.Text.Trim();
+            if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(contraseña))
             {
-                MessageBox.Show("Complete todos los campos"); return;
-            }
-
-
-            BLL_Usuario_56PS usuarioBLL = new BLL_Usuario_56PS();
-
-
-            //antes de validar si la contraseña y el usuario coinciden primero validamos si existen algun usuario con ese nombre de usuario
-
-            bool existeUsuarioConEseUsername = usuarioBLL.existeUsuarioConEseUsername(userName);
-
-            if (!existeUsuarioConEseUsername) //si el userName directamente no existe
-            {
-                MessageBox.Show("No existe usuario con ese nombre ");
+                mensajes.MostrarMensaje("Complete todos los campos");
                 return;
             }
 
-            List<Usuario_56PS> listaUsuarios = new BLL_Usuario_56PS().obtenerUsuarios();
-            Usuario_56PS usuarioLogueado = listaUsuarios.Find(u => u.NombreUsuario == userName);
-
-            //si existe usuario con ese nombre... validamos si su contraseña coincide
-
-            bool valido = usuarioBLL.validarUsuario(userName, password); //aca se valida si el usuario y la contraseña coinciden con algun usuario de la bd
-
-            if (!valido)
+            BLL_Usuario_56PS usuarios = new BLL_Usuario_56PS();
+            if (!usuarios.existeUsuarioConEseUsername(nombreUsuario))
             {
-                MessageBox.Show("Contraseña incorrecta");
-
-                //registramos evento en bitacora
-                Evento_56PS eventoFallido = new Evento_56PS(
-                    usuarioLogueado.Dni,
-                    DateTime.Now,
-                    "Usuarios",
-                    "Intento fallido",
-                    Evento_56PS.Criticidad.Alto
-                );
-
-                BLL_BitacoraEvento_56PS bitacoraBLL = new BLL_BitacoraEvento_56PS();
-                bitacoraBLL.RegistrarEvento(eventoFallido);
-
-                //obtenemos eventos de los ultimos 5 minutos
-                List<Evento_56PS> eventos = bitacoraBLL.obtenerEventos();
-
-                int cantidadIntentos = eventos.Count(ev =>
-                    ev.dni == usuarioLogueado.Dni &&
-                    ev.descripcion== "Intento fallido" &&
-                    ev.fecha >= DateTime.Now.AddMinutes(-5)
-                );
-
-                //si tiene 3 o mas intentos fallidos lo bloqueamos
-                if (cantidadIntentos >= 3)
-                {
-                    usuarioBLL.bloquearUsuario(usuarioLogueado.Dni);
-                    MessageBox.Show("Usuario bloqueado por demasiados intentos fallidos");
-                }
-
+                mensajes.MostrarMensaje("No existe usuario con ese nombre ");
                 return;
             }
 
-
-            //en caso de que el userName y la contraseña coincidan... verificamos que el usuario no se encuentre bloqueado
-
-                if(usuarioLogueado == null) { MessageBox.Show("Usuario no existe"); return; }
-
-                if (usuarioLogueado.Bloqueado)
-                {
-                    MessageBox.Show("El usuario se encuentra bloqueado"); return;
-                }
-
-            if (!usuarioLogueado.Activo)
+            Usuario_56PS usuario = usuarios.obtenerUsuarios()
+                .FirstOrDefault(item => item.NombreUsuario == nombreUsuario);
+            if (usuario == null)
             {
-                MessageBox.Show("El usuario se encuentra inactivo"); return;
+                mensajes.MostrarMensaje("Usuario no existe");
+                return;
+            }
+
+            if (!usuarios.validarUsuario(nombreUsuario, contraseña))
+            {
+                RegistrarIntentoFallido(usuario, usuarios, mensajes);
+                return;
+            }
+
+            if (usuario.Bloqueado)
+            {
+                mensajes.MostrarMensaje("El usuario se encuentra bloqueado");
+                return;
+            }
+
+            if (!usuario.Activo)
+            {
+                mensajes.MostrarMensaje("El usuario se encuentra inactivo");
+                return;
             }
 
             var revision = new BLL_DigitoVerificador_56PS().Revision();
+            bool hayInconsistencias = revision.tablaDVVacia || revision.tablasConError.Count > 0;
+            bool puedeReparar = TieneAlgunPermiso(
+                usuario.Rol,
+                Permisos_56PS.RecalcularDigitosVerificadores,
+                Permisos_56PS.RestaurarBackup);
 
-            bool tablavacia = revision.tablaDVVacia;
-            List<string> errores = revision.tablasConError;
-            bool puedeRepararSistema = TieneAlgunPermiso(usuarioLogueado.Perfil, Permisos_56PS.RecalcularDigitosVerificadores, Permisos_56PS.RestaurarBackup);
-            MenuPrincipal_56PS menu = Application.OpenForms["MenuPrincipal_56PS"] as MenuPrincipal_56PS;
-
-            if (tablavacia || errores.Count > 0)
+            if (hayInconsistencias && !puedeReparar)
             {
-                if (puedeRepararSistema)
-                {
-                    if (tablavacia && errores.Count == 0)
-                        errores.Add("Tabla DigitoVerificador sin registros");
-
-                    MessageBox.Show("Se detectaron inconsistencias en la base de datos");
-                    SessionManager_56PS.getInstancia().iniciarSesion(usuarioLogueado);
-                    SessionManager_56PS.getInstancia().CambiarIdioma(new Idioma_56PS(usuarioLogueado.idioma));
-
-                    if (menu != null)
-                        menu.AplicarEstadoSesion(usuarioLogueado.Perfil);
-
-                    FormReparacion_56PS form = new FormReparacion_56PS(errores);
-                    if (menu != null)
-                    {
-                        form.MdiParent = menu;
-                        form.WindowState = FormWindowState.Maximized;
-                    }
-
-                    form.Show();
-                    this.Close();
-                    return;
-                }
-                else
-                {
-                    MessageBox.Show("El sistema no se encuentra disponible en estos momentos, contacte al administrador.");
-                    return;
-                }
-            }
-
-
-            SessionManager_56PS.getInstancia().iniciarSesion(usuarioLogueado);
-            SessionManager_56PS.getInstancia().CambiarIdioma(new Idioma_56PS(usuarioLogueado.idioma));
-
-
-
-            var sessao = SessionManager_56PS.getInstancia();
-                string userNamee = sessao.getUsuarioActivo().NombreUsuario;
-
-
-                MessageBox.Show("Sesión iniciada, bienvenido " + userNamee);
-
-
-
-            var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
-
-
-                Evento_56PS evento = new Evento_56PS(user.Dni, DateTime.Now, "Usuarios", "Inicio de sesión", Evento_56PS.Criticidad.Bajo);
-
-                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
-
-
-
-                var userr = SessionManager_56PS.getInstancia().getUsuarioActivo();
-                BLL_Usuario_56PS bll = new BLL_Usuario_56PS();
-
-                if (menu != null)
-                    menu.AplicarEstadoSesion(userr.Perfil);
-
-            // Verificar si el usuario debe cambiar contraseña usando la bitácora
-            if (DebeCambiarContraseña(userr.Dni))
-            {
-                MessageBox.Show("Debe cambiar su contraseña antes de continuar.");
-                FormCambiarContraseña_56PS formCambio = new FormCambiarContraseña_56PS();
-                formCambio.ShowDialog();
-            }
-
-                this.Close();
-
+                mensajes.MostrarMensaje("El sistema no se encuentra disponible en estos momentos, contacte al administrador.");
                 return;
-            
+            }
+
+            MenuPrincipal_56PS menu = Application.OpenForms["MenuPrincipal_56PS"] as MenuPrincipal_56PS;
+            sesion.iniciarSesion(usuario);
+            sesion.CambiarIdioma(usuario.Idioma ?? new Idioma_56PS("ES"));
+
+            if (hayInconsistencias)
+            {
+                if (revision.tablaDVVacia && revision.tablasConError.Count == 0)
+                    revision.tablasConError.Add("Tabla DigitoVerificador sin registros");
+
+                mensajes.MostrarMensaje("Se detectaron inconsistencias en la base de datos");
+                if (menu != null)
+                    menu.AplicarEstadoSesion(usuario.Rol);
+
+                FormReparacion_56PS reparacion = new FormReparacion_56PS(revision.tablasConError);
+                if (menu != null)
+                {
+                    reparacion.MdiParent = menu;
+                    reparacion.WindowState = FormWindowState.Maximized;
+                }
+
+                reparacion.Show();
+                Close();
+                return;
+            }
+
+            mensajes.MostrarMensaje("Sesión iniciada, bienvenido " + usuario.NombreUsuario);
+            new BLL_BitacoraEvento_56PS().RegistrarEvento(new Evento_56PS(
+                usuario.Dni,
+                DateTime.Now,
+                "Usuarios",
+                "Inicio de sesión",
+                Evento_56PS.Criticidad.Bajo));
+
+            if (menu != null)
+                menu.AplicarEstadoSesion(usuario.Rol);
+
+            if (DebeCambiarContraseña(usuario.Dni))
+            {
+                mensajes.MostrarMensaje("Debe cambiar su contraseña antes de continuar.");
+                new FormCambiarContraseña_56PS().ShowDialog();
+            }
+
+            Close();
         }
 
-        /// <summary>
-        /// Verifica en la bitácora si el usuario debe cambiar su contraseña.
-        /// Un usuario debe cambiar contraseña si:
-        /// 1. Fue creado y nunca cambió su contraseña (no existe evento "Cambio de contraseña" para su DNI)
-        /// 2. Fue desbloqueado y no cambió su contraseña después del desbloqueo
-        /// </summary>
+        private void RegistrarIntentoFallido(Usuario_56PS usuario, BLL_Usuario_56PS usuarios, BLL_Idioma_56PS mensajes)
+        {
+            mensajes.MostrarMensaje("Contraseña incorrecta");
+            BLL_BitacoraEvento_56PS bitacora = new BLL_BitacoraEvento_56PS();
+            bitacora.RegistrarEvento(new Evento_56PS(
+                usuario.Dni,
+                DateTime.Now,
+                "Usuarios",
+                "Intento fallido",
+                Evento_56PS.Criticidad.Alto));
+
+            int intentos = bitacora.obtenerEventos().Count(evento =>
+                evento.dni == usuario.Dni &&
+                evento.descripcion == "Intento fallido" &&
+                evento.fecha >= DateTime.Now.AddMinutes(-5));
+
+            if (intentos >= 3)
+            {
+                usuarios.bloquearUsuario(usuario.Dni);
+                mensajes.MostrarMensaje("Usuario bloqueado por demasiados intentos fallidos");
+            }
+        }
+
         private bool DebeCambiarContraseña(string dniUsuario)
         {
-            BLL_BitacoraEvento_56PS bitacoraBLL = new BLL_BitacoraEvento_56PS();
-            List<Evento_56PS> eventos = bitacoraBLL.obtenerEventos();
-
-            // Buscar el último evento de "Cambio de contraseña" de ESTE usuario
-            var ultimoCambio = eventos
-                .Where(ev => ev.dni == dniUsuario && ev.descripcion == "Cambio de contraseña")
-                .OrderByDescending(ev => ev.fecha)
+            List<Evento_56PS> eventos = new BLL_BitacoraEvento_56PS().obtenerEventos();
+            Evento_56PS ultimoCambio = eventos
+                .Where(evento => evento.dni == dniUsuario && evento.descripcion == "Cambio de contraseña")
+                .OrderByDescending(evento => evento.fecha)
                 .FirstOrDefault();
 
-            // Si nunca cambió la contraseña → debe cambiarla (usuario nuevo)
             if (ultimoCambio == null)
                 return true;
 
-            // Buscar si hay un evento de desbloqueo posterior al último cambio de contraseña
-            // El evento de desbloqueo lo registra el ADMIN, y la descripción contiene el DNI del usuario desbloqueado
-            var desbloqueoPostCambio = eventos
-                .Where(ev =>
-                    ev.descripcion.Contains("Desbloqueo de usuario") &&
-                    ev.dni.Contains(dniUsuario) &&
-                    ev.fecha > ultimoCambio.fecha)
-                .Any();
-
-            return desbloqueoPostCambio;
+            return eventos.Any(evento =>
+                evento.descripcion.Contains("Desbloqueo de usuario") &&
+                evento.dni.Contains(dniUsuario) &&
+                evento.fecha > ultimoCambio.fecha);
         }
 
-        private bool TienePermiso(Perfil_56PS perfil, string permiso)
+        private bool TieneAlgunPermiso(Rol_56PS rol, params string[] permisos)
         {
-            return perfil != null && perfil.TienePermiso(permiso);
-        }
-
-        private bool TieneAlgunPermiso(Perfil_56PS perfil, params string[] permisos)
-        {
-            return perfil != null && perfil.TieneAlgunPermiso(permisos);
+            return rol != null && rol.TieneAlgunPermiso(permisos);
         }
 
         private void FormIniciarSesion_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

@@ -16,7 +16,7 @@ namespace BE_56_PS
         public string Email { get; set; }
 
         [XmlIgnore]
-        public string Rol_56_PS { get; set; } //Perfil 
+        public string Rol_56_PS { get; set; }
 
 
         public string Nombre { get; set; }

@@ -1,10 +1,5 @@
-﻿using Servicio;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+using Servicio;
 
 namespace BE_56_PS
 {
@@ -15,31 +10,29 @@ namespace BE_56_PS
         public string Contraseña { get; set; }
         public string Dni { get; set; }
         public string Email { get; set; }
-
-    
-        public Perfil_56PS Perfil{ get; set; } //Perfil 
-
-
+        public Rol_56PS Rol { get; set; }
         public string Nombre { get; set; }
         public string NombreUsuario { get; set; }
-        public string idioma { get; set; }
+        public Idioma_56PS Idioma { get; set; }
         public bool Bloqueado { get; set; }
         public bool Activo { get; set; }
 
-        public Usuario_56PS() { }
-
-        public Usuario_56PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, string idioma, bool bloqueado ,bool activo, Perfil_56PS perfil)
+        public Usuario_56PS()
         {
-            this.Apellido = apellido;
-            this.Contraseña = contraseña;
-            this.Dni = dni;
-            this.Email = email;
-            this.Nombre = nombre;
-            this.NombreUsuario = nombreUsuario;
-            this.idioma = idioma;
-            this.Bloqueado = bloqueado;
-            this.Activo = activo;
-            this.Perfil = perfil;
+        }
+
+        public Usuario_56PS(string apellido, string contraseña, string dni, string email, string nombre, string nombreUsuario, Idioma_56PS idioma, bool bloqueado, bool activo, Rol_56PS rol)
+        {
+            Apellido = apellido;
+            Contraseña = contraseña;
+            Dni = dni;
+            Email = email;
+            Nombre = nombre;
+            NombreUsuario = nombreUsuario;
+            Idioma = idioma;
+            Bloqueado = bloqueado;
+            Activo = activo;
+            Rol = rol;
         }
     }
 }

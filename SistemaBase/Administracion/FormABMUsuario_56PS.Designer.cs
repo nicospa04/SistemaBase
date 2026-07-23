@@ -66,8 +66,8 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(30, 13);
             this.label7.TabIndex = 31;
-            this.label7.Tag = "perfilLabel";
-            this.label7.Text = "Perfil";
+            this.label7.Tag = "rolLabel";
+            this.label7.Text = "Rol";
             // 
             // comboBox1
             // 

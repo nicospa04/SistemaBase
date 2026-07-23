@@ -5,13 +5,6 @@ using ClassLibrary3;
 using Services_625NS;
 using Servicio;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SistemaBase.Usuario
@@ -21,15 +14,13 @@ namespace SistemaBase.Usuario
         public FormCambiarContraseña_56PS()
         {
             InitializeComponent();
-
             actualizarIdioma();
             button1.Enabled = TienePermiso(Permisos_56PS.CambiarContrasena);
         }
 
         public void actualizarIdioma()
         {
-            var traductor = new BLL_Idioma_56PS();
-            traductor.Traducir(this);
+            new BLL_Idioma_56PS().Traducir(this);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,82 +28,69 @@ namespace SistemaBase.Usuario
             string actual = textBox1.Text.Trim();
             string nueva = textBox2.Text.Trim();
             string confirmacion = textBox3.Text.Trim();
+            BLL_Idioma_56PS mensajes = new BLL_Idioma_56PS();
 
             if (string.IsNullOrEmpty(actual) || string.IsNullOrEmpty(nueva) || string.IsNullOrEmpty(confirmacion))
             {
-                MessageBox.Show("Debe completar todos los campos.");
+                mensajes.MostrarMensaje("Debe completar todos los campos.");
                 return;
             }
 
             if (nueva != confirmacion)
             {
-                MessageBox.Show("La nueva contraseña no coincide con la confirmación.");
+                mensajes.MostrarMensaje("La nueva contraseña no coincide con la confirmación.");
                 return;
             }
 
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
-
             if (usuario == null)
             {
-                MessageBox.Show("No hay sesión activa.");
+                mensajes.MostrarMensaje("No hay sesión activa.");
                 return;
             }
 
-
-            string hashActualIngresada = CryptoManager_56PS.Encriptar(actual);
-
-            if (usuario.Contraseña != hashActualIngresada)
+            if (usuario.Contraseña != CryptoManager_56PS.Encriptar(actual))
             {
-                MessageBox.Show("La contraseña actual es incorrecta.");
+                mensajes.MostrarMensaje("La contraseña actual es incorrecta.");
                 return;
             }
 
             if (nueva == actual)
             {
-                MessageBox.Show("La contraseña nueva no puede ser igual a la actual"); return;
+                mensajes.MostrarMensaje("La contraseña nueva no puede ser igual a la actual");
+                return;
             }
 
-
-
             string nuevaHash = CryptoManager_56PS.Encriptar(nueva);
-
             try
             {
-                BLL_Usuario_56PS bll = new BLL_Usuario_56PS();
-                bll.cambiarContraseña(usuario.Dni, nuevaHash);
-
-                // Actualizar en memoria también
+                new BLL_Usuario_56PS().cambiarContraseña(usuario.Dni, nuevaHash);
                 usuario.Contraseña = nuevaHash;
+                mensajes.MostrarMensaje("La contraseña se cambió correctamente.");
 
-                MessageBox.Show("La contraseña se cambió correctamente.");
-
-                // Registrar evento en bitácora
-                Evento_56PS evento = new Evento_56PS(
+                new BLL_BitacoraEvento_56PS().RegistrarEvento(new Evento_56PS(
                     usuario.Dni,
                     DateTime.Now,
                     "Usuarios",
                     "Cambio de contraseña",
-                    Evento_56PS.Criticidad.Alto
-                );
-                new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
+                    Evento_56PS.Criticidad.Alto));
 
-                this.Close();
+                Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                mensajes.MostrarMensaje("Error: " + ex.Message);
             }
         }
 
         private void FormCambiarContraseña_56PS_Load(object sender, EventArgs e)
         {
-
         }
 
         private bool TienePermiso(string permiso)
         {
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
-            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
+            return usuario?.Rol != null && usuario.Rol.TienePermiso(permiso);
         }
     }
 }

@@ -13,12 +13,12 @@ namespace Servicio
         public const string ActivarDesactivarUsuario = "P13";
         public const string DesbloquearUsuario = "P14";
 
-        public const string ConsultarPerfiles = "P20";
-        public const string CrearPerfil = "P21";
-        public const string EliminarPerfil = "P22";
-        public const string AsignarPatenteAPerfil = "P23";
-        public const string AsignarFamiliaAPerfil = "P24";
-        public const string QuitarPermisoDePerfil = "P25";
+        public const string ConsultarRoles = "P20";
+        public const string CrearRol = "P21";
+        public const string EliminarRol = "P22";
+        public const string AsignarPatenteARol = "P23";
+        public const string AsignarFamiliaARol = "P24";
+        public const string QuitarPermisoDeRol = "P25";
 
         public const string ConsultarFamilias = "P30";
         public const string CrearFamilia = "P31";
@@ -41,14 +41,14 @@ namespace Servicio
             DesbloquearUsuario
         };
 
-        public static readonly string[] Perfiles =
+        public static readonly string[] Roles =
         {
-            ConsultarPerfiles,
-            CrearPerfil,
-            EliminarPerfil,
-            AsignarPatenteAPerfil,
-            AsignarFamiliaAPerfil,
-            QuitarPermisoDePerfil
+            ConsultarRoles,
+            CrearRol,
+            EliminarRol,
+            AsignarPatenteARol,
+            AsignarFamiliaARol,
+            QuitarPermisoDeRol
         };
 
         public static readonly string[] Familias =
@@ -75,12 +75,12 @@ namespace Servicio
             ModificarUsuario,
             ActivarDesactivarUsuario,
             DesbloquearUsuario,
-            ConsultarPerfiles,
-            CrearPerfil,
-            EliminarPerfil,
-            AsignarPatenteAPerfil,
-            AsignarFamiliaAPerfil,
-            QuitarPermisoDePerfil,
+            ConsultarRoles,
+            CrearRol,
+            EliminarRol,
+            AsignarPatenteARol,
+            AsignarFamiliaARol,
+            QuitarPermisoDeRol,
             ConsultarFamilias,
             CrearFamilia,
             ModificarFamilia,

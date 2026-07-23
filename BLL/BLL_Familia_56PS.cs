@@ -14,21 +14,21 @@ namespace BLL
 {
     public class BLL_Familia_56PS
     {
-        DAL_Perfil_56PS dalperfil = new DAL_Perfil_56PS();
+        DAL_Rol_56PS dalrol = new DAL_Rol_56PS();
 
         public void EliminarFamilia(Familia_56PS familia)
         {
             if (familia == null || string.IsNullOrWhiteSpace(familia.Codigo))
                 throw new Exception("Debe seleccionar una familia.");
 
-            if (!dalperfil.VerificarFamiliaEliminada(familia))
+            if (!dalrol.VerificarFamiliaEliminada(familia))
                 throw new Exception("La familia no existe o ya se encuentra inactiva.");
 
-            if (dalperfil.VerificarAsignacionFamilia(familia))
+            if (dalrol.VerificarAsignacionFamilia(familia))
                 throw new Exception("No se puede eliminar la familia mientras tenga asignaciones. Primero quite sus relaciones.");
 
             familia.activo = false;
-            dalperfil.EliminarFamilia(familia);
+            dalrol.EliminarFamilia(familia);
 
             var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
             Evento_56PS evento = new Evento_56PS(
@@ -48,30 +48,39 @@ namespace BLL
             if (f == null || string.IsNullOrWhiteSpace(f.Codigo) || string.IsNullOrWhiteSpace(f.Nombre))
                 throw new Exception("Debe indicar el código y el nombre de la familia.");
 
-            if (dalperfil.VerificarExistenciaFamiliaNombre(f))
+            if (dalrol.VerificarExistenciaFamiliaNombre(f))
                 throw new Exception("Ya existe otra familia con ese nombre.");
 
-            if (!dalperfil.FamiliaEstaActiva(f.Codigo))
+            if (!dalrol.FamiliaEstaActiva(f.Codigo))
                 throw new Exception("La familia no existe o se encuentra inactiva.");
 
-            dalperfil.Modificar(f);
+            dalrol.Modificar(f);
             new BLL_DigitoVerificador_56PS().CalcularDV("Familias", DAL_56PS.ConsultarTabla("Familias"));
         }
 
         public void CrearFamilia(Familia_56PS fam)
         {
+            CrearFamilia(fam, Enumerable.Empty<Rol_56PS>());
+        }
+
+        public void CrearFamilia(Familia_56PS fam, IEnumerable<Rol_56PS> elementos)
+        {
             if (fam == null || string.IsNullOrWhiteSpace(fam.Codigo) || string.IsNullOrWhiteSpace(fam.Nombre))
                 throw new Exception("Debe indicar el código y el nombre de la familia.");
 
-            if (dalperfil.VerificarExistenciaFamiliaCodigo(fam))
+            List<Rol_56PS> elementosIniciales = ValidarElementosIniciales(fam, elementos);
+
+            if (dalrol.VerificarExistenciaFamiliaCodigo(fam))
                 throw new Exception("Ya existe una familia con ese código.");
-            if (dalperfil.VerificarExistenciaFamiliaNombre(fam))
+            if (dalrol.VerificarExistenciaFamiliaNombre(fam))
                 throw new Exception("Ya existe una familia con ese nombre.");
 
             try
             {
-                dalperfil.CrearFamilia(fam);
+                dalrol.CrearFamiliaConElementos(fam, elementosIniciales);
                 new BLL_DigitoVerificador_56PS().CalcularDV("Familias", DAL_56PS.ConsultarTabla("Familias"));
+                new BLL_DigitoVerificador_56PS().CalcularDV("FamiliaPatente", DAL_56PS.ConsultarTabla("FamiliaPatente"));
+                new BLL_DigitoVerificador_56PS().CalcularDV("FamiliaFamilia", DAL_56PS.ConsultarTabla("FamiliaFamilia"));
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
 
@@ -86,7 +95,39 @@ namespace BLL
             new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
         }
 
-        public void AsignarPermisoAFamilia(Familia_56PS f, Perfil_56PS p)
+        private List<Rol_56PS> ValidarElementosIniciales(Familia_56PS familia, IEnumerable<Rol_56PS> elementos)
+        {
+            List<Rol_56PS> elementosIniciales = elementos == null
+                ? new List<Rol_56PS>()
+                : elementos.Where(elemento => elemento != null).ToList();
+
+            if (elementosIniciales.Count == 0)
+                throw new Exception("No se puede crear una familia vacía. Debe seleccionar al menos una patente o familia.");
+
+            HashSet<string> codigos = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (Rol_56PS elemento in elementosIniciales)
+            {
+                if (string.IsNullOrWhiteSpace(elemento.Codigo))
+                    throw new Exception("El elemento inicial no es válido.");
+
+                string clave = elemento.esfamilia + ":" + elemento.Codigo;
+                if (!codigos.Add(clave))
+                    throw new Exception("No se puede asignar el mismo elemento más de una vez.");
+
+                if (elemento.esfamilia)
+                {
+                    if (familia.Codigo == elemento.Codigo)
+                        throw new Exception("Una familia no puede contenerse a sí misma.");
+
+                    if (!dalrol.FamiliaEstaActiva(elemento.Codigo))
+                        throw new Exception("La familia seleccionada no existe o se encuentra inactiva.");
+                }
+            }
+
+            return elementosIniciales;
+        }
+
+        public void AsignarPermisoAFamilia(Familia_56PS f, Rol_56PS p)
         {
             if (f == null || string.IsNullOrWhiteSpace(f.Codigo))
                 throw new Exception("Debe seleccionar la familia de destino.");
@@ -94,27 +135,27 @@ namespace BLL
             if (p == null || string.IsNullOrWhiteSpace(p.Codigo))
                 throw new Exception("Debe seleccionar un permiso o una familia.");
 
-            if (!dalperfil.FamiliaEstaActiva(f.Codigo))
+            if (!dalrol.FamiliaEstaActiva(f.Codigo))
                 throw new Exception("La familia de destino no existe o se encuentra inactiva.");
 
-            Familia_56PS familiaActual = dalperfil.ObtenerFamilia(f.Codigo);
+            Familia_56PS familiaActual = dalrol.ObtenerFamilia(f.Codigo);
 
             if (familiaActual.Contiene(p.Codigo))
                 throw new Exception("La familia ya contiene ese elemento.");
 
             if (p.esfamilia)
             {
-                if (!dalperfil.FamiliaEstaActiva(p.Codigo))
+                if (!dalrol.FamiliaEstaActiva(p.Codigo))
                     throw new Exception("La familia seleccionada no existe o se encuentra inactiva.");
 
                 if (f.Codigo == p.Codigo)
                     throw new Exception("Una familia no puede contenerse a sí misma.");
 
-                if (dalperfil.FamiliaContiene(p.Codigo, f.Codigo))
+                if (dalrol.FamiliaContiene(p.Codigo, f.Codigo))
                     throw new Exception("La asignación genera un ciclo entre familias.");
             }
 
-            dalperfil.AsignarPermisoAFamilia(p, f);
+            dalrol.AsignarPermisoAFamilia(p, f);
             var dv = new BLL_DigitoVerificador_56PS();
             dv.CalcularDV("FamiliaPatente", DAL_56PS.ConsultarTabla("FamiliaPatente"));
             dv.CalcularDV("FamiliaFamilia", DAL_56PS.ConsultarTabla("FamiliaFamilia"));
@@ -130,12 +171,12 @@ namespace BLL
             new BLL_BitacoraEvento_56PS().RegistrarEvento(evento);
         }
 
-        public void EliminarPermisodeFamilia(Perfil_56PS p, string cod)
+        public void EliminarPermisodeFamilia(Rol_56PS p, string cod)
         {
             if (p == null || string.IsNullOrWhiteSpace(p.Codigo) || string.IsNullOrWhiteSpace(cod))
                 throw new Exception("Debe seleccionar una asignación válida.");
 
-            dalperfil.EliminarPermisodeFamilia(p, cod);
+            dalrol.EliminarPermisodeFamilia(p, cod);
             var dv = new BLL_DigitoVerificador_56PS();
             dv.CalcularDV("FamiliaPatente", DAL_56PS.ConsultarTabla("FamiliaPatente"));
             dv.CalcularDV("FamiliaFamilia", DAL_56PS.ConsultarTabla("FamiliaFamilia"));
@@ -143,12 +184,12 @@ namespace BLL
 
         public Familia_56PS ObtenerFamilia(string codigo)
         {
-            return dalperfil.ObtenerFamilia(codigo);
+            return dalrol.ObtenerFamilia(codigo);
         }
 
         public List<Familia_56PS> ObtenerFamilias()
         {
-            return dalperfil.ObtenerFamilias();
+            return dalrol.ObtenerFamilias();
         }
     }
 }

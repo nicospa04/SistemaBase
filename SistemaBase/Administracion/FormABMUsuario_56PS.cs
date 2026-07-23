@@ -1,4 +1,4 @@
-﻿using BE_56_PS;
+using BE_56_PS;
 using BE_625NS;
 using BLL;
 using ClassLibrary2;
@@ -28,6 +28,32 @@ namespace SistemaBase.Administracion
         {
             var traductor = new BLL_Idioma_56PS();
             traductor.Traducir(this);
+            ActualizarMensajeModo();
+        }
+
+        private void ActualizarMensajeModo()
+        {
+            string mensaje;
+            switch (modo)
+            {
+                case "crear":
+                    mensaje = "Mensaje: \nModo crear";
+                    break;
+                case "modificar":
+                    mensaje = "Mensaje: \nModo modificar";
+                    break;
+                case "activar/desactivar":
+                    mensaje = "Mensaje: \nModo activar/desactivar";
+                    break;
+                case "desbloquear":
+                    mensaje = "Mensaje: \nModo desbloquear";
+                    break;
+                default:
+                    mensaje = "Mensaje: \nModo consulta";
+                    break;
+            }
+
+            textBox5.Text = new BLL_Idioma_56PS().TraducirMensaje(mensaje);
         }
 
         List<Usuario_56PS> listaGeneral;
@@ -53,14 +79,14 @@ namespace SistemaBase.Administracion
 
             actualizar();
 
-            textBox5.Text = textBox5.Text = "Mensaje: \nModo consulta";
+            ActualizarMensajeModo();
 
             dataGridView1.Columns["Contraseña"].Visible = false;
             dataGridView1.Columns["Email"].Visible = false;
             dataGridView1.Columns["Bloqueado"].Visible = false;
             dataGridView1.Columns["Activo"].Visible = false;
-            dataGridView1.Columns["idioma"].Visible = false;
-            dataGridView1.Columns["Perfil"].Visible = false;
+            dataGridView1.Columns["Idioma"].Visible = false;
+            dataGridView1.Columns["Rol"].Visible = false;
             SessionManager_56PS.getInstancia().Suscribir(this);
 
             actualizarIdioma();
@@ -82,21 +108,21 @@ namespace SistemaBase.Administracion
         {
             try
             {
-                var bll = new BLL_Perfil_56PS();
-                List<Perfil_56PS> perfiles = bll.ObtenerTodosLosPerfiles()
+                var bll = new BLL_Rol_56PS();
+                List<Rol_56PS> roles = bll.ObtenerTodosLosRoles()
                                                 .Where(p => p.activo)
                                                 .ToList();
 
-                comboBox1.DataSource = perfiles;
+                comboBox1.DataSource = roles;
                 comboBox1.DisplayMember = "Nombre";
                 comboBox1.ValueMember = "Codigo";
 
-                if (perfiles.Count > 0)
+                if (roles.Count > 0)
                     comboBox1.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar perfiles: " + ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje("Error al cargar roles: " + ex.Message);
             }
         }
 
@@ -105,7 +131,7 @@ namespace SistemaBase.Administracion
 
             modo = "crear";
 
-            textBox5.Text = "Mensaje: \nModo crear";
+            ActualizarMensajeModo();
 
             habilitarBotonAplicar();
             habilitarBotonCancelar();
@@ -121,7 +147,7 @@ namespace SistemaBase.Administracion
         {
             if (dataGridView1.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Debe seleccionar un usuario de la lista.");
+                new BLL_Idioma_56PS().MostrarMensaje("Debe seleccionar un usuario de la lista.");
                 return;
             }
 
@@ -130,11 +156,11 @@ namespace SistemaBase.Administracion
             DataGridViewRow fila = dataGridView1.SelectedRows[0];
 
 
-            string codigoPerfil = ((Usuario_56PS)fila.DataBoundItem).Perfil?.Codigo;
-            if (!string.IsNullOrEmpty(codigoPerfil))
+            string codigoRol = ((Usuario_56PS)fila.DataBoundItem).Rol?.Codigo;
+            if (!string.IsNullOrEmpty(codigoRol))
             {
-                var items = comboBox1.DataSource as List<Perfil_56PS>;
-                int idx = items?.FindIndex(p => p.Codigo == codigoPerfil) ?? -1;
+                var items = comboBox1.DataSource as List<Rol_56PS>;
+                int idx = items?.FindIndex(p => p.Codigo == codigoRol) ?? -1;
                 if (idx >= 0) comboBox1.SelectedIndex = idx;
             }
 
@@ -155,7 +181,7 @@ namespace SistemaBase.Administracion
 
             modo = "modificar";
 
-            textBox5.Text = "Mensaje: \nModo modificar";
+            ActualizarMensajeModo();
 
             habilitarBotonAplicar();
             habilitarBotonCancelar();
@@ -176,7 +202,7 @@ namespace SistemaBase.Administracion
                 {
 
 
-                    MessageBox.Show("Debe seleccionar un usuario de la tabla");
+                    new BLL_Idioma_56PS().MostrarMensaje("Debe seleccionar un usuario de la tabla");
                     return;
                 }
 
@@ -193,11 +219,11 @@ namespace SistemaBase.Administracion
                 }
                 else
                 {
-                    MessageBox.Show("No puede desbloquear a un usuario que no se encuentra bloqueado");
+                    new BLL_Idioma_56PS().MostrarMensaje("No puede desbloquear a un usuario que no se encuentra bloqueado");
                     return;
                 }
 
-                MessageBox.Show("Estado actualizado con éxito.");
+                new BLL_Idioma_56PS().MostrarMensaje("Estado actualizado con éxito.");
                 actualizar(); // Esto refresca la lista
 
                 var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
@@ -220,7 +246,7 @@ namespace SistemaBase.Administracion
                 if (dataGridView1.SelectedRows.Count == 0) {
 
 
-                    MessageBox.Show("Debe seleccionar un usuario de la tabla");
+                    new BLL_Idioma_56PS().MostrarMensaje("Debe seleccionar un usuario de la tabla");
                     return;
                 }
 
@@ -235,7 +261,7 @@ namespace SistemaBase.Administracion
 
                 bll.cambiarEstadoActivo(dni);
 
-                    MessageBox.Show("Estado actualizado con éxito.");
+                    new BLL_Idioma_56PS().MostrarMensaje("Estado actualizado con éxito.");
                     actualizar(); // Esto refresca la lista
 
                 var user = SessionManager_56PS.getInstancia().getUsuarioActivo();
@@ -314,7 +340,7 @@ namespace SistemaBase.Administracion
 
                 if (nombre.Length < 2 || apellido.Length < 2 || dni.Length < 2)
                 {
-                    MessageBox.Show("Nombre, Apellido y DNI deben tener al menos 2 caracteres.");
+                    new BLL_Idioma_56PS().MostrarMensaje("Nombre, Apellido y DNI deben tener al menos 2 caracteres.");
                     return;
                 }
                 string nombreUsuario = fila.Cells["NombreUsuario"].Value.ToString();
@@ -322,7 +348,7 @@ namespace SistemaBase.Administracion
                 if (activo == bloqueado)
                 {
 
-                    MessageBox.Show("Solo puede tener un estado, bloqueado y activo no pueden tener el mismo valor");
+                    new BLL_Idioma_56PS().MostrarMensaje("Solo puede tener un estado, bloqueado y activo no pueden tener el mismo valor");
                     return;
                 }
 
@@ -338,8 +364,8 @@ namespace SistemaBase.Administracion
                     nombre: nombre,
                     nombreUsuario: nombreUsuario,
                     activo: activo,
-                    idioma: "EN",
-perfil: (Perfil_56PS)comboBox1.SelectedItem);
+                    idioma: ((Usuario_56PS)fila.DataBoundItem).Idioma,
+rol: (Rol_56PS)comboBox1.SelectedItem);
 
 
 
@@ -355,7 +381,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem);
                 LimpiarCampos();
 
 
-                MessageBox.Show("Usuario modificado");
+                new BLL_Idioma_56PS().MostrarMensaje("Usuario modificado");
 
 
                 var currentUser = SessionManager_56PS.getInstancia().getUsuarioActivo();
@@ -377,25 +403,25 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem);
                         string.IsNullOrWhiteSpace(textBox3.Text) ||
                         string.IsNullOrWhiteSpace(textBox4.Text))
                     {
-                        MessageBox.Show("Todos los campos son obligatorios", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        new BLL_Idioma_56PS().MostrarMensaje("Todos los campos son obligatorios", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
                     if (comboBox1.SelectedItem == null)
                     {
-                        MessageBox.Show("Debe seleccionar un rol", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        new BLL_Idioma_56PS().MostrarMensaje("Debe seleccionar un rol", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
                     if (string.IsNullOrWhiteSpace(textBox4.Text))
                     {
-                        MessageBox.Show("Debe ingresar un email");
+                        new BLL_Idioma_56PS().MostrarMensaje("Debe ingresar un email");
                         return;
                     }
 
                     if(checkBox1.Checked == checkBox2.Checked)
                     {
-                        MessageBox.Show("Los botones de activo y bloqueado no pueden ser iguales"); return;
+                        new BLL_Idioma_56PS().MostrarMensaje("Los botones de activo y bloqueado no pueden ser iguales"); return;
                     }
 
 
@@ -403,7 +429,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem);
 
                     if (new BLL_Usuario_56PS().obtenerUsuarios().Any(ee => ee.Dni == dni))
                     {
-                        MessageBox.Show("No se puede crear un usuario con ese DNI.");
+                        new BLL_Idioma_56PS().MostrarMensaje("No se puede crear un usuario con ese DNI.");
                         return;
                     }
 
@@ -424,9 +450,9 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem);
                         email: textBox4.Text,
                         nombre: textBox3.Text,
                         nombreUsuario: nombreUsuario,
-                        idioma: "ES", //Español es el idioma por defecto,
+                        idioma: new Idioma_56PS("ES"),
                         activo: checkBox1.Checked,
-perfil: (Perfil_56PS)comboBox1.SelectedItem
+rol: (Rol_56PS)comboBox1.SelectedItem
                         );
 
 
@@ -436,7 +462,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
 
 
-                    MessageBox.Show("Usuario creado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    new BLL_Idioma_56PS().MostrarMensaje("Usuario creado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
                     string aa = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
@@ -449,7 +475,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error al crear el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    new BLL_Idioma_56PS().MostrarMensaje($"Error al crear el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
                 actualizar();
@@ -458,6 +484,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
 
             modo = "";
+            ActualizarMensajeModo();
         }
 
         void habilitarBotonCancelar()
@@ -472,12 +499,11 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
         private void button6_Click(object sender, EventArgs e)
         {
-            //se cancela la operacion actual
             modo = "";
 
             LimpiarCampos();
 
-            MessageBox.Show("Operacion cancelada");
+            new BLL_Idioma_56PS().MostrarMensaje("Operacion cancelada");
 
             deshabilitarBotonAplicar();
             deshabilitarBotonCancelar();
@@ -486,7 +512,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
             habilitarBotonDesbloquear();
             habilitarBotonModificar();
 
-            textBox5.Text = textBox5.Text = "Mensaje: \nModo consulta";
+            ActualizarMensajeModo();
 
         }
 
@@ -520,8 +546,8 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
         //private void CargarRoles()
         ////{
-        ////    var rolBLL = new BLLPerfil_625NS();
-        //    var roles = rolBLL.ObtenerPerfilesSimples625NS();
+        ////    var rolBLL = new BLLRol_625NS();
+        //    var roles = rolBLL.ObtenerRolesSimples625NS();
         //    comboBox1.DataSource = roles;
         //    comboBox1.DisplayMember = "Nombre_625NS";
         //    comboBox1.ValueMember = "Nombre_625NS";
@@ -541,7 +567,6 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
             button5.Enabled = habilitar;
         }
-        bool activado = false;
 
 
         void habilitarBotonCrear()
@@ -603,7 +628,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
             if (dataGridView1.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Debe seleccionar un usuario de la lista.");
+                new BLL_Idioma_56PS().MostrarMensaje("Debe seleccionar un usuario de la lista.");
                 return;
             }
 
@@ -611,7 +636,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
 
             modo = "activar/desactivar";
 
-            textBox5.Text = textBox5.Text = "Mensaje: \nModo activar/desactivar";
+            ActualizarMensajeModo();
 
             habilitarBotonAplicar();
             habilitarBotonCancelar();
@@ -680,13 +705,13 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
             {
 
 
-                MessageBox.Show("Debe seleccionar un usuario de la tabla");
+                new BLL_Idioma_56PS().MostrarMensaje("Debe seleccionar un usuario de la tabla");
                 return;
             }
 
             modo = "desbloquear";
 
-            textBox5.Text = "Mensaje: \nModo desbloquear";
+            ActualizarMensajeModo();
 
             habilitarBotonAplicar();
             habilitarBotonCancelar();
@@ -710,7 +735,7 @@ perfil: (Perfil_56PS)comboBox1.SelectedItem
         private bool TienePermiso(string permiso)
         {
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
-            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
+            return usuario?.Rol != null && usuario.Rol.TienePermiso(permiso);
         }
     }
 }

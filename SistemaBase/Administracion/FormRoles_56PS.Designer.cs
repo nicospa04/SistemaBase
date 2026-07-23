@@ -1,6 +1,6 @@
 ﻿namespace SistemaBase.Administracion
 {
-    partial class FormPerfiles_56PS
+    partial class FormRoles_56PS
     {
         /// <summary>
         /// Required designer variable.
@@ -39,7 +39,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.btncancelar = new System.Windows.Forms.Button();
             this.btnbuscar = new System.Windows.Forms.Button();
-            this.lblperfiles = new System.Windows.Forms.Label();
+            this.lblroles = new System.Windows.Forms.Label();
             this.lblnombre = new System.Windows.Forms.Label();
             this.txtnomb = new System.Windows.Forms.TextBox();
             this.lblcod = new System.Windows.Forms.Label();
@@ -56,8 +56,8 @@
             this.button6.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.button6.Size = new System.Drawing.Size(277, 32);
             this.button6.TabIndex = 162;
-            this.button6.Tag = "eliminarPermiso/familiaDePerfil";
-            this.button6.Text = "Eliminar permiso/familia de perfil";
+            this.button6.Tag = "eliminarPermiso/familiaDeRol";
+            this.button6.Text = "Eliminar permiso/familia de rol";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
@@ -70,8 +70,8 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(111, 19);
             this.label1.TabIndex = 161;
-            this.label1.Tag = "todosLosPerfiles";
-            this.label1.Text = "Todos los perfiles";
+            this.label1.Tag = "todosLosRoles";
+            this.label1.Text = "Todos los roles";
             // 
             // dataGridView1
             // 
@@ -163,8 +163,8 @@
             this.btncancelar.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.btncancelar.Size = new System.Drawing.Size(277, 33);
             this.btncancelar.TabIndex = 151;
-            this.btncancelar.Tag = "eliminarPerfil";
-            this.btncancelar.Text = "Eliminar Perfil";
+            this.btncancelar.Tag = "eliminarRol";
+            this.btncancelar.Text = "Eliminar Rol";
             this.btncancelar.UseVisualStyleBackColor = true;
             this.btncancelar.Click += new System.EventHandler(this.btncancelar_Click);
             // 
@@ -177,22 +177,22 @@
             this.btnbuscar.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.btnbuscar.Size = new System.Drawing.Size(277, 33);
             this.btnbuscar.TabIndex = 150;
-            this.btnbuscar.Tag = "crearPerfil";
-            this.btnbuscar.Text = "Crear Perfil";
+            this.btnbuscar.Tag = "crearRol";
+            this.btnbuscar.Text = "Crear Rol";
             this.btnbuscar.UseVisualStyleBackColor = true;
             this.btnbuscar.Click += new System.EventHandler(this.btnbuscar_Click);
             // 
-            // lblperfiles
+            // lblroles
             // 
-            this.lblperfiles.AutoSize = true;
-            this.lblperfiles.Font = new System.Drawing.Font("Segoe UI Variable Display", 20F);
-            this.lblperfiles.Location = new System.Drawing.Point(255, -62);
-            this.lblperfiles.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblperfiles.Name = "lblperfiles";
-            this.lblperfiles.Size = new System.Drawing.Size(99, 36);
-            this.lblperfiles.TabIndex = 147;
-            this.lblperfiles.Tag = "perfilesTitle";
-            this.lblperfiles.Text = "Perfiles";
+            this.lblroles.AutoSize = true;
+            this.lblroles.Font = new System.Drawing.Font("Segoe UI Variable Display", 20F);
+            this.lblroles.Location = new System.Drawing.Point(255, -62);
+            this.lblroles.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblroles.Name = "lblroles";
+            this.lblroles.Size = new System.Drawing.Size(99, 36);
+            this.lblroles.TabIndex = 147;
+            this.lblroles.Tag = "rolesTitle";
+            this.lblroles.Text = "Roles";
             // 
             // lblnombre
             // 
@@ -234,7 +234,7 @@
             this.txtcod.Size = new System.Drawing.Size(158, 20);
             this.txtcod.TabIndex = 163;
             // 
-            // FormPerfiles_56PS
+            // FormRoles_56PS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -254,10 +254,10 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.btncancelar);
             this.Controls.Add(this.btnbuscar);
-            this.Controls.Add(this.lblperfiles);
-            this.Name = "FormPerfiles_56PS";
-            this.Text = "FormPerfiles_56PS";
-            this.Load += new System.EventHandler(this.FormPerfiles_56PS_Load);
+            this.Controls.Add(this.lblroles);
+            this.Name = "FormRoles_56PS";
+            this.Text = "FormRoles_56PS";
+            this.Load += new System.EventHandler(this.FormRoles_56PS_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -277,7 +277,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btncancelar;
         private System.Windows.Forms.Button btnbuscar;
-        private System.Windows.Forms.Label lblperfiles;
+        private System.Windows.Forms.Label lblroles;
         private System.Windows.Forms.Label lblnombre;
         private System.Windows.Forms.TextBox txtnomb;
         private System.Windows.Forms.Label lblcod;

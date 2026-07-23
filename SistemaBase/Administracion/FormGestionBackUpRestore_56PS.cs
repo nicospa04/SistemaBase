@@ -1,4 +1,4 @@
-﻿using BE_625NS;
+using BE_625NS;
 using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
@@ -41,7 +41,7 @@ namespace SistemaBase.Administracion
         {
             if (comboBox1.SelectedItem == null)
             {
-                MessageBox.Show("Selecciona Backup o Restore antes de buscar.");
+                new BLL_Idioma_56PS().MostrarMensaje("Selecciona Backup o Restore antes de buscar.");
                 return;
             }
 
@@ -78,7 +78,7 @@ namespace SistemaBase.Administracion
 
             if (comboBox1.SelectedItem == null)
             {
-                MessageBox.Show("Selecciona un item");
+                new BLL_Idioma_56PS().MostrarMensaje("Selecciona un item");
                 return;
             }
 
@@ -86,7 +86,7 @@ namespace SistemaBase.Administracion
             {
                 if (!TienePermiso(Permisos_56PS.RealizarBackup))
                 {
-                    MessageBox.Show("No tiene permiso para realizar backup.");
+                    new BLL_Idioma_56PS().MostrarMensaje("No tiene permiso para realizar backup.");
                     return;
                 }
 
@@ -95,7 +95,7 @@ namespace SistemaBase.Administracion
                     try
                     {
                         bll.RealizarBackup(textBox1.Text);
-                        MessageBox.Show("Backup realizado con éxito.");
+                        new BLL_Idioma_56PS().MostrarMensaje("Backup realizado con éxito.");
                         textBox1.Text = "";
 
                         string a = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
@@ -105,19 +105,19 @@ namespace SistemaBase.Administracion
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Error al realizar el backup: {ex.Message}");
+                        new BLL_Idioma_56PS().MostrarMensaje($"Error al realizar el backup: {ex.Message}");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Seleccione una ubicación para el backup.");
+                    new BLL_Idioma_56PS().MostrarMensaje("Seleccione una ubicación para el backup.");
                 }
             }
             else
             {
                 if (!TienePermiso(Permisos_56PS.RestaurarBackup))
                 {
-                    MessageBox.Show("No tiene permiso para realizar restore.");
+                    new BLL_Idioma_56PS().MostrarMensaje("No tiene permiso para realizar restore.");
                     return;
                 }
 
@@ -127,7 +127,7 @@ namespace SistemaBase.Administracion
                     {
                         string dniUsuario = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
                         bll.RealizarRestore(textBox1.Text);
-                        MessageBox.Show("Restauración realizada con éxito. El sistema se cerrará para volver a iniciar con la base restaurada.");
+                        new BLL_Idioma_56PS().MostrarMensaje("Restauración realizada con éxito. El sistema se cerrará para volver a iniciar con la base restaurada.");
 
                         try
                         {
@@ -143,12 +143,12 @@ namespace SistemaBase.Administracion
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Error al restaurar la base de datos: {ex.Message}");
+                        new BLL_Idioma_56PS().MostrarMensaje($"Error al restaurar la base de datos: {ex.Message}");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Seleccione un archivo de restore.");
+                    new BLL_Idioma_56PS().MostrarMensaje("Seleccione un archivo de restore.");
                 }
             }
         }
@@ -156,13 +156,13 @@ namespace SistemaBase.Administracion
         private bool TienePermiso(string permiso)
         {
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
-            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
+            return usuario?.Rol != null && usuario.Rol.TienePermiso(permiso);
         }
 
         private bool TieneAlgunPermiso(params string[] permisos)
         {
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
-            return usuario?.Perfil != null && usuario.Perfil.TieneAlgunPermiso(permisos);
+            return usuario?.Rol != null && usuario.Rol.TieneAlgunPermiso(permisos);
         }
 
         private void SalirDelSistemaDespuesDeRestore()

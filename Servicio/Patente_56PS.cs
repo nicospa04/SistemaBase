@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Servicio
 {
-    public class Patente_56PS: Perfil_56PS
+    public class Patente_56PS: Rol_56PS
     {
-        public override List<Perfil_56PS> hijos
+        public override List<Rol_56PS> hijos
         {
             get { return null; }
         }
 
 
-        public override void Agregar(Perfil_56PS p)
+        public override void Agregar(Rol_56PS p)
         {
 
         }
-        public override void Eliminar(Perfil_56PS p)
+        public override void Eliminar(Rol_56PS p)
         {
 
         }

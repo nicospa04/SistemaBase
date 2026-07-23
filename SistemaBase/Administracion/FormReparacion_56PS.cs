@@ -1,4 +1,4 @@
-﻿using BE_625NS;
+using BE_625NS;
 using BLL;
 using ClassLibrary2;
 using ClassLibrary3;
@@ -63,14 +63,14 @@ namespace SistemaBase.Administracion
 
                 if (revision.tablaDVVacia || Errores.Count > 0)
                 {
-                    MessageBox.Show("Se recalcularon los DV, pero todavia se detectan inconsistencias.");
+                    new BLL_Idioma_56PS().MostrarMensaje("Se recalcularon los DV, pero todavia se detectan inconsistencias.");
                     return;
                 }
 
-                MessageBox.Show("Se recalcularon los DV correctamente. Debe iniciar sesión nuevamente.");
+                new BLL_Idioma_56PS().MostrarMensaje("Se recalcularon los DV correctamente. Debe iniciar sesión nuevamente.");
                 CerrarSesionYVolverAlMenu();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { new BLL_Idioma_56PS().MostrarMensaje(ex.Message); }
         }
 
         private void btnrestore_Click(object sender, EventArgs e)
@@ -87,7 +87,7 @@ namespace SistemaBase.Administracion
 
                     new BLL_BackUpRestore_56PS().RealizarRestore(ruta);
 
-                    MessageBox.Show("Restauración realizada correctamente. El sistema se cerrará para volver a iniciar con la base restaurada.");
+                    new BLL_Idioma_56PS().MostrarMensaje("Restauración realizada correctamente. El sistema se cerrará para volver a iniciar con la base restaurada.");
 
                     string aa = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
 
@@ -99,12 +99,12 @@ namespace SistemaBase.Administracion
                 }
                 else
                 {
-                    MessageBox.Show("Debe seleccionar un archivo de respaldo"); // 
+                    new BLL_Idioma_56PS().MostrarMensaje("Debe seleccionar un archivo de respaldo");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje(ex.Message);
             }
         }
 
@@ -116,7 +116,7 @@ namespace SistemaBase.Administracion
         private bool TienePermiso(string permiso)
         {
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
-            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
+            return usuario?.Rol != null && usuario.Rol.TienePermiso(permiso);
         }
 
         private void CargarErrores()

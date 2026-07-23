@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Servicio
 {
-    public class Familia_56PS: Perfil_56PS
+    public class Familia_56PS: Rol_56PS
     {
         public Familia_56PS() { }
     }

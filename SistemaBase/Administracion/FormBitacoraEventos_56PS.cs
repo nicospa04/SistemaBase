@@ -76,7 +76,7 @@ namespace GUI_625NS.Administracion
         {
              if (dateTimePicker1.Value.Date > dateTimePicker2.Value.Date)
             {
-                MessageBox.Show("La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.");
+                new BLL_Idioma_56PS().MostrarMensaje("La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.");
                 return;
             }
 
@@ -131,7 +131,7 @@ namespace GUI_625NS.Administracion
             {
                 if (dataGridView1.Rows.Count == 0)
                 {
-                    MessageBox.Show("No hay datos para exportar.");
+                    new BLL_Idioma_56PS().MostrarMensaje("No hay datos para exportar.");
                     return;
                 }
 
@@ -192,7 +192,7 @@ namespace GUI_625NS.Administracion
                         stream.Close();
                     }
 
-                    MessageBox.Show("PDF exportado correctamente.");
+                    new BLL_Idioma_56PS().MostrarMensaje("PDF exportado correctamente.");
 
                     string a = SessionManager_56PS.getInstancia().getUsuarioActivo().Dni;
 
@@ -202,7 +202,7 @@ namespace GUI_625NS.Administracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al exportar PDF: " + ex.Message);
+                new BLL_Idioma_56PS().MostrarMensaje("Error al exportar PDF: " + ex.Message);
             }
         }
 
@@ -220,7 +220,7 @@ namespace GUI_625NS.Administracion
         private bool TienePermiso(string permiso)
         {
             var usuario = SessionManager_56PS.getInstancia().getUsuarioActivo();
-            return usuario?.Perfil != null && usuario.Perfil.TienePermiso(permiso);
+            return usuario?.Rol != null && usuario.Rol.TienePermiso(permiso);
         }
     }
 }

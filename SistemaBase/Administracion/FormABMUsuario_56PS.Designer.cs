@@ -71,6 +71,7 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(255, 265);
             this.comboBox1.Name = "comboBox1";
@@ -303,8 +304,11 @@
             this.textBox5.Location = new System.Drawing.Point(467, 305);
             this.textBox5.Multiline = true;
             this.textBox5.Name = "textBox5";
+            this.textBox5.ReadOnly = true;
+            this.textBox5.ShortcutsEnabled = false;
             this.textBox5.Size = new System.Drawing.Size(256, 109);
             this.textBox5.TabIndex = 34;
+            this.textBox5.TabStop = false;
             this.textBox5.Text = "Mensaje:";
             this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 

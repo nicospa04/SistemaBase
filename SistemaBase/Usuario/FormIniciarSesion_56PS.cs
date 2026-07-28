@@ -67,15 +67,23 @@ namespace SistemaBase
                 return;
             }
 
+            sesion.CambiarIdioma(usuario.Idioma ?? new Idioma_56PS("ES"));
+
             if (usuario.Bloqueado)
             {
-                mensajes.MostrarMensaje("El usuario se encuentra bloqueado");
+                MostrarMensajeYRestablecerIdioma(
+                    mensajes,
+                    "El usuario se encuentra bloqueado",
+                    sesion);
                 return;
             }
 
             if (!usuario.Activo)
             {
-                mensajes.MostrarMensaje("El usuario se encuentra inactivo");
+                MostrarMensajeYRestablecerIdioma(
+                    mensajes,
+                    "El usuario se encuentra inactivo",
+                    sesion);
                 return;
             }
 
@@ -88,13 +96,15 @@ namespace SistemaBase
 
             if (hayInconsistencias && !puedeReparar)
             {
-                mensajes.MostrarMensaje("El sistema no se encuentra disponible en estos momentos, contacte al administrador.");
+                MostrarMensajeYRestablecerIdioma(
+                    mensajes,
+                    "El sistema no se encuentra disponible en estos momentos, contacte al administrador.",
+                    sesion);
                 return;
             }
 
             MenuPrincipal_56PS menu = Application.OpenForms["MenuPrincipal_56PS"] as MenuPrincipal_56PS;
             sesion.iniciarSesion(usuario);
-            sesion.CambiarIdioma(usuario.Idioma ?? new Idioma_56PS("ES"));
 
             if (hayInconsistencias)
             {
@@ -135,6 +145,15 @@ namespace SistemaBase
             }
 
             Close();
+        }
+
+        private void MostrarMensajeYRestablecerIdioma(
+            BLL_Idioma_56PS mensajes,
+            string mensaje,
+            SessionManager_56PS sesion)
+        {
+            mensajes.MostrarMensaje(mensaje);
+            sesion.CambiarIdioma(new Idioma_56PS("ES"));
         }
 
         private void RegistrarIntentoFallido(Usuario_56PS usuario, BLL_Usuario_56PS usuarios, BLL_Idioma_56PS mensajes)

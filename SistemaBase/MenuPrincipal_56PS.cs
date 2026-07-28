@@ -185,8 +185,9 @@ namespace SistemaBase
 
             }
 
+            string mensajeSesionCerrada = new BLL_Idioma_56PS().TraducirMensaje("Sesión cerrada");
             instance.cerrarSesion();
-            new BLL_Idioma_56PS().MostrarMensaje("Sesión cerrada");
+            MessageBox.Show(mensajeSesionCerrada);
 
             CerrarFormulariosHijos();
             AplicarEstadoSinSesion();

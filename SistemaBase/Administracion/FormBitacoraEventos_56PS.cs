@@ -48,8 +48,8 @@ namespace GUI_625NS.Administracion
                 Evento_56PS.Criticidad.Bajo
             );
 
-             dateTimePicker1.MaxDate = DateTime.Today.AddDays(1);
-            dateTimePicker2.MaxDate = DateTime.Today.AddDays(1);
+            dateTimePicker1.MaxDate = DateTime.Today;
+            dateTimePicker2.MaxDate = DateTime.Today;
 
              button1.Click += button1_Click;
             button2.Click += button2_Click;
@@ -113,7 +113,7 @@ namespace GUI_625NS.Administracion
             comboBox2.SelectedIndex = -1;
 
             dateTimePicker1.Value = eventos.Min(ev => ev.fecha);
-            dateTimePicker2.Value = DateTime.Now;
+            dateTimePicker2.Value = DateTime.Today;
 
             filtrados = new List<Evento_56PS>(eventos);
             dataGridView1.DataSource = null;
@@ -160,7 +160,8 @@ namespace GUI_625NS.Administracion
                         );
 
                         // Agregar título
-                        Paragraph titulo = new Paragraph("Bitácora de Eventos", fontTitulo);
+                        string tituloTraducido = new BLL_Idioma_56PS().TraducirMensaje("Bitácora de Eventos");
+                        Paragraph titulo = new Paragraph(tituloTraducido, fontTitulo);
                         titulo.Alignment = Element.ALIGN_CENTER;
                         pdfDoc.Add(titulo);
                         pdfDoc.Add(new Paragraph("\n"));

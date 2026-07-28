@@ -56,6 +56,15 @@ namespace SistemaBase.Administracion
             textBox5.Text = new BLL_Idioma_56PS().TraducirMensaje(mensaje);
         }
 
+        private void VolverAModoConsulta()
+        {
+            modo = "";
+            ActualizarMensajeModo();
+            deshabilitarBotonAplicar();
+            deshabilitarBotonCancelar();
+            AplicarPermisosAcciones();
+        }
+
         List<Usuario_56PS> listaGeneral;
 
         public FormABMUsuario_56PS()
@@ -483,8 +492,7 @@ rol: (Rol_56PS)comboBox1.SelectedItem
              }
 
 
-            modo = "";
-            ActualizarMensajeModo();
+            VolverAModoConsulta();
         }
 
         void habilitarBotonCancelar()
@@ -499,20 +507,11 @@ rol: (Rol_56PS)comboBox1.SelectedItem
 
         private void button6_Click(object sender, EventArgs e)
         {
-            modo = "";
-
             LimpiarCampos();
 
             new BLL_Idioma_56PS().MostrarMensaje("Operacion cancelada");
 
-            deshabilitarBotonAplicar();
-            deshabilitarBotonCancelar();
-            habilitarBotonActivarDesactivar();
-            habilitarBotonCrear();
-            habilitarBotonDesbloquear();
-            habilitarBotonModificar();
-
-            ActualizarMensajeModo();
+            VolverAModoConsulta();
 
         }
 

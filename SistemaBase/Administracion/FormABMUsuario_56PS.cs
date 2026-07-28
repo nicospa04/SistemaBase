@@ -87,6 +87,7 @@ namespace SistemaBase.Administracion
             comboBox1.SelectedItem = 0;
 
             actualizar();
+            ConfigurarColumnasRolEIdioma();
 
             ActualizarMensajeModo();
 
@@ -100,6 +101,53 @@ namespace SistemaBase.Administracion
 
             actualizarIdioma();
             AplicarPermisosAcciones();
+        }
+
+        private void ConfigurarColumnasRolEIdioma()
+        {
+            if (!dataGridView1.Columns.Contains("NombreRol"))
+            {
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "NombreRol",
+                    HeaderText = "Rol",
+                    ReadOnly = true,
+                    SortMode = DataGridViewColumnSortMode.NotSortable
+                });
+            }
+
+            if (!dataGridView1.Columns.Contains("NombreIdioma"))
+            {
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "NombreIdioma",
+                    HeaderText = "Idioma",
+                    ReadOnly = true,
+                    SortMode = DataGridViewColumnSortMode.NotSortable
+                });
+            }
+
+            dataGridView1.CellFormatting -= dataGridView1_CellFormatting;
+            dataGridView1.CellFormatting += dataGridView1_CellFormatting;
+        }
+
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            string nombreColumna = dataGridView1.Columns[e.ColumnIndex].Name;
+            if (nombreColumna != "NombreRol" && nombreColumna != "NombreIdioma")
+                return;
+
+            Usuario_56PS usuario = dataGridView1.Rows[e.RowIndex].DataBoundItem as Usuario_56PS;
+            if (usuario == null)
+                return;
+
+            e.Value = nombreColumna == "NombreRol"
+                ? usuario.Rol?.Nombre ?? string.Empty
+                : usuario.Idioma?.nombre ?? string.Empty;
+            e.FormattingApplied = true;
         }
 
         void deshabilitarBotonAplicar()

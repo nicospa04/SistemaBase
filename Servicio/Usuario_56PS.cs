@@ -14,8 +14,6 @@ namespace BE_56_PS
         public string Nombre { get; set; }
         public string NombreUsuario { get; set; }
         public Idioma_56PS Idioma { get; set; }
-        public string NombreRol => Rol?.Nombre ?? string.Empty;
-        public string NombreIdioma => Idioma?.nombre ?? string.Empty;
         public bool Bloqueado { get; set; }
         public bool Activo { get; set; }
 
